@@ -10,7 +10,7 @@ abstract class WGMetaBoxInput
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function setValue( $value )
+	public function set_value( $value )
 	{
 		if ( is_array( $this->properties ) )
 		{

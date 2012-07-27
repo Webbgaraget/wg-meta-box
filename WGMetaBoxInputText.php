@@ -66,7 +66,15 @@ class WGMetaBoxInputText extends WGMetaBoxInput
 		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
 		
 		/*** Add input field **/
-		$output .= '<td><input type="text" ' . implode( ", ", $attributes ) . '><span class="description">Test</span></td>';
+		$output .= '<td><input type="text" ' . implode( ' ', $attributes ) . '>';
+		
+		// Description
+		if ( isset( $this->properties['description'] ) )
+		{
+			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
+		}
+
+		$output .= '</td>';
 		
 		$output .= '</tr>';
 		return $output;

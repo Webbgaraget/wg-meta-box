@@ -9,7 +9,7 @@ class WGMetaBoxInputSelect extends WGMetaBoxInput
 	}
 	
 	/**
-	 * Returns markup for input field
+	 * Returns markup for select field
 	 *
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)

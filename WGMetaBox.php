@@ -68,12 +68,19 @@ class WGMetaBox
 		$page_meta = array();
 		foreach( $this->params['fields'] as $type => $field )
 		{
-			// Save text
-			if ( $type == 'text' || $type == 'textarea' || $type = 'select' )
+			// Save text, textarea, select
+			if ( in_array( $type, array( 'text', 'textarea', 'select' ) ) )
 			{
 				$name = "{$this->params['id']}-{$field['slug']}";
 				$page_meta[$name] = $_POST[$name];
 			}
+			// Save checkbox
+			if ( in_array( $type, array( 'checkbox') ) )
+			{
+				$name = "{$this->params['id']}-{$field['slug']}";
+				$page_meta[$name] = ($_POST[$name] == $field['slug']);
+			}
+			
 		}
 		
 		
@@ -126,7 +133,7 @@ class WGMetaBox
 				$field = new $class_names[$type]( $this->params['id'], $field );
 				if ( isset( $value ) && !is_null( $value ) && mb_strlen( $value ) != 0 )
 				{
-					$field->setValue( $value );
+					$field->set_value( $value );
 				}
 				$output .= $field->render();
 			}
