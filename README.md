@@ -1,14 +1,20 @@
 # WGMetaBox
 `WGMetaBox` is a library for WordPress that facilitates programmatically adding meta boxes to post types. It takes care of rendering the form and saving the values.
 
-Here's an example of how a select and a text field are added:
+* Say good bye to large chunks of code for handling meta boxes
+* Say hello to the beauty of easily adding meta boxes programmatically
+* Speed up your development phase
+* Never ever to bother about the problem why the meta data isn't stored as supposed to
+* Feel safe that your user won't change the meta boxes (as with a meta box GUI plugin)
 
+# Example
+
+Here's an example of how a select and a text field are added:
 
 	$fields = array(
 	    'favorite-color' => array(
 	        'type'    => 'select',
 	        'label'   => 'Favorite color',
-	        'slug'    => 'favorite-color',
 	        'options' => array(
 	            'r' => 'Red',
 	            'g' => 'Green',
@@ -17,9 +23,8 @@ Here's an example of how a select and a text field are added:
 	        'value'   => 'g'
 	    ),
 	    'name' => array(
-	        'type'        => 'text,
-	        'label'       => "Name",
-	        'slug'        => 'name',
+	        'type'        => 'text',
+	        'label'       => 'Name',
 	        'placeholder' => 'Name'
 	        )
 	    );
