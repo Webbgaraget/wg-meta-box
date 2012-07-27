@@ -71,19 +71,19 @@ class WGMetaBox
 	        return $post->ID;
 	
 		$page_meta = array();
-		foreach( $this->params['fields'] as $type => $field )
+		foreach( $this->params['fields'] as $slug => $field )
 		{
 			// Save text, textarea, select
-			if ( in_array( $type, array( 'text', 'textarea', 'select' ) ) )
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'select' ) ) )
 			{
-				$name = "{$this->params['id']}-{$field['slug']}";
+				$name = "{$this->params['id']}-{$slug}";
 				$page_meta[$name] = $_POST[$name];
 			}
 			// Save checkbox
-			if ( in_array( $type, array( 'checkbox') ) )
+			elseif ( in_array( $field['type'], array( 'checkbox') ) )
 			{
-				$name = "{$this->params['id']}-{$field['slug']}";
-				$page_meta[$name] = ($_POST[$name] == $field['slug']);
+				$name = "{$this->params['id']}-{$slug}";
+				$page_meta[$name] = ($_POST[$name] == $slug);
 			}
 			
 		}
@@ -126,16 +126,17 @@ class WGMetaBox
 		$output = '<table class="form-table">';
 
 		// Loop through each field
-		foreach( $this->params['fields'] as $type => $field )
+		foreach( $this->params['fields'] as $slug => $field )
 		{
-			if ( array_key_exists( $type, $class_names ) )
+			if ( !isset( $field['type'] ) )
 			{
-				if ( !isset( $field['slug'] ) )
-				{
-					throw new Exception( "Slug not defined for {$type}" );
-				}
-				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$field['slug']}", true );
-				$field = new $class_names[$type]( $this->params['id'], $field );
+				throw new Exception( "Type not defined for {$slug}" );
+			}
+			if ( array_key_exists( $field['type'], $class_names ) )
+			{
+				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
+				$field['slug'] = $slug;
+				$field = new $class_names[$field['type']]( $this->params['id'], $field );
 				if ( isset( $value ) && !is_null( $value ) && mb_strlen( $value ) != 0 )
 				{
 					$field->set_value( $value );
@@ -144,10 +145,34 @@ class WGMetaBox
 			}
 			else
 			{
-				throw new Exception( "Field has unknown name: {$type}" );
+				throw new Exception( "Field has unknown type: {$field['type']}" );
 			}
 		}
 		$output .= "</table>";
 		echo $output;
 	}
 }
+
+$fields = array(
+	'favorite-color' => array(
+		'type'    => 'select',
+		'label'   => 'Favorite color',
+		'options' => array(
+			'r' => 'Red',
+			'g' => 'Green',
+			'b'   => 'Blue'
+		),
+		'value' => 'g'
+	),
+	'name' => array(
+		'type'        => 'text',
+		'label'       => "Name",
+		'placeholder' => 'Name'
+	),
+	'foo' => array(
+		'type'        => 'text',
+		'label'       => "Foo",
+		'placeholder' => 'Foo'
+	)
+);
+WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
