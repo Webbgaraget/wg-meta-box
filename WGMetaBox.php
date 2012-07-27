@@ -69,7 +69,7 @@ class WGMetaBox
 		foreach( $this->params['fields'] as $type => $field )
 		{
 			// Save text
-			if ( $type == 'text' || $type == 'textarea' )
+			if ( $type == 'text' || $type == 'textarea' || $type = 'select' )
 			{
 				$name = "{$this->params['id']}-{$field['slug']}";
 				$page_meta[$name] = $_POST[$name];
@@ -123,8 +123,11 @@ class WGMetaBox
 					throw new Exception( "Slug not defined for {$type}" );
 				}
 				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$field['slug']}", true );
-				$field['value'] = $value;
 				$field = new $class_names[$type]( $this->params['id'], $field );
+				if ( isset( $value ) && !is_null( $value ) && mb_strlen( $value ) != 0 )
+				{
+					$field->setValue( $value );
+				}
 				$output .= $field->render();
 			}
 			else
