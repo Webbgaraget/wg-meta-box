@@ -41,7 +41,7 @@ class WGMetaBox
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public static function add_meta_box( $id, $title, $fields, $post_type, $context = 'advanced', $priority = 'default', $callback_args = null)
+	public static function add_meta_box( $id, $title, Array $fields, $post_type, $context = 'advanced', $priority = 'default', $callback_args = null)
 	{
 		$meta_box = new static( $id, $title, $fields, $post_type, $context, $priority, $callback_args );
 	}
