@@ -1,6 +1,18 @@
 <?php
+
+/**
+ * Abstract class adding common functionality for each input field
+ *
+ * @author Erik Hedberg (erik@webbgaraget.se)
+ */
 abstract class WGMetaBoxInput
 {
+	/**
+	 * Generates HTML markup for input field
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
 	abstract protected function render();
 	
 	/**

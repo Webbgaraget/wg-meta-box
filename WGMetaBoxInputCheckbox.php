@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class adding functionality to add individual checkbox
+ *
+ * @author Erik Hedberg (erik@webbgaraget.se)
+ */
 class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 {
 	public function __construct( $namespace, $properties )

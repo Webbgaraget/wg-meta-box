@@ -5,6 +5,11 @@ require_once( dirname( __FILE__ ) . "/WGMetaBoxInputSelect.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputText.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputTextarea.php" );
 
+/**
+ * Class facilitating creating meta boxes in WordPress
+ *
+ * @author Erik Hedberg (erik@webbgaraget.se)
+ */
 class WGMetaBox
 {
 	protected function __construct( $id, $title, $fields, $post_type, $context, $priority, $callback_args )

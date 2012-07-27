@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class adding functionality to add text field
+ *
+ * @author Erik Hedberg (erik@webbgaraget.se)
+ */
 class WGMetaBoxInputText extends WGMetaBoxInput
 {
 	public function __construct( $namespace, $properties )

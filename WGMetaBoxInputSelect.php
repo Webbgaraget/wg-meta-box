@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class adding functionality to add select menu
+ *
+ * @author Erik Hedberg (erik@webbgaraget.se)
+ */
 class WGMetaBoxInputSelect extends WGMetaBoxInput
 {
 	public function __construct( $namespace, $properties )
