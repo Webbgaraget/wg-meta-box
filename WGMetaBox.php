@@ -66,9 +66,21 @@ class WGMetaBox
 	public function save()
 	{
 		global $post;
-
+		// Verify not doing autosave
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+		{
+			return $post->ID;
+		}
+		// Verify user has rights
 	    if ( !current_user_can( 'edit_post', $post->ID ) )
+		{
 	        return $post->ID;
+		}
+		// Verify nonce
+	    if ( !isset( $_POST[$this->params['id'] . '-nonce'] ) || !wp_verify_nonce( $_POST[$this->params['id'] . '-nonce'], plugin_basename(__FILE__) ) )
+	    {
+	        return $post->ID;
+	    }
 	
 		$page_meta = array();
 		foreach( $this->params['fields'] as $slug => $field )
@@ -123,7 +135,9 @@ class WGMetaBox
 			'text'     => 'WGMetaBoxInputText',
 			'textarea' => 'WGMetaBoxInputTextarea'
 		);
-		$output = '<table class="form-table">';
+		$output = "";
+		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
+		$output .= '<table class="form-table">';
 
 		// Loop through each field
 		foreach( $this->params['fields'] as $slug => $field )
