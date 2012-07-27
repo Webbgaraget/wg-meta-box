@@ -152,27 +152,3 @@ class WGMetaBox
 		echo $output;
 	}
 }
-
-$fields = array(
-	'favorite-color' => array(
-		'type'    => 'select',
-		'label'   => 'Favorite color',
-		'options' => array(
-			'r' => 'Red',
-			'g' => 'Green',
-			'b'   => 'Blue'
-		),
-		'value' => 'g'
-	),
-	'name' => array(
-		'type'        => 'text',
-		'label'       => "Name",
-		'placeholder' => 'Name'
-	),
-	'foo' => array(
-		'type'        => 'text',
-		'label'       => "Foo",
-		'placeholder' => 'Foo'
-	)
-);
-WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
