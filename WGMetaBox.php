@@ -4,6 +4,7 @@ require_once( dirname( __FILE__ ) . "/WGMetaBoxInputCheckbox.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputSelect.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputText.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputTextarea.php" );
+require_once( dirname( __FILE__ ) . "/WGMetaBoxInputRichEdit.php" );
 
 /**
  * Class facilitating creating meta boxes in WordPress
@@ -133,7 +134,8 @@ class WGMetaBox
 			'checkbox' => 'WGMetaBoxInputCheckbox',
 			'select'   => 'WGMetaBoxInputSelect',
 			'text'     => 'WGMetaBoxInputText',
-			'textarea' => 'WGMetaBoxInputTextarea'
+			'textarea' => 'WGMetaBoxInputTextarea',
+			'richedit' => 'WGMetaBoxInputRichEdit'
 		);
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';

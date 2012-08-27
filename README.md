@@ -49,7 +49,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 * **$priority** Priority _(optional)_
 
 ## Input fields
-Currently there are four input fields supported: *text*, *textarea*, *select*, *checkbox*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
+Currently there are four input fields supported: *text*, *textarea*, *select*, *checkbox*, *rich editor*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
 
 ### Common arguments
 There are some common and some field specific arguments. The common arguments are the following.
@@ -93,8 +93,17 @@ In the example in the introduction, the select field would be accessible with th
 # Accessing the meta values
 Since this library only creates the meta box (and handles saving) the meta values are accessed the regular WordPress way, by using ``get_post_meta()``. Each input field's key is a concatenation of the meta box's id, a dash ("-") and the fields slug, i.e. ``example-favorite-color``.
 
+### Rich editor
+The rich editor corresponds to the WYSIWYG editor used by default in WordPress. Note that the common property _class_ and settings property _editor\_class_ are the same.
+
+* **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings
+
 
 # Changelog
+### 2012-08-27 0.2
+* Added rich text editor.
+
+
 ### 2012-07-27 Alpha 0.1 release
 
 # License (MIT)
