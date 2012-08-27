@@ -49,7 +49,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 * **$priority** Priority _(optional)_
 
 ## Input fields
-Currently there are four input fields supported: *text*, *textarea*, *select*, *checkbox*, *rich editor*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
+Currently theses input fields are supported: *text*, *textarea*, *select*, *checkbox*, *rich editor*, *date*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
 
 ### Common arguments
 There are some common and some field specific arguments. The common arguments are the following.
