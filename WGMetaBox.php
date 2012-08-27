@@ -5,6 +5,7 @@ require_once( dirname( __FILE__ ) . "/WGMetaBoxInputSelect.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputText.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputTextarea.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputRichEdit.php" );
+require_once( dirname( __FILE__ ) . "/WGMetaBoxInputDate.php" );
 
 /**
  * Class facilitating creating meta boxes in WordPress
@@ -27,6 +28,8 @@ class WGMetaBox
 		
 		add_action( 'admin_menu', array( $this, 'add' ) );
 		add_action( 'save_post', array( $this, 'save' ) );
+		
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 	}
 	
 	/**
@@ -86,8 +89,8 @@ class WGMetaBox
 		$page_meta = array();
 		foreach( $this->params['fields'] as $slug => $field )
 		{
-			// Save text, textarea, select
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'select' ) ) )
+			// Save text, textarea, select, richedit and date
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
 				$page_meta[$name] = $_POST[$name];
@@ -135,7 +138,8 @@ class WGMetaBox
 			'select'   => 'WGMetaBoxInputSelect',
 			'text'     => 'WGMetaBoxInputText',
 			'textarea' => 'WGMetaBoxInputTextarea',
-			'richedit' => 'WGMetaBoxInputRichEdit'
+			'richedit' => 'WGMetaBoxInputRichEdit',
+			'date'     => 'WGMetaBoxInputDate'
 		);
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
@@ -166,5 +170,17 @@ class WGMetaBox
 		}
 		$output .= "</table>";
 		echo $output;
+	}
+	
+	/**
+	 * Enqueue needed JS
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function enqueue_js()
+	{
+	    wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 	}
 }

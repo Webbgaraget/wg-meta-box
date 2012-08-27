@@ -90,18 +90,25 @@ In the example in the introduction, the select field would be accessible with th
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
 
-# Accessing the meta values
-Since this library only creates the meta box (and handles saving) the meta values are accessed the regular WordPress way, by using ``get_post_meta()``. Each input field's key is a concatenation of the meta box's id, a dash ("-") and the fields slug, i.e. ``example-favorite-color``.
 
 ### Rich editor
 The rich editor corresponds to the WYSIWYG editor used by default in WordPress. Note that the common property _class_ and settings property _editor\_class_ are the same.
 
-* **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings
+* **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings. _(array, optional, default: [])__
+
+### Date
+Input field with datepicker utilizing jQuery UI's [datepicker](http://jqueryui.com/demos/datepicker/).
+
+* **first\_day** Number of first day of week, where sunday is 0. _(integer, optional, default: 0)_
+* **format** Date format according to spec found [here](http://docs.jquery.com/UI/Datepicker/formatDate). _(string, optional, default: 'yy-mm-dd')_
+
+# Accessing the meta values
+Since this library only creates the meta box (and handles saving) the meta values are accessed the regular WordPress way, by using ``get_post_meta()``. Each input field's key is a concatenation of the meta box's id, a dash ("-") and the fields slug, i.e. ``example-favorite-color``.
 
 
 # Changelog
 ### 2012-08-27 0.2
-* Added rich text editor.
+* Added rich text editor and date field.
 
 
 ### 2012-07-27 Alpha 0.1 release
