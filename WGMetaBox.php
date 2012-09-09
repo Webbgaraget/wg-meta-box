@@ -16,6 +16,15 @@ class WGMetaBox
 {
 	protected function __construct( $id, $title, $fields, $post_type, $context, $priority, $callback_args )
 	{
+		$this->class_names = array(
+			'checkbox' => 'WGMetaBoxInputCheckbox',
+			'select'   => 'WGMetaBoxInputSelect',
+			'text'     => 'WGMetaBoxInputText',
+			'textarea' => 'WGMetaBoxInputTextarea',
+			'richedit' => 'WGMetaBoxInputRichEdit',
+			'date'     => 'WGMetaBoxInputDate'
+		);
+
 		$this->params = array(
 			'id'            => $id,
 			'title'         => $title,
@@ -30,6 +39,10 @@ class WGMetaBox
 		add_action( 'save_post', array( $this, 'save' ) );
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
+		
+        // Add columns to the overview
+		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
+		add_filter( 'manage_' . $post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
 	}
 	
 	/**
@@ -133,14 +146,6 @@ class WGMetaBox
 	public function render()
 	{
 		global $post;
-		$class_names = array(
-			'checkbox' => 'WGMetaBoxInputCheckbox',
-			'select'   => 'WGMetaBoxInputSelect',
-			'text'     => 'WGMetaBoxInputText',
-			'textarea' => 'WGMetaBoxInputTextarea',
-			'richedit' => 'WGMetaBoxInputRichEdit',
-			'date'     => 'WGMetaBoxInputDate'
-		);
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
 		$output .= '<table class="form-table">';
@@ -152,11 +157,11 @@ class WGMetaBox
 			{
 				throw new Exception( "Type not defined for {$slug}" );
 			}
-			if ( array_key_exists( $field['type'], $class_names ) )
+			if ( array_key_exists( $field['type'], $this->class_names ) )
 			{
 				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
 				$field['slug'] = $slug;
-				$field = new $class_names[$field['type']]( $this->params['id'], $field );
+				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
 				if ( isset( $value ) && !is_null( $value ) && mb_strlen( $value ) != 0 )
 				{
 					$field->set_value( $value );
@@ -170,6 +175,57 @@ class WGMetaBox
 		}
 		$output .= "</table>";
 		echo $output;
+	}
+	
+	/**
+	 * Add columns to the post overview
+	 *
+	 * @param string $post_columns 
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function add_columns( $post_columns )
+	{
+		// Loop through each field
+		foreach( $this->params['fields'] as $slug => $field )
+		{
+			if ( !isset( $field['type'] ) )
+			{
+				throw new Exception( "Type not defined for {$slug}" );
+			}
+			if ( array_key_exists( $field['type'], $this->class_names ) )
+			{
+			    $field['slug'] = $slug;
+				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
+                if ( $field->show_in_overview() )
+                {
+                    $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_label() ) );
+                }
+			}
+			else
+			{
+				throw new Exception( "Field has unknown type: {$field['type']}" );
+			}
+		}
+		return $post_columns;
+	}
+	
+	/**
+	 * Populates column with meta data
+	 *
+	 * @param string $column_name 
+	 * @param string $post_id 
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function populate_column( $slug )
+	{
+	    global $post;
+        $field = $this->params['fields'][$slug];
+	    $field['slug'] = $slug;
+	    $field['post'] = $post;
+		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
+        echo $field->get_column_value();
 	}
 	
 	/**
