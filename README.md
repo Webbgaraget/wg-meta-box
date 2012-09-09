@@ -58,8 +58,6 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **label** Field label. _(string, required)_
 
-* **slug** Combined with the meta box id, the slug constitutes the key for the meta value. _(string, required)_
-
 In the example in the introduction, the select field would be accessible with the key ``example-favorite-color``.
 
 * **class** Additional class(es) of the input field. _(string, optional, default: "")_
@@ -107,7 +105,11 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
-### 2012-08-27 0.2
+### 2012-09-09 v0.2.1
+* Fixed misplaced rich editor. Fixes #3.
+* Removed slug parameter from documentation about common parameters, since it's never used.
+
+### 2012-08-27 v0.2
 * Added rich text editor and date field.
 
 

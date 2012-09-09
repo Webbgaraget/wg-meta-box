@@ -59,7 +59,13 @@ class WGMetaBoxInputRichEdit extends WGMetaBoxInput
 		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
 		
 		/*** Add input field **/
-		$output .= '<td>' . wp_editor( $this->properties['value'], $this->namespace . '-' . $this->properties['slug'], $settings );
+		$output .= '<td>';
+		
+        // Catch output since wp_editor() echoes the result
+		ob_start();
+		wp_editor( $this->properties['value'], $this->namespace . '-' . $this->properties['slug'], $settings );
+		$output .= ob_get_contents();
+		ob_end_clean();
 		
 		// Description
 		if ( isset( $this->properties['description'] ) )
