@@ -200,7 +200,7 @@ class WGMetaBox
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
                 if ( $field->show_in_admin_column() )
                 {
-                    $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_label() ) );
+                    $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_column_label() ) );
 		            add_filter( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
                 }
 			}

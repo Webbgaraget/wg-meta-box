@@ -108,4 +108,19 @@ abstract class WGMetaBoxInput
      {
          return $this->get_value();
      }
+     
+     /**
+      * Gets the admin column label
+      *
+      * @return void
+      * @author Erik Hedberg (erik@webbgaraget.se)
+      */
+     public function get_column_label()
+     {
+         if ( isset( $this->properties['admin-column-label'] ) )
+         {
+             return $this->properties['admin-column-label'];
+         }
+         return $this->get_label();
+     }
 }

@@ -10,16 +10,13 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 	public function __construct( $namespace, $properties )
 	{
 		$this->namespace = $namespace;
-		$this->properties = $properties;
 		
-        $this->labels = array(
-            "No",
-            "Yes"
-        );
-		if ( isset( $this->properties['admin-column-labels']) && is_array( $this->properties['admin-column-labels'] ) )
-		{
-		    $this->labels = $this->properties['admin-column-labels'];
-		}
+		$default_properties = array(
+		  'checked'                      => false,
+		  'admin-column-checked-label'   => 'Yes',
+		  'admin-column-unchecked-label' => 'No'
+		);
+		$this->properties = array_merge( $default_properties, $properties );
 	}
 	
 	/**
@@ -113,6 +110,10 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 	 */
      public function get_column_value()
      {
-         return $this->get_value() == "1" ? $this->labels[1] : $this->labels[0];
+         if ( $this->get_value() == "1" )
+         {
+             return $this->properties['admin-column-checked-label'];
+         }
+         return $this->properties['admin-column-unchecked-label'];
      }
 }

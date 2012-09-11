@@ -4,7 +4,7 @@
 * Say good bye to large chunks of code for handling meta boxes
 * Say hello to the beauty of easily adding meta boxes programmatically
 * Speed up your development phase
-* Never ever to bother about the problem why the meta data isn't stored as supposed to
+* Never ever have to bother about the problem why the meta data isn't stored as supposed to
 * Feel safe that your user won't change the meta boxes (as with a meta box GUI plugin)
 
 # Example
@@ -29,6 +29,8 @@ Here's an example of how a select and a text field are added:
 	        )
 	    );
 	WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
+	
+The fields are accessible through the meta keys `example-favorite-color` and `example-name`.
 
 # Creating a meta box
 The syntax for creating a meta box is very similar to WordPress' native function [``add_meta_box()``](http://codex.wordpress.org/Function_Reference/add_meta_box). It takes the same parameters, except number three.
@@ -58,13 +60,13 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **label** Field label. _(string, required)_
 
-* **admin-column** Whether to show the value as admin column
-
-In the example in the introduction, the select field would be accessible with the key ``example-favorite-color``.
-
 * **class** Additional class(es) of the input field. _(string, optional, default: "")_
 
 * **disabled** Whether the input field is disabled or not. _(boolean, optional, default: false)_
+
+* **admin-column** Whether to show the value as admin column _(boolean, optional, default: false)_
+
+* **admin-column-label** Label for admin column. If not set, it will default to the label. _(string, optional, default: see label)_
 
 ### Text
 
@@ -92,13 +94,15 @@ In the example in the introduction, the select field would be accessible with th
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
 
-* **admin-column-labels** Numerative consisting of labels to show when not checked/checked. _(array, options, default: `array("No", "Yes")`)_
+* **admin-column-checked-label** Label used in admin column to indicate checked. _(string, optional, default: "Yes")_
+
+* **admin-column-unchecked-label** LAbel used in admin column to indicated unchecked. _(string, optional, default: "No")_
 
 
 ### Rich editor
 The rich editor corresponds to the WYSIWYG editor used by default in WordPress. Note that the common property _class_ and settings property _editor\_class_ are the same.
 
-* **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings. _(array, optional, default: [])__
+* **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings. _(array, optional, default: [])_
 
 ### Date
 Input field with datepicker utilizing jQuery UI's [datepicker](http://jqueryui.com/demos/datepicker/).
