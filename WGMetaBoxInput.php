@@ -67,24 +67,45 @@ abstract class WGMetaBoxInput
 	}
 	
 	/**
-	 * Whether the meta is supposed to be shown in the overview
+	 * Whether the meta is supposed to be shown in the admin column
 	 *
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function show_in_overview()
+	public function show_in_admin_column()
 	{
-	    return isset( $this->properties['overview'] ) && $this->properties['overview'];
+	    return isset( $this->properties['admin-column'] ) && $this->properties['admin-column'];
 	}
 	
 	/**
-	 * Retrieves the value to be echoed in the overview
+	 * Gets the value
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function get_value()
+	{
+	    // In case value already set
+	    if ( isset( $this->properties['value'] ) )
+	    {
+	        return $this->properties['value'];
+	    }
+	    // In case value defined in post-meta
+        if ( $value = get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true ) )
+        {
+            return $value;
+        }
+        return null;
+	}
+	
+	/**
+	 * Retrieves the value to be echoed in the admin column
 	 *
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
      public function get_column_value()
      {
-         return get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true );
+         return $this->get_value();
      }
 }

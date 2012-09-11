@@ -58,6 +58,8 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **label** Field label. _(string, required)_
 
+* **admin-column** Whether to show the value as admin column
+
 In the example in the introduction, the select field would be accessible with the key ``example-favorite-color``.
 
 * **class** Additional class(es) of the input field. _(string, optional, default: "")_
@@ -78,7 +80,9 @@ In the example in the introduction, the select field would be accessible with th
 
 ### Select
 
-**options** Array with the selectable options. The key will be the value and the value the option value. _(array, required)_
+* **options** Array with the selectable options. The key will be the value and the value the option value. Note that if you define key 0 it will be in conflict with possible defined default value. _(array, required)_
+
+* **default** Default name for option with value 0. The value will be used if there's none set or the one set isn't present in the options array. _(string, optional, default: "`<i>None</i>`")_
 
 * **size** Corresponds to the HTML 'size' attribute _(integer, optional, default: 1)_
 
@@ -87,6 +91,8 @@ In the example in the introduction, the select field would be accessible with th
 ### Checkbox
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
+
+* **admin-column-labels** Numerative consisting of labels to show when not checked/checked. _(array, options, default: `array("No", "Yes")`)_
 
 
 ### Rich editor
@@ -105,6 +111,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2012-09-xx v0.3
+* Added support for admin columns. Fixes #5.
+
 ### 2012-09-09 v0.2.1
 * Fixed misplaced rich editor. Fixes #3.
 * Removed slug parameter from documentation about common parameters, since it's never used.

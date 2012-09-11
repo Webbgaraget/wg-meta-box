@@ -40,7 +40,7 @@ class WGMetaBox
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 		
-        // Add columns to the overview
+        // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
 		add_filter( 'manage_' . $post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
 	}
@@ -178,7 +178,7 @@ class WGMetaBox
 	}
 	
 	/**
-	 * Add columns to the post overview
+	 * Add columns to the admin column
 	 *
 	 * @param string $post_columns 
 	 * @return void
@@ -197,7 +197,7 @@ class WGMetaBox
 			{
 			    $field['slug'] = $slug;
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
-                if ( $field->show_in_overview() )
+                if ( $field->show_in_admin_column() )
                 {
                     $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_label() ) );
                 }
@@ -211,7 +211,7 @@ class WGMetaBox
 	}
 	
 	/**
-	 * Populates column with meta data
+	 * Populates admin column with meta data
 	 *
 	 * @param string $column_name 
 	 * @param string $post_id 

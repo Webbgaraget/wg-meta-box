@@ -11,6 +11,15 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 	{
 		$this->namespace = $namespace;
 		$this->properties = $properties;
+		
+        $this->labels = array(
+            "No",
+            "Yes"
+        );
+		if ( isset( $this->properties['admin-column-labels']) && is_array( $this->properties['admin-column-labels'] ) )
+		{
+		    $this->labels = $this->properties['admin-column-labels'];
+		}
 	}
 	
 	/**
@@ -95,4 +104,15 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 		$output .= '</tr>';
 		return $output;
 	}
+	
+	/**
+	 * Retrieves the value to be echoed in the admin column
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+     public function get_column_value()
+     {
+         return $this->get_value() == "1" ? $this->labels[1] : $this->labels[0];
+     }
 }

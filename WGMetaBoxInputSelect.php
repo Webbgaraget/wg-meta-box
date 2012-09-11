@@ -11,6 +11,12 @@ class WGMetaBoxInputSelect extends WGMetaBoxInput
 	{
 		$this->namespace = $namespace;
 		$this->properties = $properties;
+		
+        // Add default value to options
+		if ( ( isset( $this->properties['default'] ) && $default = $this->properties['default'] ) || $default = "<i>None</i>" )
+		{
+            $this->properties['options'] = array_merge( array( '0' => $this->properties['default'] ), $this->properties['options'] );
+		}
 	}
 	
 	/**
@@ -75,11 +81,12 @@ class WGMetaBoxInputSelect extends WGMetaBoxInput
 		{
 			throw new Exception( "Options param must be array" );
 		}
+		
 		$output .= '<select ' . implode( ' ', $attributes ) . '>';
 		foreach( $this->properties['options'] as $value => $name )
 		{
 			$selected = '';
-			if ( isset( $this->properties['value'] ) && $this->properties['value'] == $value )
+			if ( $this->get_value() == $value )
 			{
 				$selected = ' selected="selected"';
 			}
@@ -97,4 +104,54 @@ class WGMetaBoxInputSelect extends WGMetaBoxInput
 		$output .= '</tr>';
 		return $output;
 	}
+	
+	/**
+	 * Retrieves the default option
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function get_default_option()
+	{
+	    if ( isset( $this->properties['default_option'] ) )
+	    {
+	        return $this->properties['default_option'];
+	    }
+	    return null;
+	}
+	
+	/**
+	 * Retrieves the value
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function get_value()
+	{
+        $value = parent::get_value();
+
+        // In case of default value
+        if ( !$value || !array_key_exists( $value, $this->properties['options'] ) )
+        {
+            // Default value
+            if ( isset( $this->properties['default'] ) )
+            {
+                return "0";
+            }
+            // Otherwise, there's no value
+            return null;
+        }
+        return $value;
+	}
+	
+	/**
+	 * Retrieves the value to be echoed in the admin column
+	 *
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+     public function get_column_value()
+     {
+         return $this->properties['options'][$this->get_value()];
+     }
 }
