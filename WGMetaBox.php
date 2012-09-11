@@ -35,6 +35,8 @@ class WGMetaBox
 			'callback_args' => $callback_args
 		);
 		
+		$this->post_type = $post_type;
+		
 		add_action( 'admin_menu', array( $this, 'add' ) );
 		add_action( 'save_post', array( $this, 'save' ) );
 		
@@ -42,7 +44,6 @@ class WGMetaBox
 		
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
-		add_filter( 'manage_' . $post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
 	}
 	
 	/**
@@ -200,6 +201,7 @@ class WGMetaBox
                 if ( $field->show_in_admin_column() )
                 {
                     $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_label() ) );
+		            add_filter( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
                 }
 			}
 			else
