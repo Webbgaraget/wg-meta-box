@@ -15,7 +15,7 @@ class WGMetaBoxInputSelect extends WGMetaBoxInput
         // Add default value to options
 		if ( ( isset( $this->properties['default'] ) && $default = $this->properties['default'] ) || $default = "<i>None</i>" )
 		{
-            $this->properties['options'] = array_merge( array( '0' => $this->properties['default'] ), $this->properties['options'] );
+            $this->properties['options'] = array_diff_key( array( '0' => $this->properties['default'] ), $this->properties['options'] ) + $this->properties['options'];
 		}
 	}
 	
