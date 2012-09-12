@@ -7,6 +7,39 @@
  */
 abstract class WGMetaBoxInput
 {
+    
+    public function __construct( $namespace, $properties )
+    {
+		// Validate slug
+		if ( !isset( $properties['slug'] ) )
+		{
+			throw new Exception( "Slug must be defined" );
+		}
+		
+		// Validate label
+		if ( !isset( $properties['label'] ) )
+		{
+			throw new Exception( "Label must be defined" );
+		}
+
+
+        $this->namespace = $namespace;
+        $this->default_properties = array_merge( array(
+            'admin-column' => array(
+                'display' => false,
+                'label' => $properties['label']
+            ),
+            ), $this->default_properties );
+        
+        // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
+		if ( array_key_exists( 'admin-column', $properties ) )
+		{
+            $this->default_properties['admin-column'] = array_merge( $this->default_properties['admin-column'], $properties['admin-column'] );
+            unset( $properties['admin-column'] );
+		}
+		$this->properties = array_merge( $this->default_properties, $properties );
+    }
+        
 	/**
 	 * Generates HTML markup for input field
 	 *
@@ -74,7 +107,7 @@ abstract class WGMetaBoxInput
 	 */
 	public function show_in_admin_column()
 	{
-	    return isset( $this->properties['admin-column'] ) && $this->properties['admin-column'];
+	    return $this->properties['admin-column']['display'];
 	}
 	
 	/**
@@ -117,9 +150,9 @@ abstract class WGMetaBoxInput
       */
      public function get_column_label()
      {
-         if ( isset( $this->properties['admin-column-label'] ) )
+         if ( isset( $this->properties['admin-column']['label'] ) )
          {
-             return $this->properties['admin-column-label'];
+             return $this->properties['admin-column']['label'];
          }
          return $this->get_label();
      }

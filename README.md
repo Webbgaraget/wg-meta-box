@@ -26,11 +26,21 @@ Here's an example of how a select and a text field are added:
 	        'type'        => 'text',
 	        'label'       => 'Name',
 	        'placeholder' => 'Name'
+	        ),
+	    'visible' => array(
+	        'type'         => 'checkbox',
+	        'label'        => 'Visible',
+	        'admin-column' => array(
+	            'display'         => true,
+	            'label'           => 'Visibility',
+	            'label-unchecked' => 'Invisible',
+	            'label-checked'   => 'Visible'
+	            )
 	        )
 	    );
 	WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
 	
-The fields are accessible through the meta keys `example-favorite-color` and `example-name`.
+The fields are accessible through the meta keys `example-favorite-color`, `example-name` and `example-visible`.
 
 # Creating a meta box
 The syntax for creating a meta box is very similar to WordPress' native function [``add_meta_box()``](http://codex.wordpress.org/Function_Reference/add_meta_box). It takes the same parameters, except number three.
@@ -44,7 +54,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 
 * **$fields** Array with specification of the input fields. See section about the fields below. _(required)_
 
-* **$post_type** Name of post type to register the meta box with. _(required)_
+* **$post\_type** Name of post type to register the meta box with. _(required)_
 
 * **$context** Context _(optional)_
 
@@ -64,9 +74,12 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **disabled** Whether the input field is disabled or not. _(boolean, optional, default: false)_
 
-* **admin-column** Whether to show the value as admin column _(boolean, optional, default: false)_
+* **admin-column** Options for the admin column. See separate section.
 
-* **admin-column-label** Label for admin column. If not set, it will default to the label. _(string, optional, default: see label)_
+#### Admin column parameters
+* **display** Whether to show the value as admin column _(boolean, optional, default: false)_
+
+* **label** Label for admin column. If not set, it will default to the label. _(string, optional, default: field label)_
 
 ### Text
 
@@ -94,9 +107,12 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
 
-* **admin-column-checked-label** Label used in admin column to indicate checked. _(string, optional, default: "Yes")_
+#### Admin column
+This type has some additional admin column parameters:
 
-* **admin-column-unchecked-label** LAbel used in admin column to indicated unchecked. _(string, optional, default: "No")_
+* **label-checked** Label used in admin column to indicate checked. _(string, optional, default: "Yes")_
+
+* **label-unchecked** LAbel used in admin column to indicated unchecked. _(string, optional, default: "No")_
 
 
 ### Rich editor

@@ -9,14 +9,15 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 {
 	public function __construct( $namespace, $properties )
 	{
-		$this->namespace = $namespace;
-		
-		$default_properties = array(
-		  'checked'                      => false,
-		  'admin-column-checked-label'   => 'Yes',
-		  'admin-column-unchecked-label' => 'No'
+		$this->default_properties = array(
+		  'checked'      => false,
+		  'admin-column' => array(
+		      'label-checked'   => 'Yes',
+		      'label-unchecked' => 'No'
+		  )
 		);
-		$this->properties = array_merge( $default_properties, $properties );
+
+	    parent::__construct( $namespace, $properties );
 	}
 	
 	/**
@@ -47,15 +48,9 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		if ( isset( $this->properties['slug'] ) )
-		{
-			$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-			$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		}
-		else
-		{
-			throw new Exception( "Slug must be defined" );
-		}
+		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+
 		// Value
 		if ( isset( $this->properties['slug'] ) )
 		{
@@ -79,12 +74,6 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 		
 		
 		/** Add label to markup **/
-		// Validate label
-		if ( !isset( $this->properties['label'] ) )
-		{
-			throw new Exception( "Label must be defined" );
-		}
-		// Add to markup
 		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
 		
 		/*** Add input field **/
@@ -112,8 +101,8 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
      {
          if ( $this->get_value() == "1" )
          {
-             return $this->properties['admin-column-checked-label'];
+             return $this->properties['admin-column']['label-checked'];
          }
-         return $this->properties['admin-column-unchecked-label'];
+         return $this->properties['admin-column']['label-unchecked'];
      }
 }

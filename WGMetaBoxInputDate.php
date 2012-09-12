@@ -28,15 +28,9 @@ class WGMetaBoxInputDate extends WGMetaBoxInput
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		if ( isset( $this->properties['slug'] ) )
-		{
-			$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-			$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		}
-		else
-		{
-			throw new Exception( "Slug must be defined" );
-		}
+		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+
 		// Value
 		if ( isset( $this->properties['value'] ) )
 		{
@@ -64,12 +58,6 @@ class WGMetaBoxInputDate extends WGMetaBoxInput
 		
 		
 		/** Add label to markup **/
-		// Validate label
-		if ( !isset( $this->properties['label'] ) )
-		{
-			throw new Exception( "Label must be defined" );
-		}
-		// Add to markup
 		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
 		
 		/*** Add input field **/

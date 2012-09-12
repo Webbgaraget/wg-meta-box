@@ -9,8 +9,8 @@ class WGMetaBoxInputRichEdit extends WGMetaBoxInput
 {
 	public function __construct( $namespace, $properties )
 	{
-		$this->namespace = $namespace;
-		$this->properties = $properties;
+		$this->default_properties = array();
+	    parent::__construct( $namespace, $properties );
 	}
 	
 	/**
@@ -24,11 +24,7 @@ class WGMetaBoxInputRichEdit extends WGMetaBoxInput
 		$output = "<tr>";
 		
 		/* Setup attributes */
-		if ( !isset( $this->properties['slug'] ) )
-		{
-			throw new Exception( "Slug must be defined" );
-		}
-		
+		// Name
 		/** Editor properties ***/
         $settings = array();
 		if ( isset( $this->properties['settings'] ) )
@@ -50,12 +46,6 @@ class WGMetaBoxInputRichEdit extends WGMetaBoxInput
 		}
 		
 		/** Add label to markup **/
-		// Validate label
-		if ( !isset( $this->properties['label'] ) )
-		{
-			throw new Exception( "Label must be defined" );
-		}
-		// Add to markup
 		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
 		
 		/*** Add input field **/
