@@ -54,7 +54,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 
 * **$fields** Array with specification of the input fields. See section about the fields below. _(required)_
 
-* **$post\_type** Name of post type to register the meta box with. _(required)_
+* **$post\_types** Name(s) of post types to register the meta box with. Can be either string (if only one) or array of strings (if multiple) _(string/array, required)_
 
 * **$context** Context _(optional)_
 
@@ -133,6 +133,7 @@ Since this library only creates the meta box (and handles saving) the meta value
 # Changelog
 ### 2012-09-xx v0.3
 * Added support for admin columns. Fixes #5.
+* Added feature to register meta box with multiple post types. Fixes #6.
 
 ### 2012-09-09 v0.2.1
 * Fixed misplaced rich editor. Fixes #3.

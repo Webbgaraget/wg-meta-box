@@ -52,16 +52,23 @@ class WGMetaBox
 	 * @param string $id 
 	 * @param string $title 
 	 * @param array $fields 
-	 * @param string $post_type
+	 * @param string/array $post_types
 	 * @param string $context 
 	 * @param string $priority 
 	 * @param string $callback_args 
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public static function add_meta_box( $id, $title, Array $fields, $post_type, $context = 'advanced', $priority = 'default', $callback_args = null)
+	public static function add_meta_box( $id, $title, Array $fields, $post_types, $context = 'advanced', $priority = 'default', $callback_args = null)
 	{
-		$meta_box = new static( $id, $title, $fields, $post_type, $context, $priority, $callback_args );
+        if ( !is_array( $post_types ) )
+        {
+            $post_types = array( $post_types );
+        }
+        foreach( $post_types as $post_type )
+        {
+            new static( $id, $title, $fields, $post_type, $context, $priority, $callback_args );
+        }
 	}
 		
 	/**
