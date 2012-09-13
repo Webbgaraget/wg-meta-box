@@ -52,7 +52,7 @@ class WGMetaBox
 	 * @param string $id 
 	 * @param string $title 
 	 * @param array $fields 
-	 * @param string/array $post_types
+	 * @param string|array $post_types
 	 * @param string $context 
 	 * @param string $priority 
 	 * @param string $callback_args 

@@ -54,7 +54,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 
 * **$fields** Array with specification of the input fields. See section about the fields below. _(required)_
 
-* **$post\_types** Name(s) of post types to register the meta box with. Can be either string (if only one) or array of strings (if multiple) _(string/array, required)_
+* **$post\_types** Name(s) of post types to register the meta box with. Can be either string (if only one) or array of strings (if multiple) _(string|array, required)_
 
 * **$context** Context _(optional)_
 
