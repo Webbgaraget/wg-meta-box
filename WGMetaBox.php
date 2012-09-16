@@ -230,7 +230,11 @@ class WGMetaBox
 	public function populate_column( $slug )
 	{
 	    global $post;
-        $field = $this->params['fields'][$slug];
+	    
+	    // Do return if the column slug isn't among the fields (i.e. other plugin)
+	    if ( !array_key_exists( $slug, $this->params['fields'] ) ) return;
+	    
+        $field = $this->params['fields'][$slug];        
 	    $field['slug'] = $slug;
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
