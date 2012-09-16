@@ -132,7 +132,7 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 # Changelog
 ### 2012-09-16 v0.3.1
-* Removes a bug causing post overviews to crash if other scripts where to output admin columns as well.
+* Removed a bug causing post overviews to crash if other scripts where to output admin columns as well.
 
 ### 2012-09-13 v0.3
 * Added support for admin columns. Fixes #5.
