@@ -151,11 +151,17 @@ class WGMetaBox
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function render()
+	public function render($post, $context)
 	{
 		global $post;
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
+		
+		if ( isset( $context['args'] ) && isset( $context['args']['description'] ) )
+		{
+		    $output .= call_user_func( $context['args']['description'] );
+		}
+		
 		$output .= '<table class="form-table">';
 
 		// Loop through each field

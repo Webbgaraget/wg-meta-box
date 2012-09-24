@@ -60,6 +60,14 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 
 * **$priority** Priority _(optional)_
 
+* **$callback\_args** Callback arguments. See description below. _(array, optional, default: null)_
+
+## Callback arguments
+As of now, only one callback argument is supported.
+
+### Description
+In order to add a description to the meta field, which will be printed above the input fields, supply the key `render` with a callback function assigned. The callback function should return a string, HTML-formatted.
+
 ## Input fields
 Currently theses input fields are supported: *text*, *textarea*, *select*, *checkbox*, *rich editor*, *date*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
 
@@ -131,6 +139,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2012-**-** v0.4
+* Added feature to add callback function for printing a description above the input fields.
+
 ### 2012-09-16 v0.3.1
 * Removed a bug causing post overviews to crash if other scripts where to output admin columns as well.
 
