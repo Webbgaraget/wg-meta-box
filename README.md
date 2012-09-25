@@ -66,7 +66,7 @@ There's no need to register ``WGMetaBox::add_meta_box()`` with any action hook w
 As of now, only one callback argument is supported.
 
 ### Description
-In order to add a description to the meta field, which will be printed above the input fields, supply the key `render` with a callback function assigned. The callback function should return a string, HTML-formatted.
+In order to add a description to the meta box, which will be printed above the input fields, supply the key `render` with a callback function assigned. The callback function should return a string, HTML-formatted.
 
 ## Input fields
 Currently theses input fields are supported: *text*, *textarea*, *select*, *checkbox*, *rich editor*, *date*. Each is specified by the syntax familiar to the WordPress developer. The parameters are made up of an associative array.
