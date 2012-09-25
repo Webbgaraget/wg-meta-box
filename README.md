@@ -175,20 +175,25 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2012-09-25 v0.4.1
+* Removed a bug where a warning was triggered when trying to save an unchecked checkbox (issue #18).
+* Made sure there's always a value (empty string is default) when rendering input field (issue #17)
+* Removed a bug where a warning was triggered about undefined post when doing save routine (issue #16)
+
 ### 2012-09-25 v0.4
-* Added feature to add callback function for printing a description above the input fields.
-* Added field for providing custom markup.
-* Added support for registering callback function to print the admin column value.
+* Added feature to add callback function for printing a description above the input fields (issue #9)
+* Added field for providing custom markup (issue #12).
+* Added support for registering callback function to print the admin column value (issue #14).
 
 ### 2012-09-16 v0.3.1
-* Removed a bug causing post overviews to crash if other scripts where to output admin columns as well.
+* Removed a bug causing post overviews to crash if other scripts where to output admin columns as well (issue #10).
 
 ### 2012-09-13 v0.3
-* Added support for admin columns. Fixes #5.
-* Added feature to register meta box with multiple post types. Fixes #6.
+* Added support for admin columns (issue #5).
+* Added feature to register meta box with multiple post types (issue #6).
 
 ### 2012-09-09 v0.2.1
-* Fixed misplaced rich editor. Fixes #3.
+* Fixed misplaced rich editor (issue #3).
 * Removed slug parameter from documentation about common parameters, since it's never used.
 
 ### 2012-08-27 v0.2
