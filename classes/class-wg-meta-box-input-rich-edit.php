@@ -5,7 +5,7 @@
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
  */
-class WGMetaBoxInputRichEdit extends WGMetaBoxInput
+class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 {
 	public function __construct( $namespace, $properties )
 	{

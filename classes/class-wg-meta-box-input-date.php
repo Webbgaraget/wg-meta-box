@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Class adding functionality to add text field
+ * Class adding functionality to add date field
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
  */
-class WGMetaBoxInputText extends WGMetaBoxInput
+class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 {
 	public function __construct( $namespace, $properties )
 	{
-		$this->default_properties = array();
-	    parent::__construct( $namespace, $properties );
+		$this->namespace = $namespace;
+		$this->properties = $properties;
+		
+		add_action( 'admin_footer', array( $this, 'render_js' ) );
 	}
 	
 	/**
@@ -28,6 +30,7 @@ class WGMetaBoxInputText extends WGMetaBoxInput
 		// Name
 		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
 		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+
 		// Value
 		if ( isset( $this->properties['value'] ) )
 		{
@@ -36,11 +39,11 @@ class WGMetaBoxInputText extends WGMetaBoxInput
 		// Class
 		if ( isset( $this->properties['class'] ) )
 		{
-			$attributes[] = 'class="text large-text ' . $this->properties['class'] . '"';
+			$attributes[] = 'class="text ' . $this->properties['class'] . '"';
 		}
 		else
 		{
-			$attributes[] = 'class="text large-text"';
+			$attributes[] = 'class="text"';
 		}
 		// Disabled
 		if ( isset( $this->properties['disabled'] ) && $this->properties['disabled'] )
@@ -70,5 +73,49 @@ class WGMetaBoxInputText extends WGMetaBoxInput
 		
 		$output .= '</tr>';
 		return $output;
+	}
+	
+	/**
+	 * Renders necessary JS
+	 *
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	function render_js()
+	{
+	    
+	    /*** Set attributes ***/
+	    $attrs = array();
+	    // First day
+	    if ( isset( $this->properties['first_day'] ) )
+	    {
+	        $attrs['firstDay'] = $this->properties['first_day'];
+	    }
+	    // Format
+	    if ( isset( $this->properties['format'] ) )
+	    {
+	        $attrs['dateFormat'] = $this->properties['format'];
+	    }
+	    // Default 'yy-mm-dd'
+	    else
+	    {
+	        $attrs['dateFormat'] = 'yy-mm-dd';
+	    }
+	    
+        $attr_string = "";
+        if ( count( $attrs ) > 0 )
+        {
+            foreach( $attrs as $name => $value )
+            {
+                $attr_string .= "{$name}:'{$value}',";
+            }
+        }
+	    ?>
+        <script type="text/javascript">
+        	jQuery(document).ready(function()
+        	{
+        		jQuery("#<?php echo $this->namespace; ?>-<?php echo $this->properties['slug']; ?>").datepicker({<?php echo $attr_string; ?>});
+        	});
+        	</script>
+	    <?php
 	}
 }

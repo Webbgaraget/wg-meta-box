@@ -1,12 +1,12 @@
 <?php
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInput.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputCheckbox.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputSelect.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputText.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputTextarea.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputRichEdit.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputDate.php" );
-require_once( dirname( __FILE__ ) . "/WGMetaBoxInputCustom.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-checkbox.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-select.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-text.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-textarea.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-rich-edit.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-date.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-custom.php" );
 
 /**
  * Class facilitating creating meta boxes in WordPress
@@ -18,13 +18,13 @@ class WGMetaBox
 	protected function __construct( $id, $title, $fields, $post_type, $context, $priority, $callback_args )
 	{
 		$this->class_names = array(
-			'checkbox' => 'WGMetaBoxInputCheckbox',
-			'select'   => 'WGMetaBoxInputSelect',
-			'text'     => 'WGMetaBoxInputText',
-			'textarea' => 'WGMetaBoxInputTextarea',
-			'richedit' => 'WGMetaBoxInputRichEdit',
-			'date'     => 'WGMetaBoxInputDate',
-			'custom'   => 'WGMetaBoxInputCustom'
+			'checkbox' => 'Wg_Meta_Box_Input_Checkbox',
+			'select'   => 'Wg_Meta_Box_Input_Select',
+			'text'     => 'Wg_Meta_Box_Input_Text',
+			'textarea' => 'Wg_Meta_Box_Input_Textarea',
+			'richedit' => 'Wg_Meta_Box_Input_Rich_Edit',
+			'date'     => 'Wg_Meta_Box_Input_Date',
+			'custom'   => 'Wg_Meta_Box_Input_Custom'
 		);
 
 		$this->params = array(

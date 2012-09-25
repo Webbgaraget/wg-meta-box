@@ -5,7 +5,7 @@
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
  */
-class WGMetaBoxInputCustom extends WGMetaBoxInput
+class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 {
 	public function __construct( $namespace, $properties )
 	{
