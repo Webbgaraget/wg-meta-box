@@ -134,6 +134,38 @@ Input field with datepicker utilizing jQuery UI's [datepicker](http://jqueryui.c
 * **first\_day** Number of first day of week, where sunday is 0. _(integer, optional, default: 0)_
 * **format** Date format according to spec found [here](http://docs.jquery.com/UI/Datepicker/formatDate). _(string, optional, default: 'yy-mm-dd')_
 
+### Custom field
+This field facilitates for creating an input field with custom markup. The developer is responsible for supplying callbacks rendering valid HTML.
+
+* **callbacks** An array with a mandatory rendering callback function and an optional save callback function. _(array, required)_
+
+#### Callbacks
+There are two callback functions that can be supplied to the field. The rendering callback is the only required callback. Saving will by default be handled by saving the `$_POST` value of the field name.
+
+**render**
+
+The render paramater accepts a callback function callable by `call_user_func()`. The function must return an HTML-formatted string. It's not expected to echo anything. The function will be called with two arguments.
+
+Note that this field is required.
+
+Parameters:
+
+* **id** The id (and name) of the input field. This value is the same as the meta key and must be supplied to guarantee the value will be saved.
+
+* **value** The value of the field.
+
+**save**
+
+If the custom field requires a custom save method, it should be registered with this parameter. The function must return a value to be stored as meta value. It's called with the same arguments as the render callback.
+
+Note that this field is not required.
+
+Parameters:
+
+* **id** The id (and name) of the input field. This value is the same as the meta key and must be supplied to guarantee the value will be saved.
+
+* **value** The value of the field.
+
 # Accessing the meta values
 Since this library only creates the meta box (and handles saving) the meta values are accessed the regular WordPress way, by using ``get_post_meta()``. Each input field's key is a concatenation of the meta box's id, a dash ("-") and the fields slug, i.e. ``example-favorite-color``.
 
@@ -141,6 +173,7 @@ Since this library only creates the meta box (and handles saving) the meta value
 # Changelog
 ### 2012-**-** v0.4
 * Added feature to add callback function for printing a description above the input fields.
+* Added field for providing custom markup.
 
 ### 2012-09-16 v0.3.1
 * Removed a bug causing post overviews to crash if other scripts where to output admin columns as well.

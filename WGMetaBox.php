@@ -6,6 +6,7 @@ require_once( dirname( __FILE__ ) . "/WGMetaBoxInputText.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputTextarea.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputRichEdit.php" );
 require_once( dirname( __FILE__ ) . "/WGMetaBoxInputDate.php" );
+require_once( dirname( __FILE__ ) . "/WGMetaBoxInputCustom.php" );
 
 /**
  * Class facilitating creating meta boxes in WordPress
@@ -22,7 +23,8 @@ class WGMetaBox
 			'text'     => 'WGMetaBoxInputText',
 			'textarea' => 'WGMetaBoxInputTextarea',
 			'richedit' => 'WGMetaBoxInputRichEdit',
-			'date'     => 'WGMetaBoxInputDate'
+			'date'     => 'WGMetaBoxInputDate',
+			'custom'   => 'WGMetaBoxInputCustom'
 		);
 
 		$this->params = array(
@@ -110,7 +112,7 @@ class WGMetaBox
 		$page_meta = array();
 		foreach( $this->params['fields'] as $slug => $field )
 		{
-			// Save text, textarea, select, richedit and date
+			// Save text, textarea, select, richedit, date and custom field
 			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
@@ -121,6 +123,21 @@ class WGMetaBox
 			{
 				$name = "{$this->params['id']}-{$slug}";
 				$page_meta[$name] = ($_POST[$name] == $slug);
+			}
+			// Save custom field
+			elseif ( in_array( $field['type'], array( 'custom' ) ) )
+			{
+			    $name = "{$this->params['id']}-{$slug}";
+			    
+			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+			    {
+			        $value = call_user_func( $field['callbacks']['save'], $name, $_POST[$name] );
+			    }
+			    else
+			    {
+			        $value = $_POST[$name];
+			    }
+			    $page_meta[$name] = $value;
 			}
 			
 		}
