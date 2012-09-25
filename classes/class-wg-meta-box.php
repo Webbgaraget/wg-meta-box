@@ -93,6 +93,9 @@ class WGMetaBox
 	public function save()
 	{
 		global $post;
+        
+        if ( is_null( $post ) ) return;
+        
 		// Verify not doing autosave
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
 		{
