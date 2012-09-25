@@ -90,19 +90,4 @@ class WGMetaBoxInputCheckbox extends WGMetaBoxInput
 		$output .= '</tr>';
 		return $output;
 	}
-	
-	/**
-	 * Retrieves the value to be echoed in the admin column
-	 *
-	 * @return void
-	 * @author Erik Hedberg (erik@webbgaraget.se)
-	 */
-     public function get_column_value()
-     {
-         if ( $this->get_value() == "1" )
-         {
-             return $this->properties['admin-column']['label-checked'];
-         }
-         return $this->properties['admin-column']['label-unchecked'];
-     }
 }

@@ -89,6 +89,8 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **label** Label for admin column. If not set, it will default to the label. _(string, optional, default: field label)_
 
+* **callback** Callback function for printing the value. The function must accept the parameters `$id` and `$value` and return a string. _(callback, optional, default: A function that returns `$value`)_
+
 ### Text
 
 * **value** Field value. _(string, optional, default: '')_
@@ -115,7 +117,9 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
 
-#### Admin column
+#### Admin column (*deprecated*)
+**This feature is deprecated as of v0.4**
+
 This type has some additional admin column parameters:
 
 * **label-checked** Label used in admin column to indicate checked. _(string, optional, default: "Yes")_
@@ -171,9 +175,10 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
-### 2012-**-** v0.4
+### 2012-09-25 v0.4
 * Added feature to add callback function for printing a description above the input fields.
 * Added field for providing custom markup.
+* Added support for registering callback function to print the admin column value.
 
 ### 2012-09-16 v0.3.1
 * Removed a bug causing post overviews to crash if other scripts where to output admin columns as well.

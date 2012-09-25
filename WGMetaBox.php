@@ -113,16 +113,10 @@ class WGMetaBox
 		foreach( $this->params['fields'] as $slug => $field )
 		{
 			// Save text, textarea, select, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date' ) ) )
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
 				$page_meta[$name] = $_POST[$name];
-			}
-			// Save checkbox
-			elseif ( in_array( $field['type'], array( 'checkbox') ) )
-			{
-				$name = "{$this->params['id']}-{$slug}";
-				$page_meta[$name] = ($_POST[$name] == $slug);
 			}
 			// Save custom field
 			elseif ( in_array( $field['type'], array( 'custom' ) ) )

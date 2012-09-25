@@ -26,10 +26,11 @@ abstract class WGMetaBoxInput
         $this->namespace = $namespace;
         $this->default_properties = array_merge( array(
             'admin-column' => array(
-                'display' => false,
-                'label' => $properties['label']
+                'display'  => false,
+                'label'    =>  $properties['label'],
+                'callback' => array( $this, 'admin_column_callback' )
             ),
-            ), $this->default_properties );
+        ), $this->default_properties );
         
         // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'admin-column', $properties ) )
@@ -47,6 +48,19 @@ abstract class WGMetaBoxInput
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
 	abstract protected function render();
+	
+	/**
+	 * Default callback function for admin column
+	 *
+	 * @param string $id 
+	 * @param string $value 
+	 * @return void
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function admin_column_callback( $id, $value )
+	{
+	    return $value;
+	}
 	
 	/**
 	 * Sets value
@@ -139,7 +153,16 @@ abstract class WGMetaBoxInput
 	 */
      public function get_column_value()
      {
-         return $this->get_value();
+         if ( isset( $this->properties['admin-column']['callback'] ) )
+         {
+             $id = "{$this->namespace}-{$this->properties['slug']}";
+             $value = call_user_func( $this->properties['admin-column']['callback'], $id, $this->get_value() );
+         }
+         else
+         {
+             $value = $this->get_value();
+         }
+         return $value;
      }
      
      /**
