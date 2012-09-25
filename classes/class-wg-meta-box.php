@@ -138,11 +138,10 @@ class WGMetaBox
 			}
 			
 		}
-		
-		
+
 	    foreach( $page_meta as $key => $value )
 	    {
-	        if ( $this->post->post_type == 'revision' )
+	        if ( $post->post_type == 'revision' )
 	        {
 	            return;
 	        }
@@ -190,10 +189,8 @@ class WGMetaBox
 				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
 				$field['slug'] = $slug;
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
-				if ( isset( $value ) && !is_null( $value ) && mb_strlen( $value ) != 0 )
-				{
-					$field->set_value( $value );
-				}
+
+				$field->set_value( $value );
 				$output .= $field->render();
 			}
 			else
