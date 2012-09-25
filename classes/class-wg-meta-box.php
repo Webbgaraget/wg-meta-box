@@ -119,20 +119,28 @@ class WGMetaBox
 			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
-				$page_meta[$name] = $_POST[$name];
+				
+                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+				$value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+				
+				$page_meta[$name] = $value;
 			}
 			// Save custom field
 			elseif ( in_array( $field['type'], array( 'custom' ) ) )
 			{
 			    $name = "{$this->params['id']}-{$slug}";
 			    
+			    // Call custom callback if defined
 			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
 			    {
-			        $value = call_user_func( $field['callbacks']['save'], $name, $_POST[$name] );
+                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+
+			        $value = call_user_func( $field['callbacks']['save'], $name, $value );
 			    }
 			    else
 			    {
-			        $value = $_POST[$name];
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
 			    }
 			    $page_meta[$name] = $value;
 			}
