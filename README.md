@@ -7,9 +7,12 @@
 * Never ever have to bother about the problem why the meta data isn't stored as supposed to
 * Feel safe that your user won't change the meta boxes (as with a meta box GUI plugin)
 
+# Examples in the wiki
+Don't bother about reading this documentation. Head on to the [examples of adding the input fields](/wiki/Examples-of-different-input-types).
+
 # Example
 
-Here's an example of how a select and a text field are added:
+Still reading, are you? Here's an example of how a select and a text field are added:
 
 	$fields = array(
 	    'favorite-color' => array(
@@ -92,6 +95,7 @@ There are some common and some field specific arguments. The common arguments ar
 * **callback** Callback function for printing the value. The function must accept the parameters `$id` and `$value` and return a string. _(callback, optional, default: A function that returns `$value`)_
 
 ### Text
+Name in fields array: _text_.
 
 * **value** Field value. _(string, optional, default: '')_
 
@@ -104,6 +108,7 @@ There are some common and some field specific arguments. The common arguments ar
 * **placeholder** Placeholder text. _(string, optional, default: '')_
 
 ### Select
+Name in fields array: _select_.
 
 * **options** Array with the selectable options. The key will be the value and the value the option value. Note that if you define key 0 it will be in conflict with possible defined default value. _(array, required)_
 
@@ -114,6 +119,7 @@ There are some common and some field specific arguments. The common arguments ar
 * **multiple** Whether it's a multiple select or not. _(boolean, optional, default: false)_
 
 ### Checkbox
+Name in fields array: _checkbox_.
 
 * **checked** Whether the box is checked or not. _(boolean, optional, default: false)_
 
@@ -128,17 +134,23 @@ This type has some additional admin column parameters:
 
 
 ### Rich editor
+Name in fields array: _richedit_.
+
 The rich editor corresponds to the WYSIWYG editor used by default in WordPress. Note that the common property _class_ and settings property _editor\_class_ are the same.
 
 * **settings** Settings corresponding to [wp_editor()](http://codex.wordpress.org/Function_Reference/wp_editor) settings. _(array, optional, default: [])_
 
 ### Date
+Name in fields array: _date_.
+
 Input field with datepicker utilizing jQuery UI's [datepicker](http://jqueryui.com/demos/datepicker/).
 
 * **first\_day** Number of first day of week, where sunday is 0. _(integer, optional, default: 0)_
 * **format** Date format according to spec found [here](http://docs.jquery.com/UI/Datepicker/formatDate). _(string, optional, default: 'yy-mm-dd')_
 
 ### Custom field
+Name in fields array: _custom_.
+
 This field facilitates for creating an input field with custom markup. The developer is responsible for supplying callbacks rendering valid HTML.
 
 * **callbacks** An array with a mandatory rendering callback function and an optional save callback function. _(array, required)_
