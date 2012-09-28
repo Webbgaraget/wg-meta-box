@@ -8,7 +8,7 @@
 * Feel safe that your user won't change the meta boxes (as with a meta box GUI plugin)
 
 # Examples in the wiki
-Don't bother about reading this documentation. Head on to the [examples of adding the input fields](/wiki/Examples-of-different-input-types).
+Don't bother about reading this documentation. Head on to the [examples of adding the input fields](wiki/Examples-of-different-input-types).
 
 # Example
 
