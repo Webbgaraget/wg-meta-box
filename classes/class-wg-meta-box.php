@@ -40,7 +40,7 @@ class WGMetaBox
 		$this->post_type = $post_type;
 		
 		add_action( 'admin_menu', array( $this, 'add' ) );
-		add_action( 'save_post', array( $this, 'save' ) );
+		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 		
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 		
@@ -90,10 +90,8 @@ class WGMetaBox
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function save()
+	public function save( $post_id, $post )
 	{
-		global $post;
-        
         if ( is_null( $post ) ) return;
         
 		// Verify not doing autosave
