@@ -13,7 +13,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 	    parent::__construct( $namespace, $properties );
 		
         // Add default value to options
-		if ( ( isset( $this->properties['default'] ) && $default = $this->properties['default'] ) || $default = "<i>None</i>" )
+		if ( ( isset( $this->properties['default'] ) && $default = $this->properties['default'] ) || $this->properties['default'] = "<i>Choose</i>" )
 		{
             $this->properties['options'] = array_diff_key( array( '0' => $this->properties['default'] ), $this->properties['options'] ) + $this->properties['options'];
 		}
@@ -57,7 +57,15 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 		}
 		
 		/** Add label to markup **/
-		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
+		$output .= '<th scope="row">';
+		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+
+		if ( $this->is_required() )
+		{
+			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+		}
+
+		$output .= '</th>';
 		
 		/*** Add input field **/
 		$output .= '<td>';
@@ -124,7 +132,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
             // Default value
             if ( isset( $this->properties['default'] ) )
             {
-                return "0";
+                return '0';
             }
             // Otherwise, there's no value
             return null;
