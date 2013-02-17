@@ -187,6 +187,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-02-xx v0.5
+* Removes bug where not all admin column values were printed in case of conflicting field slugs (issue #20)
+
 ### 2013-02-11 v0.4.2
 * Stops relying on global $post variable when doing save_post. Relying on global $post would sometimes cause PHP Notice errors when saving a post.
 
