@@ -232,7 +232,9 @@ class WGMetaBox
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
                 if ( $field->show_in_admin_column() )
                 {
-                    $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_column_label() ) );
+                	// Namespace column slug to avoid conflicts
+                	$column_slug = $this->params['id'] . '-' . $field->get_slug();
+                    $post_columns = array_merge( $post_columns, array( $column_slug => $field->get_column_label() ) );
 		            add_filter( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
                 }
 			}
@@ -255,11 +257,14 @@ class WGMetaBox
 	public function populate_column( $slug )
 	{
 	    global $post;
+
+	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
 	    
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
 	    if ( !array_key_exists( $slug, $this->params['fields'] ) ) return;
 	    
-        $field = $this->params['fields'][$slug];        
+        $field = $this->params['fields'][$slug];
+        
 	    $field['slug'] = $slug;
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
