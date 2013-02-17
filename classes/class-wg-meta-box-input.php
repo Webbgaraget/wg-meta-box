@@ -28,7 +28,8 @@ abstract class Wg_Meta_Box_Input
             'admin-column' => array(
                 'display'  => false,
                 'label'    =>  $properties['label'],
-                'callback' => array( $this, 'admin_column_callback' )
+                'callback' => array( $this, 'admin_column_callback' ),
+                'sortable' => false,
             ),
         ), $this->default_properties );
         
@@ -111,6 +112,17 @@ abstract class Wg_Meta_Box_Input
 	    {
 	        throw new Exception('No label defined');
 	    }
+	}
+
+	/**
+	 * Retrieves whether sortable
+	 *
+	 * @return boolean
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function is_sortable()
+	{
+		return $this->properties['admin-column']['sortable'];
 	}
 	
 	/**

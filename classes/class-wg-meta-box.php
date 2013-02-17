@@ -46,6 +46,12 @@ class WGMetaBox
 		
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
+
+		// Register sortable columns
+		add_filter( 'manage_edit-' . $post_type . '_sortable_columns', array( $this, 'register_sortable_columns' ) );
+
+		// Add instructions for sorting meta values
+		add_filter( 'pre_get_posts', array( $this, 'register_sortable_meta' ) );
 	}
 	
 	/**
@@ -267,6 +273,53 @@ class WGMetaBox
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
         echo $field->get_column_value();
+	}
+
+	/**
+	 * Registers additional sortable columns
+	 *
+	 * @param array Names of sortable columns
+	 * @return arrray
+	 */
+	public function register_sortable_columns( $columns )
+	{
+		foreach( $this->params['fields'] as $slug => $field )
+		{
+			$field['slug'] = $this->params['id'] . '-' . $slug;
+			$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
+
+			if ( $field->is_sortable() )
+			{
+				$columns[$field->get_slug()] = $field->get_slug();
+			}
+		}
+		return $columns;
+	}
+
+	/**
+	 * Register instruction on how to order meta values
+	 *
+	 * @param array Query vars
+	 * @return array
+	 */
+	public function register_sortable_meta( $query )
+	{
+	   if( ! is_admin() )  
+	        return;  
+
+	    $orderby = $query->get( 'orderby' );
+
+	    if ( strpos( $orderby, $this->params['id'] ) !== false )
+	    {
+	    	$slug = substr( $orderby, strlen( $this->params['id'] ) + 1 );
+
+	    	if ( array_key_exists( $slug, $this->params['fields'] ) )
+	    	{
+		        $query->set( 'meta_key', $orderby );  
+		        $query->set( 'orderby','meta_value' );
+	    	}
+	    }
+	    return $query;
 	}
 	
 	/**
