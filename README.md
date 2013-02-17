@@ -21,15 +21,15 @@ Still reading, are you? Here's an example of how a select and a text field are a
 	        'options' => array(
 	            'r' => 'Red',
 	            'g' => 'Green',
-	            'b' => 'Blue'
-	        ),
-	        'value'   => 'g'
-	    ),
-	    'name' => array(
+	            'b' => 'Blue',
+	    	),
+	    	'value'   => 'g'
+		),
+		'name' => array(
 	        'type'        => 'text',
 	        'label'       => 'Name',
-	        'placeholder' => 'Name'
-	        ),
+	        'placeholder' => 'Name',
+		),
 	    'visible' => array(
 	        'type'         => 'checkbox',
 	        'label'        => 'Visible',
@@ -37,10 +37,11 @@ Still reading, are you? Here's an example of how a select and a text field are a
 	            'display'         => true,
 	            'label'           => 'Visibility',
 	            'label-unchecked' => 'Invisible',
-	            'label-checked'   => 'Visible'
-	            )
+	            'label-checked'   => 'Visible',
+	            'sortable'        => true,
 	        )
-	    );
+	    )
+	);
 	WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
 	
 The fields are accessible through the meta keys `example-favorite-color`, `example-name` and `example-visible`.
@@ -188,7 +189,8 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 # Changelog
 ### 2013-02-xx v0.5
-* Removes bug where not all admin column values were printed in case of conflicting field slugs (issue #20)
+* Removed bug where not all admin column values were printed in case of conflicting field slugs (issue #20)
+* Added option to make admin columns sortable (issue #21)
 
 ### 2013-02-11 v0.4.2
 * Stops relying on global $post variable when doing save_post. Relying on global $post would sometimes cause PHP Notice errors when saving a post.
