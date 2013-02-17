@@ -52,6 +52,12 @@ class WGMetaBox
 
 		// Add instructions for sorting meta values
 		add_filter( 'pre_get_posts', array( $this, 'register_sortable_meta' ) );
+
+		// Write error messages for required fields
+		add_action( 'admin_notices', array( $this, 'show_admin_messages' ) );
+
+		// Supress "post published" message
+		add_filter( 'post_updated_messages', array( $this, 'supress_default_message' ) );
 	}
 	
 	/**
@@ -117,16 +123,28 @@ class WGMetaBox
 	    }
 	
 		$page_meta = array();
+
+		// List of missing fields
+		$required_missing = array();
+
 		foreach( $this->params['fields'] as $slug => $field )
 		{
-			// Save text, textarea, select, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date', 'checkbox' ) ) )
+			$value = '';
+			// Save text, textarea, richedit, date and custom field
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
 				
                 // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-				$value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 				
+				$page_meta[$name] = $value;
+			}
+			// Select
+			elseif ( $field['type'] == 'select' )
+			{
+				$name = "{$this->params['id']}-{$slug}";
+				$value = isset( $_POST[$name] ) && $_POST[$name] != 0 ? $_POST[$name] : '';
 				$page_meta[$name] = $value;
 			}
 			// Save custom field
@@ -138,17 +156,20 @@ class WGMetaBox
 			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
 			    {
                     // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 
 			        $value = call_user_func( $field['callbacks']['save'], $name, $value );
 			    }
 			    else
 			    {
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 			    }
 			    $page_meta[$name] = $value;
 			}
-			
+
+			// Check if field is required and not set
+			if ( $field['required'] && '' == $value )
+				$required_missing[] = $slug;
 		}
 
 	    foreach( $page_meta as $key => $value )
@@ -158,15 +179,29 @@ class WGMetaBox
 	            return;
 	        }
 
-	        if ( get_post_meta( $post->ID, $key, FALSE ) )
-	        {
-	            update_post_meta( $post->ID, $key, $value );
-	        }
-	        else
-	        {
-	            add_post_meta( $post->ID, $key, $value );
-	        }
+	        update_post_meta( $post->ID, $key, $value );
 	    }
+
+		// Any required fields missing?
+		if ( count( $required_missing ) > 0 )
+		{
+			set_transient( $this->params['id'] . '-required-missing-fields', $required_missing );
+			set_transient( $this->params['id'] . '-missing-required-fields', 1 );
+
+			// Remove action hook and set post status to draft
+			remove_action( 'save_post', array( $this, 'save' ) );
+			wp_update_post( array(
+					'ID'          => $post->ID,
+					'post_status' => 'draft',
+				)
+			);
+			add_action( 'save_post', array( $this, 'save ' ), 10, 2 );
+		}
+		else
+		{
+			delete_transient( $this->params['id'] . '-required-missing-fields' );
+			delete_transient( $this->params['id'] . '-missing-required-fields' );
+		}
 	}
 
 	
@@ -321,6 +356,57 @@ class WGMetaBox
 	    }
 	    return $query;
 	}
+
+	/**
+	 * Prints message if required field missing
+	 *
+	 * @return void
+	 */
+	public function show_admin_messages()
+	{
+		$fields = get_transient( $this->params['id'] . '-required-missing-fields' );
+		$missing = get_transient( $this->params['id'] . '-missing-required-fields' );
+		$count = count( $fields );
+
+		if ( $missing && is_array( $fields ) )
+		{
+			// Get labels instead of slugs
+			$labels = array();
+
+			foreach( $fields as $slug )
+			{
+				$labels[] = $this->params['fields'][$slug]['label'];
+			}
+
+			echo '<div class="error"><p><strong>';
+			if ( $count == 1 )
+				echo _e( "The required field in {$this->params['title']} is missing value: " );
+			else
+				echo _e( "The following required fields in {$this->params['title']} are missing values: " );
+			echo implode( ', ', $labels );
+			echo '</strong></p></div>';
+
+			delete_transient( $this->params['id'] . '-required-missing-fields' );
+			delete_transient( $this->params['id'] . '-missing-required-fields' );
+		}
+	}
+
+	/**
+	 * Supresses the standard 'post published' message in case a required
+	 * field is missing
+	 */
+	public function supress_default_message( $messages )
+	{
+		$missing_fields = get_transient( $this->params['id'] . '-required-missing-fields' );
+
+		if ( is_array( $missing_fields ) && count( $missing_fields) > 0 )
+		{
+			$messages['post'][6] = $messages['post'][10];
+			$messages['page'][6] = $messages['page'][10];
+		}
+
+		return $messages;
+	}
 	
 	/**
 	 * Enqueue needed JS
@@ -331,6 +417,6 @@ class WGMetaBox
 	public function enqueue_js()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
+        //wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 	}
 }

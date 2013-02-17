@@ -55,7 +55,15 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		
 		
 		/** Add label to markup **/
-		$output .= '<th scope="row"><label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label></th>';
+		$output .= '<th scope="row">';
+		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+
+		if ( $this->is_required() )
+		{
+			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+		}
+
+		$output .= '</th>';
 		
 		/*** Add input field **/
 		$output .= '<td><input type="text" ' . implode( ' ', $attributes ) . '>';

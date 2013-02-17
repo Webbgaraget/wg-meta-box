@@ -31,6 +31,7 @@ abstract class Wg_Meta_Box_Input
                 'callback' => array( $this, 'admin_column_callback' ),
                 'sortable' => false,
             ),
+            'required' => false,
         ), $this->default_properties );
         
         // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
@@ -123,6 +124,16 @@ abstract class Wg_Meta_Box_Input
 	public function is_sortable()
 	{
 		return $this->properties['admin-column']['sortable'];
+	}
+
+	/**
+	 * Retrieves whether required
+	 *
+	 * @return boolean
+	 */
+	public function is_required()
+	{
+		return $this->properties['required'];
 	}
 	
 	/**
