@@ -28,8 +28,10 @@ abstract class Wg_Meta_Box_Input
             'admin-column' => array(
                 'display'  => false,
                 'label'    =>  $properties['label'],
-                'callback' => array( $this, 'admin_column_callback' )
+                'callback' => array( $this, 'admin_column_callback' ),
+                'sortable' => false,
             ),
+            'required' => false,
         ), $this->default_properties );
         
         // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
@@ -111,6 +113,27 @@ abstract class Wg_Meta_Box_Input
 	    {
 	        throw new Exception('No label defined');
 	    }
+	}
+
+	/**
+	 * Retrieves whether sortable
+	 *
+	 * @return boolean
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function is_sortable()
+	{
+		return $this->properties['admin-column']['sortable'];
+	}
+
+	/**
+	 * Retrieves whether required
+	 *
+	 * @return boolean
+	 */
+	public function is_required()
+	{
+		return $this->properties['required'];
 	}
 	
 	/**

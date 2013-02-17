@@ -46,6 +46,18 @@ class WGMetaBox
 		
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
+
+		// Register sortable columns
+		add_filter( 'manage_edit-' . $post_type . '_sortable_columns', array( $this, 'register_sortable_columns' ) );
+
+		// Add instructions for sorting meta values
+		add_filter( 'pre_get_posts', array( $this, 'register_sortable_meta' ) );
+
+		// Write error messages for required fields
+		add_action( 'admin_notices', array( $this, 'show_admin_messages' ) );
+
+		// Supress "post published" message
+		add_filter( 'post_updated_messages', array( $this, 'supress_default_message' ) );
 	}
 	
 	/**
@@ -111,16 +123,28 @@ class WGMetaBox
 	    }
 	
 		$page_meta = array();
+
+		// List of missing fields
+		$required_missing = array();
+
 		foreach( $this->params['fields'] as $slug => $field )
 		{
-			// Save text, textarea, select, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'select', 'richedit', 'date', 'checkbox' ) ) )
+			$value = '';
+			// Save text, textarea, richedit, date and custom field
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
 				
                 // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-				$value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 				
+				$page_meta[$name] = $value;
+			}
+			// Select
+			elseif ( $field['type'] == 'select' )
+			{
+				$name = "{$this->params['id']}-{$slug}";
+				$value = isset( $_POST[$name] ) && $_POST[$name] != 0 ? $_POST[$name] : '';
 				$page_meta[$name] = $value;
 			}
 			// Save custom field
@@ -132,17 +156,20 @@ class WGMetaBox
 			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
 			    {
                     // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 
 			        $value = call_user_func( $field['callbacks']['save'], $name, $value );
 			    }
 			    else
 			    {
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : "";
+                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 			    }
 			    $page_meta[$name] = $value;
 			}
-			
+
+			// Check if field is required and not set
+			if ( $field['required'] && '' == $value )
+				$required_missing[] = $slug;
 		}
 
 	    foreach( $page_meta as $key => $value )
@@ -152,15 +179,29 @@ class WGMetaBox
 	            return;
 	        }
 
-	        if ( get_post_meta( $post->ID, $key, FALSE ) )
-	        {
-	            update_post_meta( $post->ID, $key, $value );
-	        }
-	        else
-	        {
-	            add_post_meta( $post->ID, $key, $value );
-	        }
+	        update_post_meta( $post->ID, $key, $value );
 	    }
+
+		// Any required fields missing?
+		if ( count( $required_missing ) > 0 )
+		{
+			set_transient( $this->params['id'] . '-required-missing-fields', $required_missing );
+			set_transient( $this->params['id'] . '-missing-required-fields', 1 );
+
+			// Remove action hook and set post status to draft
+			remove_action( 'save_post', array( $this, 'save' ) );
+			wp_update_post( array(
+					'ID'          => $post->ID,
+					'post_status' => 'draft',
+				)
+			);
+			add_action( 'save_post', array( $this, 'save ' ), 10, 2 );
+		}
+		else
+		{
+			delete_transient( $this->params['id'] . '-required-missing-fields' );
+			delete_transient( $this->params['id'] . '-missing-required-fields' );
+		}
 	}
 
 	
@@ -230,7 +271,9 @@ class WGMetaBox
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
                 if ( $field->show_in_admin_column() )
                 {
-                    $post_columns = array_merge( $post_columns, array( $field->get_slug() => $field->get_column_label() ) );
+                	// Namespace column slug to avoid conflicts
+                	$column_slug = $this->params['id'] . '-' . $field->get_slug();
+                    $post_columns = array_merge( $post_columns, array( $column_slug => $field->get_column_label() ) );
 		            add_filter( 'manage_' . $this->post_type . '_posts_custom_column', array( $this, 'populate_column' ) );
                 }
 			}
@@ -253,15 +296,116 @@ class WGMetaBox
 	public function populate_column( $slug )
 	{
 	    global $post;
+
+	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
 	    
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
 	    if ( !array_key_exists( $slug, $this->params['fields'] ) ) return;
 	    
-        $field = $this->params['fields'][$slug];        
+        $field = $this->params['fields'][$slug];
+        
 	    $field['slug'] = $slug;
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
         echo $field->get_column_value();
+	}
+
+	/**
+	 * Registers additional sortable columns
+	 *
+	 * @param array Names of sortable columns
+	 * @return arrray
+	 */
+	public function register_sortable_columns( $columns )
+	{
+		foreach( $this->params['fields'] as $slug => $field )
+		{
+			$field['slug'] = $this->params['id'] . '-' . $slug;
+			$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
+
+			if ( $field->is_sortable() )
+			{
+				$columns[$field->get_slug()] = $field->get_slug();
+			}
+		}
+		return $columns;
+	}
+
+	/**
+	 * Register instruction on how to order meta values
+	 *
+	 * @param array Query vars
+	 * @return array
+	 */
+	public function register_sortable_meta( $query )
+	{
+	   if( ! is_admin() )  
+	        return;  
+
+	    $orderby = $query->get( 'orderby' );
+
+	    if ( strpos( $orderby, $this->params['id'] ) !== false )
+	    {
+	    	$slug = substr( $orderby, strlen( $this->params['id'] ) + 1 );
+
+	    	if ( array_key_exists( $slug, $this->params['fields'] ) )
+	    	{
+		        $query->set( 'meta_key', $orderby );  
+		        $query->set( 'orderby','meta_value' );
+	    	}
+	    }
+	    return $query;
+	}
+
+	/**
+	 * Prints message if required field missing
+	 *
+	 * @return void
+	 */
+	public function show_admin_messages()
+	{
+		$fields = get_transient( $this->params['id'] . '-required-missing-fields' );
+		$missing = get_transient( $this->params['id'] . '-missing-required-fields' );
+		$count = count( $fields );
+
+		if ( $missing && is_array( $fields ) )
+		{
+			// Get labels instead of slugs
+			$labels = array();
+
+			foreach( $fields as $slug )
+			{
+				$labels[] = $this->params['fields'][$slug]['label'];
+			}
+
+			echo '<div class="error"><p><strong>';
+			if ( $count == 1 )
+				echo _e( "The required field in {$this->params['title']} is missing value: " );
+			else
+				echo _e( "The following required fields in {$this->params['title']} are missing values: " );
+			echo implode( ', ', $labels );
+			echo '</strong></p></div>';
+
+			delete_transient( $this->params['id'] . '-required-missing-fields' );
+			delete_transient( $this->params['id'] . '-missing-required-fields' );
+		}
+	}
+
+	/**
+	 * Supresses the standard 'post published' message in case a required
+	 * field is missing
+	 */
+	public function supress_default_message( $messages )
+	{
+		$missing_fields = get_transient( $this->params['id'] . '-required-missing-fields' );
+
+		if ( is_array( $missing_fields ) && count( $missing_fields) > 0 )
+		{
+			$messages['post'][6] = $messages['post'][10];
+			$messages['page'][6] = $messages['page'][10];
+		}
+
+		return $messages;
 	}
 	
 	/**
@@ -273,6 +417,6 @@ class WGMetaBox
 	public function enqueue_js()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
+        //wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 	}
 }

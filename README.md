@@ -21,15 +21,16 @@ Still reading, are you? Here's an example of how a select and a text field are a
 	        'options' => array(
 	            'r' => 'Red',
 	            'g' => 'Green',
-	            'b' => 'Blue'
-	        ),
-	        'value'   => 'g'
-	    ),
-	    'name' => array(
+	            'b' => 'Blue',
+	    	),
+	    	'value'   => 'g'
+		),
+		'name' => array(
 	        'type'        => 'text',
 	        'label'       => 'Name',
-	        'placeholder' => 'Name'
-	        ),
+	        'placeholder' => 'Name',
+	        'required'    => true
+		),
 	    'visible' => array(
 	        'type'         => 'checkbox',
 	        'label'        => 'Visible',
@@ -37,10 +38,11 @@ Still reading, are you? Here's an example of how a select and a text field are a
 	            'display'         => true,
 	            'label'           => 'Visibility',
 	            'label-unchecked' => 'Invisible',
-	            'label-checked'   => 'Visible'
-	            )
+	            'label-checked'   => 'Visible',
+	            'sortable'        => true,
 	        )
-	    );
+	    )
+	);
 	WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
 	
 The fields are accessible through the meta keys `example-favorite-color`, `example-name` and `example-visible`.
@@ -87,12 +89,17 @@ There are some common and some field specific arguments. The common arguments ar
 
 * **admin-column** Options for the admin column. See separate section.
 
+* **required** Whether the field is required. If the required field is missing a value, the post's status will change to draft, regardless previous status. _(boolean, optional, default: false)_
+
 #### Admin column parameters
 * **display** Whether to show the value as admin column _(boolean, optional, default: false)_
 
 * **label** Label for admin column. If not set, it will default to the label. _(string, optional, default: field label)_
 
 * **callback** Callback function for printing the value. The function must accept the parameters `$id` and `$value` and return a string. _(callback, optional, default: A function that returns `$value`)_
+
+* **sortable** Set true if the admin column should be sortable. _(boolean, optional, default: false)_
+Note: As of now, the values are sorted by the raw meta value. This might be a problem for input fields of type select, since the user would expect sorting based by the values displayed in the menu.
 
 ### Text
 Name in fields array: _text_.
@@ -110,9 +117,9 @@ Name in fields array: _text_.
 ### Select
 Name in fields array: _select_.
 
-* **options** Array with the selectable options. The key will be the value and the value the option value. Note that if you define key 0 it will be in conflict with possible defined default value. _(array, required)_
+* **options** Array with the selectable options. The key will be the value and the value the option value. Note that if you define key _0_, it will be in conflict with possible defined default value. _(array, required)_
 
-* **default** Default name for option with value 0. The value will be used if there's none set or the one set isn't present in the options array. _(string, optional, default: "`<i>None</i>`")_
+* **default** Default name for option with value _0_. The value will be used if there's none set or the one set isn't present in the options array. _(string, optional, default: "`<i>None</i>`")_
 
 * **size** Corresponds to the HTML 'size' attribute _(integer, optional, default: 1)_
 
@@ -187,6 +194,11 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-02-17 v0.5
+* Removed bug where not all admin column values were printed in case of conflicting field slugs (issue #20)
+* Added option to make admin columns sortable (issue #21)
+* Added required option to enable fields to require a value. Otherwise, the post will be saved as a draft (issue #23)
+
 ### 2013-02-11 v0.4.2
 * Stops relying on global $post variable when doing save_post. Relying on global $post would sometimes cause PHP Notice errors when saving a post.
 
@@ -213,7 +225,6 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 ### 2012-08-27 v0.2
 * Added rich text editor and date field.
-
 
 ### 2012-07-27 Alpha 0.1 release
 
