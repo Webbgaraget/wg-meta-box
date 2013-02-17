@@ -187,6 +187,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-02-11 v0.4.2
+* Stops relying on global $post variable when doing save_post. Relying on global $post would sometimes cause PHP Notice errors when saving a post.
+
 ### 2012-09-25 v0.4.1
 * Removed a bug where a warning was triggered when trying to save an unchecked checkbox (issue #18).
 * Made sure there's always a value (empty string is default) when rendering input field (issue #17)
