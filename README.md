@@ -194,6 +194,10 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-02-19 v0.5.1
+* Removes notice about missing index for required field (issue #29)
+* Adds default values for parameters (issue #28)
+
 ### 2013-02-17 v0.5
 * Removed bug where not all admin column values were printed in case of conflicting field slugs (issue #20)
 * Added option to make admin columns sortable (issue #21)
