@@ -123,11 +123,7 @@ abstract class Wg_Meta_Box_Input
 	 */
 	public function is_sortable()
 	{
-<<<<<<< HEAD
-		return $this->properties['admin-column']['sortable'];
-=======
 		return isset( $this->properties['admin-column']['sortable']) && $this->properties['admin-column']['sortable'];
->>>>>>> development
 	}
 
 	/**
