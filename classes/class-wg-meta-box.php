@@ -105,7 +105,7 @@ class WGMetaBox
 	public function save( $post_id, $post )
 	{
         if ( is_null( $post ) ) return;
-        
+
 		// Verify not doing autosave
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
 		{
@@ -168,7 +168,7 @@ class WGMetaBox
 			}
 
 			// Check if field is required and not set
-			if ( $field['required'] && '' == $value )
+			if ( isset( $field['required']) && $field['required'] && '' == $value )
 				$required_missing[] = $slug;
 		}
 
@@ -189,13 +189,14 @@ class WGMetaBox
 			set_transient( $this->params['id'] . '-missing-required-fields', 1 );
 
 			// Remove action hook and set post status to draft
-			remove_action( 'save_post', array( $this, 'save' ) );
-			wp_update_post( array(
+			remove_action( 'save_post', array( $this, 'save' ), 10, 2 );
+			wp_update_post(
+				array(
 					'ID'          => $post->ID,
 					'post_status' => 'draft',
 				)
 			);
-			add_action( 'save_post', array( $this, 'save ' ), 10, 2 );
+			add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 		}
 		else
 		{
