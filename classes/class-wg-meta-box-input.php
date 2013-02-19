@@ -8,31 +8,35 @@
 abstract class Wg_Meta_Box_Input
 {
     
-    public function __construct( $namespace, $properties )
+	public function __construct( $namespace, $properties )
     {
 		// Validate slug
 		if ( !isset( $properties['slug'] ) )
 		{
-			throw new Exception( "Slug must be defined" );
+			throw new Exception( 'Slug must be defined' );
 		}
 		
 		// Validate label
 		if ( !isset( $properties['label'] ) )
 		{
-			throw new Exception( "Label must be defined" );
+			throw new Exception( 'Label must be defined' );
 		}
 
 
         $this->namespace = $namespace;
-        $this->default_properties = array_merge( array(
-            'admin-column' => array(
-                'display'  => false,
-                'label'    =>  $properties['label'],
-                'callback' => array( $this, 'admin_column_callback' ),
-                'sortable' => false,
-            ),
-            'required' => false,
-        ), $this->default_properties );
+
+        $this->default_properties = array_merge(
+        	array(
+	            'admin-column' => array(
+	                'display'  => false,
+	                'label'    => $properties['label'],
+	                'callback' => array( $this, 'admin_column_callback' ),
+	                'sortable' => false,
+	            ),
+	            'required' => false,
+        	),
+        	$this->default_properties
+        );
         
         // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'admin-column', $properties ) )
@@ -87,13 +91,13 @@ abstract class Wg_Meta_Box_Input
 	 */
 	public function get_slug()
 	{
-	    if ( isset( $this->properties['slug'] ) )
+		if ( isset( $this->properties['slug'] ) )
 	    {
 	        return $this->properties['slug'];
 	    }
-	    else
+		else
 	    {
-	        throw new Exception('No slug defined');
+	        throw new Exception( 'No slug defined' );
 	    }
 	}
 	
@@ -105,13 +109,13 @@ abstract class Wg_Meta_Box_Input
 	 */
 	public function get_label()
 	{
-	    if ( isset( $this->properties['label'] ) )
+		if ( isset( $this->properties['label'] ) )
 	    {
 	        return $this->properties['label'];
 	    }
-	    else
+		else
 	    {
-	        throw new Exception('No label defined');
+			throw new Exception( 'No label defined' );
 	    }
 	}
 
@@ -123,7 +127,7 @@ abstract class Wg_Meta_Box_Input
 	 */
 	public function is_sortable()
 	{
-		return isset( $this->properties['admin-column']['sortable']) && $this->properties['admin-column']['sortable'];
+		return $this->properties['admin-column']['sortable'];
 	}
 
 	/**
@@ -156,12 +160,12 @@ abstract class Wg_Meta_Box_Input
 	public function get_value()
 	{
 	    // In case value already set
-	    if ( isset( $this->properties['value'] ) )
+		if ( isset( $this->properties['value'] ) )
 	    {
 	        return $this->properties['value'];
 	    }
 	    // In case value defined in post-meta
-        if ( $value = get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true ) )
+		if ( $value = get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true ) )
         {
             return $value;
         }
