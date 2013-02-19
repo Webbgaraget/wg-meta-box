@@ -112,6 +112,27 @@ abstract class Wg_Meta_Box_Input
 	        throw new Exception('No label defined');
 	    }
 	}
+
+	/**
+	 * Retrieves whether sortable
+	 *
+	 * @return boolean
+	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 */
+	public function is_sortable()
+	{
+		return isset( $this->properties['admin-column']['sortable']) && $this->properties['admin-column']['sortable'];
+	}
+
+	/**
+	 * Retrieves whether required
+	 *
+	 * @return boolean
+	 */
+	public function is_required()
+	{
+		return $this->properties['required'];
+	}
 	
 	/**
 	 * Whether the meta is supposed to be shown in the admin column
