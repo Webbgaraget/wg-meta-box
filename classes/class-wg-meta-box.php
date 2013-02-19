@@ -298,9 +298,8 @@ class WGMetaBox
 	    global $post;
 
 	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
-	    
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
-	    if ( !array_key_exists( $slug, $this->params['fields'] ) ) return;
+	    if ( !$slug || !array_key_exists( $slug, $this->params['fields'] ) ) return;
 	    
         $field = $this->params['fields'][$slug];
         
