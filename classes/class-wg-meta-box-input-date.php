@@ -9,9 +9,11 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 {
 	public function __construct( $namespace, $properties )
 	{
-		$this->namespace = $namespace;
-		$this->properties = $properties;
-		
+		$this->default_properties = array(
+			'dateFormat' => 'yy-mm-dd',
+		);
+		parent::__construct( $namespace, $properties );
+
 		add_action( 'admin_footer', array( $this, 'render_js' ) );
 	}
 	
