@@ -144,7 +144,7 @@ class WGMetaBox
 			elseif ( $field['type'] == 'select' )
 			{
 				$name = "{$this->params['id']}-{$slug}";
-				$value = isset( $_POST[$name] ) && $_POST[$name] != 0 ? $_POST[$name] : '';
+				$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
 				$page_meta[$name] = $value;
 			}
 			// Save custom field
