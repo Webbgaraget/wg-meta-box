@@ -194,6 +194,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013- v0.6
+* Creates separate layouts for meta boxes in main column and sidebar (issue #31)
+
 ### 2013-02-22 v0.5.2
 * Fixes bug where no value was saved for select with default value (issue #32)
 
