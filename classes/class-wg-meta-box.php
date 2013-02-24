@@ -105,7 +105,7 @@ class WGMetaBox
 	public function save( $post_id, $post )
 	{
         if ( is_null( $post ) ) return;
-        
+
 		// Verify not doing autosave
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
 		{
@@ -144,7 +144,7 @@ class WGMetaBox
 			elseif ( $field['type'] == 'select' )
 			{
 				$name = "{$this->params['id']}-{$slug}";
-				$value = isset( $_POST[$name] ) && $_POST[$name] != 0 ? $_POST[$name] : '';
+				$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
 				$page_meta[$name] = $value;
 			}
 			// Save custom field
@@ -168,7 +168,7 @@ class WGMetaBox
 			}
 
 			// Check if field is required and not set
-			if ( $field['required'] && '' == $value )
+			if ( isset( $field['required']) && $field['required'] && '' == $value )
 				$required_missing[] = $slug;
 		}
 
@@ -189,13 +189,14 @@ class WGMetaBox
 			set_transient( $this->params['id'] . '-missing-required-fields', 1 );
 
 			// Remove action hook and set post status to draft
-			remove_action( 'save_post', array( $this, 'save' ) );
-			wp_update_post( array(
+			remove_action( 'save_post', array( $this, 'save' ), 10, 2 );
+			wp_update_post(
+				array(
 					'ID'          => $post->ID,
 					'post_status' => 'draft',
 				)
 			);
-			add_action( 'save_post', array( $this, 'save ' ), 10, 2 );
+			add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 		}
 		else
 		{
@@ -298,9 +299,8 @@ class WGMetaBox
 	    global $post;
 
 	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
-	    
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
-	    if ( !array_key_exists( $slug, $this->params['fields'] ) ) return;
+	    if ( !$slug || !array_key_exists( $slug, $this->params['fields'] ) ) return;
 	    
         $field = $this->params['fields'][$slug];
         
