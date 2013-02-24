@@ -21,7 +21,6 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 	 */
 	public function render()
 	{
-		$output = "<tr>";
 		
 		/* Setup attributes */
 		$attributes = array();
@@ -59,7 +58,8 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		/** Add label to markup **/
 
 		// Add to markup
-		$output .= '<th scope="row">';
+		$output = '<div class="label">';
+
 		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
 
 		if ( $this->is_required() )
@@ -67,10 +67,11 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
 		}
 
-		$output .= '</th>';
+		$output .= '</div>';
+		$output .= '<div class="input">';
 		
 		/*** Add input field **/
-		$output .= '<td><textarea ' . implode( ' ', $attributes ) . '>' . $value . '</textarea>';
+		$output .= '<textarea ' . implode( ' ', $attributes ) . '>' . $value . '</textarea>';
 		
 		// Description
 		if ( isset( $this->properties['description'] ) )
@@ -78,9 +79,8 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 		
-		$output .= '</td>';
+		$output .= '</div>';
 		
-		$output .= '</tr>';
 		return $output;
 	}
 }

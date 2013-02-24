@@ -27,14 +27,13 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 	 */
 	public function render()
 	{
-		$output = "<tr>";
-        
+       
         $id = $this->namespace .'-'. $this->properties['slug'];
         $value = $this->properties['value'];
 		
 		
 		/** Add label to markup **/
-		$output .= '<th scope="row">';
+		$output = '<div class="label">';
 		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
 
 		if ( $this->is_required() )
@@ -42,10 +41,10 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
 		}
 
-		$output .= '</th>';
+		$output .= '</div>';
 		
 		/*** Add custom input **/
-		$output .= '<td>';
+		$output .= '<div class="input">';
 		
 		$output .= call_user_func( $this->properties['callbacks']['render'], $id, $value );
 		
@@ -55,9 +54,7 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 
-		$output .= '</td>';
-		
-		$output .= '</tr>';
+		$output .= '</div>';
 		return $output;
 	}
 }

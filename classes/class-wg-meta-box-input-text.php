@@ -21,8 +21,7 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 	 */
 	public function render()
 	{
-		$output = "<tr>";
-		
+
 		/* Setup attributes */
 		$attributes = array();
 		// Name
@@ -53,9 +52,10 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
 		}
 		
+		$output = '<div class="label">';
+
 		
 		/** Add label to markup **/
-		$output .= '<th scope="row">';
 		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
 
 		if ( $this->is_required() )
@@ -63,10 +63,11 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
 		}
 
-		$output .= '</th>';
+		$output .= '</div>';
+		$output .= '<div class="input">';
 		
 		/*** Add input field **/
-		$output .= '<td><input type="text" ' . implode( ' ', $attributes ) . '>';
+		$output .= '<input type="text" ' . implode( ' ', $attributes ) . '>';
 		
 		// Description
 		if ( isset( $this->properties['description'] ) )
@@ -74,9 +75,8 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 
-		$output .= '</td>';
-		
-		$output .= '</tr>';
+		$output .= '</div>';
+
 		return $output;
 	}
 }

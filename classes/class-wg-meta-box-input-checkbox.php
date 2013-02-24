@@ -43,7 +43,6 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 	 */
 	public function render()
 	{
-		$output = "<tr>";
 		
 		/* Setup attributes */
 		$attributes = array();
@@ -74,7 +73,7 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 		
 		
 		/** Add label to markup **/
-		$output .= '<th scope="row">';
+		$output = '<div class="label checkbox">';
 		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
 
 		if ( $this->is_required() )
@@ -82,10 +81,11 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
 		}
 
-		$output .= '</th>';
+		$output .= '</div>';
 		
 		/*** Add input field **/
-		$output .= '<td><input type="checkbox" ' . implode( ' ', $attributes ) . '>';
+		$output .= '<div class="input checkbox">';
+		$output .= '<input type="checkbox" ' . implode( ' ', $attributes ) . '>';
 		
 		// Description
 		if ( isset( $this->properties['description'] ) )
@@ -93,9 +93,8 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 
-		$output .= '</td>';
+		$output .= '</div>';
 		
-		$output .= '</tr>';
 		return $output;
 	}
 }

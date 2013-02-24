@@ -42,7 +42,7 @@ class WGMetaBox
 		add_action( 'admin_menu', array( $this, 'add' ) );
 		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
 		
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
@@ -222,7 +222,7 @@ class WGMetaBox
 		    $output .= call_user_func( $context['args']['description'] );
 		}
 		
-		$output .= '<table class="form-table">';
+		$output .= '<div class="wg-meta-box">';
 
 		// Loop through each field
 		foreach( $this->params['fields'] as $slug => $field )
@@ -245,7 +245,7 @@ class WGMetaBox
 				throw new Exception( "Field has unknown type: {$field['type']}" );
 			}
 		}
-		$output .= "</table>";
+		$output .= "</div>";
 		echo $output;
 	}
 	
@@ -409,14 +409,17 @@ class WGMetaBox
 	}
 	
 	/**
-	 * Enqueue needed JS
+	 * Enqueue needed scripts
 	 *
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function enqueue_js()
+	public function enqueue_scripts()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-        //wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
+		
+		wp_register_style( 'wg-meta-box-css', plugins_url( 'assets/css/screen.css', dirname( __FILE__ ) ) );
+		wp_enqueue_style( 'wg-meta-box-css' );
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 	}
 }

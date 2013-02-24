@@ -1,0 +1,62 @@
+#postbox-container-2 .wg-meta-box,
+#postbox-container-1 .wg-meta-box {
+	overflow: hidden;
+}
+
+/** Left column **/
+#postbox-container-2 .wg-meta-box .label {
+	clear: left;
+	float: left;
+	margin-bottom: 1em;
+	width: 33%;
+}
+
+#postbox-container-2 .wg-meta-box .input {
+	float: left;
+	margin-bottom: 1em;
+	width: 67%;	
+}
+
+/** Right column **/
+#postbox-container-1 .wg-meta-box {
+	overflow: hidden;
+}
+
+#postbox-container-1 .wg-meta-box .label {
+	clear: left;
+	float: none;
+	width: 100%;
+}
+
+#postbox-container-1 .wg-meta-box .input {
+	float: none;
+	margin-bottom: 1em;
+	width: 100%;
+}
+
+#postbox-container-1 .wg-meta-box {
+	overflow: hidden;
+}
+
+#postbox-container-1 .wg-meta-box .label.checkbox {
+	clear: left;
+	float: left;
+	margin-bottom: 1em;
+	width: 67%;
+}
+
+#postbox-container-1 .wg-meta-box .input.checkbox {
+	margin-bottom: 1em;
+	float: left;
+	width: 33%;	
+}
+
+/** TinyMCE **/
+.wg-meta-box .wp_themeSkin iframe {
+	background: #fff;
+}
+
+/** Checkbox background override **/
+.wg-meta-box .checkbox {
+	background: transparent;
+}
