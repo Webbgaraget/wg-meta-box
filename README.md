@@ -194,6 +194,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-02-25 v0.5.3
+* Adds value attribute to checkbox field (issue #36)
+
 ### 2013-02-22 v0.5.2
 * Fixes bug where no value was saved for select with default value (issue #32)
 

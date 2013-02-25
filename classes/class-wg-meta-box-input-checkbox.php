@@ -52,10 +52,15 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
 
 		// Value
-		if ( isset( $this->properties['slug'] ) )
+		if ( isset( $this->properties['value'] ) )
+		{
+			$attributes[] = 'value="' . $this->properties['value'] . '"';
+		}
+		else
 		{
 			$attributes[] = 'value="' . $this->properties['slug'] . '"';
 		}
+
 		// Class
 		if ( isset( $this->properties['class'] ) )
 		{
