@@ -194,6 +194,9 @@ Since this library only creates the meta box (and handles saving) the meta value
 
 
 # Changelog
+### 2013-03-01 v0.5.4
+* Fixes bug #35, "Notice about index 'sortable' not set for text input"
+
 ### 2013-02-25 v0.5.3
 * Adds value attribute to checkbox field (issue #36)
 
