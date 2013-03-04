@@ -196,6 +196,7 @@ Since this library only creates the meta box (and handles saving) the meta value
 # Changelog
 ### 2013-03-04 v0.5.5
 * Adds CSS for datepicker (issue #38)
+
 ### 2013-03-01 v0.5.4
 * Fixes bug #35, "Notice about index 'sortable' not set for text input"
 
