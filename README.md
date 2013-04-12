@@ -197,6 +197,13 @@ Since this library only creates the meta box (and handles saving) the meta value
 ### 2013- v0.6
 * Creates separate layouts for meta boxes in main column and sidebar (issue #31)
 
+### 2013-03-04 v0.5.5
+* Adds CSS for datepicker (issue #38)
+
+### 2013-03-01 v0.5.4
+* Fixes bug #35, "Notice about index 'sortable' not set for text input"
+>>>>>>> master
+
 ### 2013-02-25 v0.5.3
 * Adds value attribute to checkbox field (issue #36)
 

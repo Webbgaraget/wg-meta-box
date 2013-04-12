@@ -417,7 +417,6 @@ class WGMetaBox
 	public function enqueue_scripts()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-		
 		wp_register_style( 'wg-meta-box-css', plugins_url( 'assets/css/screen.css', dirname( __FILE__ ) ) );
 		wp_enqueue_style( 'wg-meta-box-css' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
