@@ -36,7 +36,8 @@ class WGMetaBox
 			'priority'      => $priority,
 			'callback_args' => $callback_args
 		);
-		
+
+	
 		$this->post_type = $post_type;
 		
 		add_action( 'admin_menu', array( $this, 'add' ) );
@@ -58,6 +59,13 @@ class WGMetaBox
 
 		// Supress "post published" message
 		add_filter( 'post_updated_messages', array( $this, 'supress_default_message' ) );
+
+		// Set URL for static assets
+		$this->assets_url = plugins_url( 'assets/', dirname( __FILE__ ) );
+		if ( defined( WG_META_BOX_URL ) )
+		{
+			$this->assets_url = WG_META_BOX_URL . '/assets';
+		}
 	}
 	
 	/**
@@ -417,7 +425,7 @@ class WGMetaBox
 	public function enqueue_scripts()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_register_style( 'wg-meta-box-css', plugins_url( 'assets/css/screen.css', dirname( __FILE__ ) ) );
+		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );
 		wp_enqueue_style( 'wg-meta-box-css' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 	}
