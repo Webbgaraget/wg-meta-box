@@ -187,7 +187,7 @@ class WGMetaBox
 	            return;
 	        }
 
-	        update_post_meta( $post->ID, $key, $value );
+        	add_post_meta( $post->ID, $key, $value, true );	        	
 	    }
 
 		// Any required fields missing?
@@ -242,6 +242,7 @@ class WGMetaBox
 			}
 			if ( array_key_exists( $field['type'], $this->class_names ) )
 			{
+				// Retrieve the value
 				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
 				$field['slug'] = $slug;
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );

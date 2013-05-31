@@ -25,7 +25,7 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function render()
+	public function renderMarkup( $num )
 	{
        
         $id = $this->namespace .'-'. $this->properties['slug'];

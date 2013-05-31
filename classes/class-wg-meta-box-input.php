@@ -34,6 +34,7 @@ abstract class Wg_Meta_Box_Input
 	                'sortable' => false,
 	            ),
 	            'required' => false,
+	            'repetitions' => 1,
         	),
         	$this->default_properties
         );
@@ -46,14 +47,28 @@ abstract class Wg_Meta_Box_Input
 		}
 		$this->properties = array_merge( $this->default_properties, $properties );
     }
-        
+
+    /**
+     * Renders the field
+     * @return void
+     */
+    public function render()
+    {
+    	$markup = '';
+    	for( $i = 0; $i < $this->properties['repetitions']; $i++ )
+    	{
+    		$markup .= $this->renderMarkup( $i );
+    	}
+    	return $markup;
+    }
+      
 	/**
 	 * Generates HTML markup for input field
 	 *
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	abstract protected function render();
+	abstract protected function renderMarkup( $num );
 	
 	/**
 	 * Default callback function for admin column

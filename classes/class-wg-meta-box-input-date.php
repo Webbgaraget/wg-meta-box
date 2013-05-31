@@ -23,7 +23,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function render()
+	public function renderMarkup( $num )
 	{
 		
 		/* Setup attributes */
