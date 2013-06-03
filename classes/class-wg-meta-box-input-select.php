@@ -88,6 +88,12 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 			$output .= '<option value="' . $value . '"' . $selected . '>' . $name . '</option>';
 		}
 		$output .= '</select>';
+
+		/*** Add delete button ***/
+		if ( $this->_get_max_repetitions() > 0 )
+		{
+			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
+		}	
 		
 		// Description
 		if ( isset($this->properties['description'] ) )

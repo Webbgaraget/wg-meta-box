@@ -66,3 +66,7 @@
 	clear: left;
 	float: left;
 }
+.field-remove-button
+{
+	display: block;
+}

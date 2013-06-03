@@ -25,6 +25,9 @@
 		// Field template
 		this.$inputTemplate = this.$fieldset.find('.input:first').clone();
 
+		// Remove buttons
+		this.$removeButtons = this.$fieldset.find('.field-remove-button');
+
 		this.init();
 	};
 
@@ -35,7 +38,11 @@
 			if (this.min == 1 && this.max == 1)
 				return;
 
+			// Init remove buttons
+			this.initRemoveButtons();
+
 			this.initListeners();
+
 			this.checkIfMaxReached();
 		},
 		initListeners : function()
@@ -45,6 +52,28 @@
 			{
 				self.addField();
 			});
+		},
+		initRemoveButtons : function()
+		{
+			var self = this;
+
+			this.$removeButtons.off('click');
+
+			this.$removeButtons = this.$fieldset.find('.field-remove-button');
+
+			this.$removeButtons.on('click', function(evt)
+			{
+				var $this;
+				var fieldNum;
+
+				$this = $(this);
+				fieldNum = $this.data('num');
+				console.log("Removing " + fieldNum);
+
+				evt.preventDefault();
+				self.removeField(fieldNum);
+			});
+
 		},
 		addField : function()
 		{
@@ -56,17 +85,38 @@
 			$field = this.createField();
 			$label = this.createLabel();
 			this.$button.before($label).before($field);
+			this.redefineLabels();
 			this.checkIfMaxReached();
+			this.initRemoveButtons();
+		},
+		removeField : function(num)
+		{
+			// Remove field
+			$('#' + this.$fieldset.attr('name') + '-' + num).parent().remove();
+
+			// Remove label
+			$('label[for="' + this.$fieldset.attr('name') + '-' + num + '"]').parent().remove();
+
+			this.checkIfMaxReached();
+			this.redefineLabels();
+			this.initRemoveButtons();
 		},
 		createField : function()
 		{
 			var $fieldContainer;
 			var $field;
+			var $removeButton;
+			var num;
+
 			$fieldContainer = this.$inputTemplate.clone();
-			$field = $fieldContainer.children();
+			$field = $fieldContainer.children().not('.field-remove-button');
+			$removeButton = $fieldContainer.find('.field-remove-button');
 
+			num = this.currentNumberOfFields - 1;
+			console.log("Adding " + num);
+			$removeButton.data('num', num);
 
-			$field.attr('id' , this.$fieldset.attr('name') + '-' + (this.currentNumberOfFields - 1));
+			$field.attr('id' , this.$fieldset.attr('name') + '-' + num);
 
 			if ($field.children().is('textarea'))
 			{
@@ -91,10 +141,27 @@
 		},
 		checkIfMaxReached : function()
 		{
-			if (this.currentNumberOfFields == this.max)
+			if (this.$fieldset.find('label').length == this.max)
 			{
 				this.$button.attr('disabled', 'disabled');
 			}
+			else
+			{
+				this.$button.removeAttr('disabled');
+			}
+		},
+		redefineLabels : function()
+		{
+			var self = this;
+			var $labels;
+			$labels = this.$fieldset.find('label');
+			$labels.each(function(i, label)
+			{
+				var $label;
+				$label = $(label);
+				$label.text(self.fieldName + " #" + (i+1));
+				self.currentNumberOfFields = i + 1;
+			});
 		}
 	};
 

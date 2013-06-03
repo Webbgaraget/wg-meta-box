@@ -68,6 +68,12 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		
 		/*** Add input field **/
 		$output .= '<textarea ' . implode( ' ', $attributes ) . '>' . $value . '</textarea>';
+
+		/*** Add delete button ***/
+		if ( $this->_get_max_repetitions() > 0 )
+		{
+			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
+		}	
 		
 		// Description
 		if ( isset( $this->properties['description'] ) )
