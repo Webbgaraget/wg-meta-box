@@ -129,7 +129,7 @@ class WGMetaBox
 	    {
 	        return $post->ID;
 	    }
-	
+
 		$page_meta = array();
 
 		// List of missing fields
@@ -145,7 +145,6 @@ class WGMetaBox
 				
                 // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
 				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-				
 				$page_meta[$name] = $value;
 			}
 			// Select
@@ -187,7 +186,22 @@ class WGMetaBox
 	            return;
 	        }
 
-        	add_post_meta( $post->ID, $key, $value, true );	        	
+	        // Is the field only repeated once? Don't store it as an array
+	        if ( count( $value) === 1 )
+	        {
+	        	$value = $value[0];
+	        }
+	        
+	        // Remove the existing meta values
+	        delete_post_meta( $post->ID, $key );
+
+	        foreach( $value as $val )
+	        {
+	        	error_log($val);
+	        }
+        	
+        	// Add the new meta values
+        	add_post_meta( $post->ID, $key, $value );
 	    }
 
 		// Any required fields missing?
@@ -244,11 +258,21 @@ class WGMetaBox
 			{
 				// Retrieve the value
 				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
-				$field['slug'] = $slug;
-				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
 
+				if ( !is_array( $value ) )
+				{
+					$value = array( $value );
+				}
+
+				$field['slug'] = $slug;
+
+				// Save the properties in a temporary variable
+				$properties = $field;
+
+				$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
 				$field->set_value( $value );
 				$output .= $field->render();
+
 			}
 			else
 			{
@@ -429,5 +453,7 @@ class WGMetaBox
 		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );
 		wp_enqueue_style( 'wg-meta-box-css' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
+
+		wp_enqueue_script( 'wg-meta-repeatable', $this->assets_url . '/js/repeatable-fields.js' );
 	}
 }

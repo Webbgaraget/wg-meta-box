@@ -31,7 +31,14 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 	{
 		if ( $value )
 		{
-			$this->properties['checked'] = true;
+			if ( $this->_get_repetitions() == 1)
+			{
+				$this->properties['checked'] = true;
+			}
+			elseif ( isset( $value[$this->properties['num']] ) )
+			{
+				$this->properties['checked'] = true;
+			}
 		}
 	}
 	
@@ -41,19 +48,19 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function renderMarkup( $num )
+	public function render_markup()
 	{
 		
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'name="' . $this->get_name() . '"';
+		$attributes[] = 'id="' . $this->get_id() . '"';
 
 		// Value
-		if ( isset( $this->properties['value'] ) )
+		if ( $this->get_value() )
 		{
-			$attributes[] = 'value="' . $this->properties['value'] . '"';
+			$attributes[] = 'value="' . $this->get_value() . '"';
 		}
 		else
 		{
@@ -79,7 +86,7 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 		
 		/** Add label to markup **/
 		$output = '<div class="label checkbox">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{

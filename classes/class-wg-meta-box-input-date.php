@@ -23,19 +23,19 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function renderMarkup( $num )
+	public function render_markup()
 	{
 		
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'name="' . $this->get_name() . '"';
+		$attributes[] = 'id="' . $this->get_id() . '"';
 
 		// Value
 		if ( isset( $this->properties['value'] ) )
 		{
-			$attributes[] = 'value="' . $this->properties['value'] . '"';
+			$attributes[] = 'value="' . $this->get_value() . '"';
 		}
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -60,7 +60,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 		
 		/** Add label to markup **/
 		$output = '<div class="label">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
@@ -122,7 +122,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
         <script type="text/javascript">
         	jQuery(document).ready(function()
         	{
-        		jQuery("#<?php echo $this->namespace; ?>-<?php echo $this->properties['slug']; ?>").datepicker({<?php echo $attr_string; ?>});
+        		jQuery("#<?php echo $this->get_id(); ?>").datepicker({<?php echo $attr_string; ?>});
         	});
         	</script>
 	    <?php

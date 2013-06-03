@@ -25,16 +25,16 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function renderMarkup( $num )
+	public function render_markup()
 	{
        
-        $id = $this->namespace .'-'. $this->properties['slug'];
-        $value = $this->properties['value'];
+        $id = $this->get_id();
+        $value = $this->get_value();
 		
 		
 		/** Add label to markup **/
 		$output = '<div class="label">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{

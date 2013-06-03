@@ -19,14 +19,14 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function renderMarkup( $num )
+	public function render_markup()
 	{
 		
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'name="' . $this->get_name() . '"';
+		$attributes[] = 'id="' . $this->get_id() . '"';
 		// Class
 		if ( isset( $this->properties['class'] ) )
 		{
@@ -48,11 +48,7 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		}
 		
 		/** Set up value **/
-		$value = '';
-		if ( isset( $this->properties['value'] ) )
-		{
-			$value = $this->properties['value'];
-		}
+		$value = $this->get_value();
 		
 		
 		/** Add label to markup **/
@@ -60,7 +56,7 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		// Add to markup
 		$output = '<div class="label">';
 
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{

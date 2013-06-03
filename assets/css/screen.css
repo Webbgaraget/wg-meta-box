@@ -60,3 +60,9 @@
 .wg-meta-box .checkbox {
 	background: transparent;
 }
+
+/** Add repeatable field button **/
+.add-field-button {
+	clear: left;
+	float: left;
+}

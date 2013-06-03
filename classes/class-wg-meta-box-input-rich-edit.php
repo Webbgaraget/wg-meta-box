@@ -19,7 +19,7 @@ class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
-	public function renderMarkup( $num )
+	public function render_markup()
 	{
 		
 		/* Setup attributes */
@@ -46,7 +46,7 @@ class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 		
 		/** Add label to markup **/
 		$output = '<div class="label">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
@@ -60,7 +60,7 @@ class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 		
         // Catch output since wp_editor() echoes the result
 		ob_start();
-		wp_editor( $this->properties['value'], $this->namespace . '-' . $this->properties['slug'], $settings );
+		wp_editor( $this->get_value(), $this->get_id(), $settings );
 		$output .= ob_get_contents();
 		ob_end_clean();
 		
