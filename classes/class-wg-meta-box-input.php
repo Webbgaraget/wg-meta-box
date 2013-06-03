@@ -59,7 +59,7 @@ abstract class Wg_Meta_Box_Input
 		$this->properties = array_merge( $this->default_properties, $properties );
 
 		// Verify repeatable only specified for select and input
-		if ( !in_array( $this->get_type(), array( 'text', 'select' ) ) && ( $this->_get_max_repetitions() > 1 || $this->_get_min_repetitions > 1 ) )
+		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea' ) ) && ( $this->_get_max_repetitions() > 1 || $this->_get_min_repetitions > 1 ) )
 		{
 			throw new Exception( 'Repetition only supported for inputs of type text and select.' );
 		}

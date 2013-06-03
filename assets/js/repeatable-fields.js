@@ -60,21 +60,24 @@
 		},
 		createField : function()
 		{
+			var $fieldContainer;
 			var $field;
-			$field = this.$inputTemplate.clone();
+			$fieldContainer = this.$inputTemplate.clone();
+			$field = $fieldContainer.children();
 
-			$field.children()
-				.attr('id' , this.$fieldset.attr('name') + '-' + (this.currentNumberOfFields - 1));
 
-			if ($field.children().attr('type') !== 'checkbox')
+			$field.attr('id' , this.$fieldset.attr('name') + '-' + (this.currentNumberOfFields - 1));
+
+			if ($field.children().is('textarea'))
 			{
-				$field.children().attr('value', '');
+				$field.text('');
 			}
 			else
 			{
-				$field.children().removeAttr('checked');
+				$field.attr('value', '');
 			}
-			return $field;
+
+			return $fieldContainer;
 		},
 		createLabel : function()
 		{
