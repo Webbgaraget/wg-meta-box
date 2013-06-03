@@ -116,6 +116,8 @@ Name in fields array: _text_.
 
 * **placeholder** Placeholder text. _(string, optional, default: '')_
 
+* **repetitions** See section about repeatable fields.
+
 ### Select
 Name in fields array: _select_.
 
@@ -211,7 +213,7 @@ In case of a repeatable field, the values will be stored in two different ways. 
 # Changelog
 ### 2013- v0.6
 * Creates separate layouts for meta boxes in main column and sidebar (issue #31)
-* Adds repeatable fields for text and select (issue #40)
+* Adds repeatable fields for text, textarea and select (issue #40)
 
 ### 2013-03-04 v0.5.5
 * Adds CSS for datepicker (issue #38)
