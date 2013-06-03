@@ -175,8 +175,19 @@ class WGMetaBox
 			}
 
 			// Check if field is required and not set
-			if ( isset( $field['required']) && $field['required'] && '' == $value )
-				$required_missing[] = $slug;
+			if ( is_array( $value ) )
+			{
+				foreach( $value as $val )
+				{
+					if ( isset( $field['required']) && $field['required'] && '' == $val )
+						$required_missing[$slug] = $slug;
+				}
+			}
+			else
+			{
+				if ( isset( $field['required']) && $field['required'] && '' == $value )
+					$required_missing[] = $slug;
+			}
 		}
 
 	    foreach( $page_meta as $key => $value )
