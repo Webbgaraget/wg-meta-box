@@ -108,6 +108,8 @@ Name in fields array: _text_.
 
 * **placeholder** Placeholder text. _(string, optional, default: '')_
 
+* **repetitions** See section about repeatable fields.
+
 ### Textarea
 
 * **value** Field value. _(string, optional, default: '')_
@@ -124,6 +126,8 @@ Name in fields array: _select_.
 * **size** Corresponds to the HTML 'size' attribute _(integer, optional, default: 1)_
 
 * **multiple** Whether it's a multiple select or not. _(boolean, optional, default: false)_
+
+* **repetitions** See section about repeatable fields.
 
 ### Checkbox
 Name in fields array: _checkbox_.
@@ -189,13 +193,25 @@ Parameters:
 
 * **value** The value of the field.
 
+# Repeatable fields
+As of now, text and select fields can be configured to be repeated a minimum and maximum number of times.
+
+A scenario would be an arbitrary number of featured files, each selected in a select field. As it's impossible to foresee how many files there will be for each post, it's better to leave it for the user.
+
+The parameter for configuring the limits is named **repetitions**. It's an array with the following parameters:
+* **min** Minimum number of repetitions. _(integer, optional, default: 1)_
+* **max** Maximum number of repetitions. For unlimited number of repetitions, set this to -1. _(integer, optional, default: -1)_
+
 # Accessing the meta values
 Since this library only creates the meta box (and handles saving) the meta values are accessed the regular WordPress way, by using ``get_post_meta()``. Each input field's key is a concatenation of the meta box's id, a dash ("-") and the fields slug, i.e. ``example-favorite-color``.
+
+In case of a repeatable field, the values will be stored in two different ways. If there's only one occurrence of the field, it will be a single value. In case of multiple occurrences, the values are stored as an array.
 
 
 # Changelog
 ### 2013- v0.6
 * Creates separate layouts for meta boxes in main column and sidebar (issue #31)
+* Adds repeatable fields for text and select (issue #40)
 
 ### 2013-03-04 v0.5.5
 * Adds CSS for datepicker (issue #38)
