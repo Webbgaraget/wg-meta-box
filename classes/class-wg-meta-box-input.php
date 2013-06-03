@@ -36,7 +36,7 @@ abstract class Wg_Meta_Box_Input
 	            'required' => false,
 	            'repetitions' => array(
 	            	'min' => 1,
-	            	'max' => -1,
+	            	'max' => 1,
 	            ),
         	),
         	$this->default_properties
@@ -87,7 +87,7 @@ abstract class Wg_Meta_Box_Input
     	}
 
     	// Add button for repeatable fields
-    	if ( $this->_get_max_repetitions() > 1 )
+    	if ( $this->_get_max_repetitions() > 1 || $this->_get_max_repetitions() == -1 )
     	{
     		$output .= $this->_insert_add_button();
     	}

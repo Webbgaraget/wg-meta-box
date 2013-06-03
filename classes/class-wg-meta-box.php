@@ -194,11 +194,6 @@ class WGMetaBox
 	        
 	        // Remove the existing meta values
 	        delete_post_meta( $post->ID, $key );
-
-	        foreach( $value as $val )
-	        {
-	        	error_log($val);
-	        }
         	
         	// Add the new meta values
         	add_post_meta( $post->ID, $key, $value );
