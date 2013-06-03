@@ -218,7 +218,6 @@ In case of a repeatable field, the values will be stored in two different ways. 
 
 ### 2013-03-01 v0.5.4
 * Fixes bug #35, "Notice about index 'sortable' not set for text input"
->>>>>>> master
 
 ### 2013-02-25 v0.5.3
 * Adds value attribute to checkbox field (issue #36)
