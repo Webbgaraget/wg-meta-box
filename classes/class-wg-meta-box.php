@@ -62,7 +62,7 @@ class WGMetaBox
 
 		// Set URL for static assets
 		$this->assets_url = plugins_url( 'assets/', dirname( __FILE__ ) );
-		if ( defined( WG_META_BOX_URL ) )
+		if ( defined( 'WG_META_BOX_URL' ) )
 		{
 			$this->assets_url = WG_META_BOX_URL . '/assets';
 		}
