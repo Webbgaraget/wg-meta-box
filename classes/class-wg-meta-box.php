@@ -1,4 +1,5 @@
 <?php
+
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-checkbox.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-select.php" );
@@ -238,7 +239,9 @@ class WGMetaBox
 				$field['slug'] = $slug;
 				$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
 
-				$field->set_value( $value );
+				if ( ! empty( $value ) )
+					$field->set_value( $value );
+				
 				$output .= $field->render();
 			}
 			else
