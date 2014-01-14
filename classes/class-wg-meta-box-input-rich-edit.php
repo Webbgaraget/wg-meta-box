@@ -24,6 +24,13 @@ class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 		$output = "<tr>";
 		
 		/* Setup attributes */
+		// Value
+		$value = '';
+		if ( isset( $this->properties['value'] ) )
+		{
+			$value = $this->properties['value'];
+		}
+
 		// Name
 		/** Editor properties ***/
         $settings = array();
@@ -61,7 +68,7 @@ class Wg_Meta_Box_Input_Rich_Edit extends Wg_Meta_Box_Input
 		
         // Catch output since wp_editor() echoes the result
 		ob_start();
-		wp_editor( $this->properties['value'], $this->namespace . '-' . $this->properties['slug'], $settings );
+		wp_editor( $value, $this->namespace . '-' . $this->properties['slug'], $settings );
 		$output .= ob_get_contents();
 		ob_end_clean();
 		
