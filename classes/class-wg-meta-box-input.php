@@ -7,7 +7,7 @@
  */
 abstract class Wg_Meta_Box_Input
 {
-    
+
 	public function __construct( $namespace, $properties )
     {
 		// Validate slug
@@ -15,7 +15,7 @@ abstract class Wg_Meta_Box_Input
 		{
 			throw new Exception( 'Slug must be defined' );
 		}
-		
+
 		// Validate label
 		if ( !isset( $properties['label'] ) )
 		{
@@ -37,7 +37,7 @@ abstract class Wg_Meta_Box_Input
         	),
         	$this->default_properties
         );
-        
+
         // Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'admin-column', $properties ) )
 		{
@@ -46,7 +46,7 @@ abstract class Wg_Meta_Box_Input
 		}
 		$this->properties = array_merge( $this->default_properties, $properties );
     }
-        
+
 	/**
 	 * Generates HTML markup for input field
 	 *
@@ -54,12 +54,12 @@ abstract class Wg_Meta_Box_Input
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
 	abstract protected function render();
-	
+
 	/**
 	 * Default callback function for admin column
 	 *
-	 * @param string $id 
-	 * @param string $value 
+	 * @param string $id
+	 * @param string $value
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -67,11 +67,11 @@ abstract class Wg_Meta_Box_Input
 	{
 	    return $value;
 	}
-	
+
 	/**
 	 * Sets value
 	 *
-	 * @param string $value 
+	 * @param string $value
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -82,7 +82,7 @@ abstract class Wg_Meta_Box_Input
 			$this->properties['value'] = $value;
 		}
 	}
-	
+
 	/**
 	 * Retrieves the slug
 	 *
@@ -100,7 +100,7 @@ abstract class Wg_Meta_Box_Input
 	        throw new Exception( 'No slug defined' );
 	    }
 	}
-	
+
 	/**
 	 * Retrieves the label
 	 *
@@ -117,6 +117,26 @@ abstract class Wg_Meta_Box_Input
 	    {
 			throw new Exception( 'No label defined' );
 	    }
+	}
+
+	/**
+	 * Retrieves the array of html-attributes for the input field.
+	 * If the "html-attributes"-property has not been set, an empty
+	 * array is returned
+	 *
+	 * @return array
+	 * @author Anders Lisspers (anders@webbgaraget.se)
+	 */
+	public function get_attributes()
+	{
+		if ( isset( $this->properties['html-attributes'] ) && is_array( $this->properties['html-attributes'] ) )
+		{
+			return $this->properties['html-attributes'];
+		}
+		else
+		{
+			return array();
+		}
 	}
 
 	/**
@@ -139,7 +159,7 @@ abstract class Wg_Meta_Box_Input
 	{
 		return $this->properties['required'];
 	}
-	
+
 	/**
 	 * Whether the meta is supposed to be shown in the admin column
 	 *
@@ -150,7 +170,7 @@ abstract class Wg_Meta_Box_Input
 	{
 	    return $this->properties['admin-column']['display'];
 	}
-	
+
 	/**
 	 * Gets the value
 	 *
@@ -165,13 +185,13 @@ abstract class Wg_Meta_Box_Input
 	        return $this->properties['value'];
 	    }
 	    // In case value defined in post-meta
-		if ( $value = get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true ) )
+		if ( isset( $this->properties['post'] ) && $value = get_post_meta( $this->properties['post']->ID, "{$this->namespace}-{$this->properties['slug']}", true ) )
         {
             return $value;
         }
         return null;
 	}
-	
+
 	/**
 	 * Retrieves the value to be echoed in the admin column
 	 *
@@ -191,7 +211,7 @@ abstract class Wg_Meta_Box_Input
          }
          return $value;
      }
-     
+
      /**
       * Gets the admin column label
       *

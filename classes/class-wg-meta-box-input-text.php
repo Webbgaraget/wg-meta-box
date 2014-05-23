@@ -12,7 +12,7 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		$this->default_properties = array();
 	    parent::__construct( $namespace, $properties );
 	}
-	
+
 	/**
 	 * Returns markup for input field
 	 *
@@ -22,9 +22,9 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 	public function render()
 	{
 		$output = "<tr>";
-		
+
 		/* Setup attributes */
-		$attributes = array();
+		$attributes = $this->get_attributes();
 		// Name
 		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
 		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
@@ -52,8 +52,8 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
 		}
-		
-		
+
+
 		/** Add label to markup **/
 		$output .= '<th scope="row">';
 		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
@@ -64,10 +64,10 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		}
 
 		$output .= '</th>';
-		
+
 		/*** Add input field **/
 		$output .= '<td><input type="text" ' . implode( ' ', $attributes ) . '>';
-		
+
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{
@@ -75,7 +75,7 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		}
 
 		$output .= '</td>';
-		
+
 		$output .= '</tr>';
 		return $output;
 	}

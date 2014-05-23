@@ -37,14 +37,14 @@ class WGMetaBox
 			'priority'      => $priority,
 			'callback_args' => $callback_args
 		);
-		
+
 		$this->post_type = $post_type;
-		
+
 		add_action( 'admin_menu', array( $this, 'add' ) );
 		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
-		
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
-		
+
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
 
@@ -60,17 +60,17 @@ class WGMetaBox
 		// Supress "post published" message
 		add_filter( 'post_updated_messages', array( $this, 'supress_default_message' ) );
 	}
-	
+
 	/**
 	 * Adds meta box to post type of specified name
 	 *
-	 * @param string $id 
-	 * @param string $title 
-	 * @param array $fields 
+	 * @param string $id
+	 * @param string $title
+	 * @param array $fields
 	 * @param string|array $post_types
-	 * @param string $context 
-	 * @param string $priority 
-	 * @param string $callback_args 
+	 * @param string $context
+	 * @param string $priority
+	 * @param string $callback_args
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -85,7 +85,7 @@ class WGMetaBox
             new static( $id, $title, $fields, $post_type, $context, $priority, $callback_args );
         }
 	}
-		
+
 	/**
 	 * Adds meta box
 	 *
@@ -96,7 +96,7 @@ class WGMetaBox
 	{
 		add_meta_box( $this->params['id'], $this->params['title'], array( $this, 'render' ), $this->params['post_type'], $this->params['context'], $this->params['priority'], $this->params['callback_args'] );
 	}
-	
+
 	/**
 	 * Called when saving post
 	 *
@@ -122,7 +122,7 @@ class WGMetaBox
 	    {
 	        return $post->ID;
 	    }
-	
+
 		$page_meta = array();
 
 		// List of missing fields
@@ -135,10 +135,10 @@ class WGMetaBox
 			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
-				
+
                 // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
 				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-				
+
 				$page_meta[$name] = $value;
 			}
 			// Select
@@ -152,7 +152,7 @@ class WGMetaBox
 			elseif ( in_array( $field['type'], array( 'custom' ) ) )
 			{
 			    $name = "{$this->params['id']}-{$slug}";
-			    
+
 			    // Call custom callback if defined
 			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
 			    {
@@ -206,7 +206,7 @@ class WGMetaBox
 		}
 	}
 
-	
+
 	/**
 	 * Renders the meta box
 	 *
@@ -218,12 +218,12 @@ class WGMetaBox
 		global $post;
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
-		
+
 		if ( isset( $context['args'] ) && isset( $context['args']['description'] ) )
 		{
 		    $output .= call_user_func( $context['args']['description'] );
 		}
-		
+
 		$output .= '<table class="form-table">';
 
 		// Loop through each field
@@ -241,7 +241,7 @@ class WGMetaBox
 
 				if ( ! empty( $value ) )
 					$field->set_value( $value );
-				
+
 				$output .= $field->render();
 			}
 			else
@@ -252,11 +252,11 @@ class WGMetaBox
 		$output .= "</table>";
 		echo $output;
 	}
-	
+
 	/**
 	 * Add columns to the admin column
 	 *
-	 * @param string $post_columns 
+	 * @param string $post_columns
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -288,12 +288,12 @@ class WGMetaBox
 		}
 		return $post_columns;
 	}
-	
+
 	/**
 	 * Populates admin column with meta data
 	 *
-	 * @param string $column_name 
-	 * @param string $post_id 
+	 * @param string $column_name
+	 * @param string $post_id
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -304,9 +304,9 @@ class WGMetaBox
 	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
 	    if ( !$slug || !array_key_exists( $slug, $this->params['fields'] ) ) return;
-	    
+
         $field = $this->params['fields'][$slug];
-        
+
 	    $field['slug'] = $slug;
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
@@ -342,8 +342,8 @@ class WGMetaBox
 	 */
 	public function register_sortable_meta( $query )
 	{
-	   if( ! is_admin() )  
-	        return;  
+	   if( ! is_admin() )
+	        return;
 
 	    $orderby = $query->get( 'orderby' );
 
@@ -353,7 +353,7 @@ class WGMetaBox
 
 	    	if ( array_key_exists( $slug, $this->params['fields'] ) )
 	    	{
-		        $query->set( 'meta_key', $orderby );  
+		        $query->set( 'meta_key', $orderby );
 		        $query->set( 'orderby','meta_value' );
 	    	}
 	    }
@@ -410,7 +410,7 @@ class WGMetaBox
 
 		return $messages;
 	}
-	
+
 	/**
 	 * Enqueue needed JS
 	 *
