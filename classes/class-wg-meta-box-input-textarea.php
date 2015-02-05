@@ -4,7 +4,7 @@
  * Class adding functionality to add textarea
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
- */	
+ */
 class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 {
 	public function __construct( $namespace, $properties )
@@ -12,7 +12,7 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		$this->default_properties = array();
 	    parent::__construct( $namespace, $properties );
 	}
-	
+
 	/**
 	 * Returns markup for input field
 	 *
@@ -21,7 +21,7 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-		
+
 		/* Setup attributes */
 		$attributes = array();
 		// Name
@@ -46,11 +46,11 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
 		}
-		
+
 		/** Set up value **/
 		$value = $this->get_value();
-		
-		
+
+
 		/** Add label to markup **/
 
 		// Add to markup
@@ -65,24 +65,24 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 
 		$output .= '</div>';
 		$output .= '<div class="input">';
-		
+
 		/*** Add input field **/
 		$output .= '<textarea ' . implode( ' ', $attributes ) . '>' . $value . '</textarea>';
 
 		/*** Add delete button ***/
-		if ( $this->_get_max_repetitions() > 0 )
+		if ( $this->_get_is_repeatable() )
 		{
 			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
-		}	
-		
+		}
+
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
-		
+
 		$output .= '</div>';
-		
+
 		return $output;
 	}
 }

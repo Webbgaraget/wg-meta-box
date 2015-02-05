@@ -11,14 +11,14 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 	{
 		$this->default_properties = array();
 	    parent::__construct( $namespace, $properties );
-		
+
         // Add default value to options
 		if ( ( isset( $this->properties['default'] ) && $default = $this->properties['default'] ) || $this->properties['default'] = "<i>Choose</i>" )
 		{
             $this->properties['options'] = array_diff_key( array( '0' => $this->properties['default'] ), $this->properties['options'] ) + $this->properties['options'];
 		}
 	}
-	
+
 	/**
 	 * Returns markup for select field
 	 *
@@ -27,7 +27,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-		
+
 		/* Setup attributes */
 		$attributes = array();
 		// Name
@@ -54,7 +54,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'size="' . $this->properties['size'] . '"';
 		}
-		
+
 		/** Add label to markup **/
 		$output = '<div class="label">';
 		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
@@ -66,7 +66,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 
 		$output .= '</div>';
 		$output .= '<div class="input">';
-		
+
 		/*** Add input field **/
 		if ( !isset( $this->properties['options'] ) )
 		{
@@ -76,7 +76,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 		{
 			throw new Exception( "Options param must be array" );
 		}
-		
+
 		$output .= '<select ' . implode( ' ', $attributes ) . '>';
 		foreach( $this->properties['options'] as $value => $name )
 		{
@@ -90,21 +90,21 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 		$output .= '</select>';
 
 		/*** Add delete button ***/
-		if ( $this->_get_max_repetitions() > 0 )
+		if ( $this->_get_is_repeatable() )
 		{
 			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
-		}	
-		
+		}
+
 		// Description
 		if ( isset($this->properties['description'] ) )
 		{
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 		$output .= '</div>';
-		
+
 		return $output;
 	}
-	
+
 	/**
 	 * Retrieves the default option
 	 *
@@ -119,7 +119,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 	    }
 	    return null;
 	}
-	
+
 	/**
 	 * Retrieves the value
 	 *
@@ -143,7 +143,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
         }
         return $value;
 	}
-	
+
 	/**
 	 * Retrieves the value to be echoed in the admin column
 	 *
