@@ -5,22 +5,22 @@
 	var RepeatableGroup = RepeatableGroup || function($groupContainer)
 	{
 		// The group container
-		this.$groupCointainer = $groupContainer;
+		this.$groupContainer = $groupContainer;
 
 		// Add button
-		this.$button = this.$groupCointainer.find('.add-group-button');
+		this.$button = this.$groupContainer.find('.add-group-button');
 
 		// Current number of groups
-		this.currentNumberOfGroups = this.$groupCointainer.find('.group-repeatable-section').length;
+		this.currentNumberOfGroups = this.$groupContainer.find('.group-repeatable-section').length;
 
 		// Name of group
-		this.groupName = this.$groupCointainer.data('label');
+		this.groupName = this.$groupContainer.data('label');
 
 		// Group label template
-		this.$groupTemplate = this.$groupCointainer.find('.group-repeatable-section').clone();
+		this.$groupTemplate = this.$groupContainer.find('.group-repeatable-section').first().clone();
 
 		// Remove buttons
-		this.$removeButtons = this.$groupCointainer.find('.group-remove-button');
+		this.$removeButtons = this.$groupContainer.find('.group-remove-button');
 
 		this.init();
 	};
@@ -48,7 +48,7 @@
 
 			this.$removeButtons.off('click');
 
-			this.$removeButtons = this.$groupCointainer.find('.group-remove-button');
+			this.$removeButtons = this.$groupContainer.find('.group-remove-button');
 
 			this.$removeButtons.on('click', function(evt)
 			{
@@ -81,7 +81,7 @@
 		removeGroup : function(num)
 		{
 			// Remove group
-			$('#' + this.$groupCointainer.attr('name') + '-' + num).parent().remove();
+			$('#' + this.$groupContainer.attr('name') + '-' + num).parent().remove();
 
 			this.initRemoveButtons();
 		},
@@ -101,7 +101,7 @@
 			console.log("Adding group " + num);
 			$removeButton.data('num', num);
 
-			$group.attr('id' , this.$groupCointainer.data('name') + '-' + num);
+			$group.attr('id' , this.$groupContainer.data('name') + '-' + num);
 
 			// Fix up attributes
 			$group.find('fieldset').each(
