@@ -370,7 +370,14 @@ class WGMetaBox
 					if ( array_key_exists( $field['type'], $this->class_names ) )
 					{
 						// Retrieve the value
-						$value = $group[$slug];
+						if ( isset( $group[$slug] ) )
+						{
+							$value = $group[$slug];
+						}
+						else
+						{
+							$value = '';
+						}
 
 						if ( !is_array( $value ) )
 						{
