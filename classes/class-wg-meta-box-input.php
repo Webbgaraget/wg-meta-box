@@ -7,6 +7,7 @@
  */
 abstract class Wg_Meta_Box_Input
 {
+	protected $group_repetition = 0;
 
 	public function __construct( $namespace, $properties )
 	{
@@ -140,6 +141,15 @@ abstract class Wg_Meta_Box_Input
 		{
 			$this->properties['value'] = $value;
 		}
+	}
+
+	/**
+	 * Set group repetition nr
+	 * @return string id
+	 */
+	public function set_group_repetition( $nr )
+	{
+		$this->group_repetition = $nr;
 	}
 
 	/**
@@ -347,15 +357,15 @@ abstract class Wg_Meta_Box_Input
 	  */
 	 protected function get_name()
 	 {
-	 	if ( $this->_get_is_group_repeatable() )
-	 	{
-	 		$name = $this->namespace . '[' . $this->_get_group_repetition() . '][' . $this->properties['slug'] . ']';
-	 	}
-	 	else
-	 	{
+		if ( $this->_get_is_group_repeatable() )
+		{
+			$name = $this->namespace . '[' . $this->_get_group_repetition() . '][' . $this->properties['slug'] . ']';
+		}
+		else
+		{
 			$name = $this->namespace . '-' . $this->properties['slug']. '[]';
-	 	}
-	 	return $name;
+		}
+		return $name;
 	 }
 
 	 /**
@@ -373,7 +383,7 @@ abstract class Wg_Meta_Box_Input
 	  */
 	 protected function _get_group_repetition()
 	 {
-		return 0; // FIXME
+		return $this->group_repetition;
 	 }
 
 

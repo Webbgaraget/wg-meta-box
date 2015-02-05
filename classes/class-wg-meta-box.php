@@ -165,7 +165,7 @@ class WGMetaBox
 						$meta_group[$slug] = $value;
 					}
 					// Select
-					elseif ( $field['type'] == 'select' )
+					elseif ( $field['type'] === 'select' )
 					{
 						$value = isset( $group[$slug] ) && $group[$slug] != '0' ? $group[$slug] : '';
 						$meta_group[$slug] = $value;
@@ -201,7 +201,7 @@ class WGMetaBox
 					}
 					else
 					{
-						if ( isset( $field['required']) && $field['required'] && '' == $value )
+						if ( isset( $field['required']) && $field['required'] && '' === $value )
 						{
 							$required_missing[] = $slug;
 						}
@@ -212,7 +212,8 @@ class WGMetaBox
 				$page_meta_group[] = $meta_group;
 			}
 		}
-		else {
+		else
+		{
 			$page_meta = array();
 
 			// If this isn't a repeatable group just loop over the fields
@@ -268,7 +269,7 @@ class WGMetaBox
 				}
 				else
 				{
-					if ( isset( $field['required']) && $field['required'] && '' == $value )
+					if ( isset( $field['required']) && $field['required'] && '' === $value )
 					{
 						$required_missing[] = $slug;
 					}
@@ -350,49 +351,90 @@ class WGMetaBox
 
 		$output .= '<div class="wg-meta-box' . ( $this->params['group_repeatable'] ? ' group-repeatable' : '' ) . '" data-name="' . $this->params['id'] . '">';
 
-		// Foreach ...
-		$output .= '<fieldset class="group-repeatable-section">';
-
-		// Loop through each field
-		foreach( $this->params['fields'] as $slug => $field )
-		{
-			if ( !isset( $field['type'] ) )
-			{
-				throw new Exception( "Type not defined for {$slug}" );
-			}
-			if ( array_key_exists( $field['type'], $this->class_names ) )
-			{
-				// Retrieve the value
-				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
-
-				if ( !is_array( $value ) )
-				{
-					$value = array( $value );
-				}
-
-				$field['group_repeatable'] = $this->params['group_repeatable'];
-				$field['slug'] = $slug;
-
-				// Save the properties in a temporary variable
-				$properties = $field;
-
-				$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
-				$field->set_value( $value );
-				$output .= $field->render();
-
-			}
-			else
-			{
-				throw new Exception( "Field has unknown type: {$field['type']}" );
-			}
-		}
-
-		$output .= "</fieldset>";
-		//Endforeach ...
-
 		if ( $this->params['group_repeatable'] )
 		{
+			$groups = get_post_meta( $post->ID, "{$this->params['id']}", true );
+
+			// Loop trough each field group
+			foreach ( $groups as $index => $group )
+			{
+				$output .= '<fieldset class="group-repeatable-section">';
+
+				// Loop through each field
+				foreach( $this->params['fields'] as $slug => $field )
+				{
+					if ( !isset( $field['type'] ) )
+					{
+						throw new Exception( "Type not defined for {$slug}" );
+					}
+					if ( array_key_exists( $field['type'], $this->class_names ) )
+					{
+						// Retrieve the value
+						$value = $group[$slug];
+
+						if ( !is_array( $value ) )
+						{
+							$value = array( $value );
+						}
+
+						$field['group_repeatable'] = $this->params['group_repeatable'];
+						$field['slug'] = $slug;
+
+						// Save the properties in a temporary variable
+						$properties = $field;
+
+						$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
+						$field->set_value( $value );
+						$field->set_group_repetition( $index );
+						$output .= $field->render();
+
+					}
+					else
+					{
+						throw new Exception( "Field has unknown type: {$field['type']}" );
+					}
+				}
+
+				$output .= '</fieldset>';
+			}
+
 			$output .= '<input type="button" class="button add-group-button" id="' . $this->params['id'] . '-add-new" value="' .  __( 'Add new group' ) . '">';
+		}
+		else
+		{
+			// Loop through each field
+			foreach( $this->params['fields'] as $slug => $field )
+			{
+				if ( !isset( $field['type'] ) )
+				{
+					throw new Exception( "Type not defined for {$slug}" );
+				}
+				if ( array_key_exists( $field['type'], $this->class_names ) )
+				{
+					// Retrieve the value
+					$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
+
+					if ( !is_array( $value ) )
+					{
+						$value = array( $value );
+					}
+
+					$field['group_repeatable'] = $this->params['group_repeatable'];
+					$field['slug'] = $slug;
+
+					// Save the properties in a temporary variable
+					$properties = $field;
+
+					$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
+					$field->set_value( $value );
+					$output .= $field->render();
+
+				}
+				else
+				{
+					throw new Exception( "Field has unknown type: {$field['type']}" );
+				}
+			}
 		}
 
 		$output .= "</div>";
