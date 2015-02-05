@@ -14,7 +14,7 @@
 #postbox-container-2 .wg-meta-box .input {
 	float: left;
 	margin-bottom: 1em;
-	width: 67%;	
+	width: 67%;
 }
 
 /** Right column **/
@@ -48,7 +48,7 @@
 #postbox-container-1 .wg-meta-box .input.checkbox {
 	margin-bottom: 1em;
 	float: left;
-	width: 33%;	
+	width: 33%;
 }
 
 /** TinyMCE **/
@@ -61,8 +61,15 @@
 	background: transparent;
 }
 
+.group-repeatable-section {
+	border: 1px solid #DDDDDD;
+	background: #FDFDFD;
+	padding: .5em .9em;
+	margin-bottom: .5em;
+}
+
 /** Add repeatable field button **/
-.add-field-button {
+.add-group-button, .add-field-button {
 	clear: left;
 	float: left;
 }

@@ -27,24 +27,37 @@ class WGMetaBox
 			'custom'   => 'Wg_Meta_Box_Input_Custom'
 		);
 
+		// Using the fields array for this property is not the neatest solution but at least we don't
+		// have to add another argument to add_meta_box().
+		if ( isset( $fields['group_repeatable'] ) )
+		{
+			$group_repeatable = (bool) $fields['group_repeatable'];
+			unset( $fields['group_repeatable'] );
+		}
+		else
+		{
+			$group_repeatable = false;
+		}
+
 		$this->params = array(
-			'id'            => $id,
-			'title'         => $title,
-			'fields'        => $fields,
-			'post_type'     => $post_type,
-			'context'       => $context,
-			'priority'      => $priority,
-			'callback_args' => $callback_args
+			'id'               => $id,
+			'title'            => $title,
+			'fields'           => $fields,
+			'post_type'        => $post_type,
+			'context'          => $context,
+			'priority'         => $priority,
+			'group_repeatable' => $group_repeatable,
+			'callback_args'    => $callback_args
 		);
 
-	
+
 		$this->post_type = $post_type;
-		
-		add_action( 'admin_menu', array( $this, 'add' ) );
-		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
-		
+
+		add_action( "add_meta_boxes_{$post_type}", array( $this, 'add' ) );
+		add_action( "save_post_{$post_type}", array( $this, 'save' ), 10, 2 );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-		
+
         // Add columns to the admin column
 		add_filter( 'manage_' . $post_type . '_posts_columns', array( $this, 'add_columns' ) );
 
@@ -67,17 +80,17 @@ class WGMetaBox
 			$this->assets_url = WG_META_BOX_URL . '/assets';
 		}
 	}
-	
+
 	/**
 	 * Adds meta box to post type of specified name
 	 *
-	 * @param string $id 
-	 * @param string $title 
-	 * @param array $fields 
+	 * @param string $id
+	 * @param string $title
+	 * @param array $fields
 	 * @param string|array $post_types
-	 * @param string $context 
-	 * @param string $priority 
-	 * @param string $callback_args 
+	 * @param string $context
+	 * @param string $priority
+	 * @param string $callback_args
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -92,7 +105,7 @@ class WGMetaBox
             new static( $id, $title, $fields, $post_type, $context, $priority, $callback_args );
         }
 	}
-		
+
 	/**
 	 * Adds meta box
 	 *
@@ -103,7 +116,7 @@ class WGMetaBox
 	{
 		add_meta_box( $this->params['id'], $this->params['title'], array( $this, 'render' ), $this->params['post_type'], $this->params['context'], $this->params['priority'], $this->params['callback_args'] );
 	}
-	
+
 	/**
 	 * Called when saving post
 	 *
@@ -130,85 +143,170 @@ class WGMetaBox
 	        return $post->ID;
 	    }
 
-		$page_meta = array();
-
 		// List of missing fields
 		$required_missing = array();
 
-		foreach( $this->params['fields'] as $slug => $field )
-		{
-			$value = '';
-			// Save text, textarea, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
-			{
-				$name = "{$this->params['id']}-{$slug}";
-				
-                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-				$page_meta[$name] = $value;
-			}
-			// Select
-			elseif ( $field['type'] == 'select' )
-			{
-				$name = "{$this->params['id']}-{$slug}";
-				$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
-				$page_meta[$name] = $value;
-			}
-			// Save custom field
-			elseif ( in_array( $field['type'], array( 'custom' ) ) )
-			{
-			    $name = "{$this->params['id']}-{$slug}";
-			    
-			    // Call custom callback if defined
-			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
-			    {
-                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+		if ( $this->params['group_repeatable'] && is_array( $_POST[$this->params['id']] ) ) {
+			$page_meta_group = array();
+			$groups  = $_POST[$this->params['id']];
 
-			        $value = call_user_func( $field['callbacks']['save'], $name, $value );
-			    }
-			    else
-			    {
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-			    }
-			    $page_meta[$name] = $value;
-			}
+			// Loop over the fields for each group we're saving
+			foreach ( $groups as $group ) {
+				$meta_group = array();
 
-			// Check if field is required and not set
-			if ( is_array( $value ) )
-			{
-				foreach( $value as $val )
+				foreach( $this->params['fields'] as $slug => $field )
 				{
-					if ( isset( $field['required']) && $field['required'] && '' == $val )
-						$required_missing[$slug] = $slug;
+					$value = '';
+					// Save text, textarea, richedit, date and custom field
+					if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+					{
+		                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+						$value = isset( $group[$slug] ) ? $group[$slug] : '';
+						$meta_group[$slug] = $value;
+					}
+					// Select
+					elseif ( $field['type'] === 'select' )
+					{
+						$value = isset( $group[$slug] ) && $group[$slug] != '0' ? $group[$slug] : '';
+						$meta_group[$slug] = $value;
+					}
+					// Save custom field
+					elseif ( in_array( $field['type'], array( 'custom' ) ) )
+					{
+					    // Call custom callback if defined
+					    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+					    {
+		                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+
+					        $value = call_user_func( $field['callbacks']['save'], $slug, $value );
+					    }
+					    else
+					    {
+		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+					    }
+					    $meta_group[$slug] = $value;
+					}
+
+					// Check if field is required and not set
+					if ( is_array( $value ) )
+					{
+						foreach( $value as $val )
+						{
+							if ( isset( $field['required']) && $field['required'] && '' == $val )
+							{
+								$required_missing[$slug] = $slug;
+							}
+						}
+					}
+					else
+					{
+						if ( isset( $field['required']) && $field['required'] && '' === $value )
+						{
+							$required_missing[] = $slug;
+						}
+					}
 				}
+
+				// Store the result
+				$page_meta_group[] = $meta_group;
 			}
-			else
+		}
+		else
+		{
+			$page_meta = array();
+
+			// If this isn't a repeatable group just loop over the fields
+			foreach( $this->params['fields'] as $slug => $field )
 			{
-				if ( isset( $field['required']) && $field['required'] && '' == $value )
-					$required_missing[] = $slug;
+				$value = '';
+				// Save text, textarea, richedit, date and custom field
+				if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+				{
+					$name = "{$this->params['id']}-{$slug}";
+
+	                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+					$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+					$page_meta[$name] = $value;
+				}
+				// Select
+				elseif ( $field['type'] == 'select' )
+				{
+					$name = "{$this->params['id']}-{$slug}";
+					$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
+					$page_meta[$name] = $value;
+				}
+				// Save custom field
+				elseif ( in_array( $field['type'], array( 'custom' ) ) )
+				{
+				    $name = "{$this->params['id']}-{$slug}";
+
+				    // Call custom callback if defined
+				    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+				    {
+	                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+
+				        $value = call_user_func( $field['callbacks']['save'], $name, $value );
+				    }
+				    else
+				    {
+	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+				    }
+				    $page_meta[$name] = $value;
+				}
+
+				// Check if field is required and not set
+				if ( is_array( $value ) )
+				{
+					foreach( $value as $val )
+					{
+						if ( isset( $field['required']) && $field['required'] && '' == $val )
+						{
+							$required_missing[$slug] = $slug;
+						}
+					}
+				}
+				else
+				{
+					if ( isset( $field['required']) && $field['required'] && '' === $value )
+					{
+						$required_missing[] = $slug;
+					}
+				}
 			}
 		}
 
-	    foreach( $page_meta as $key => $value )
-	    {
-	        if ( $post->post_type == 'revision' )
-	        {
-	            return;
-	        }
+		if ( $this->params['group_repeatable'] )
+		{
+			// Remove the existing meta values
+	        delete_post_meta( $post->ID, $this->params['id'] );
 
-	        // Is the field only repeated once? Don't store it as an array
-	        if ( count( $value) === 1 )
-	        {
-	        	$value = $value[0];
-	        }
-	        
-	        // Remove the existing meta values
-	        delete_post_meta( $post->ID, $key );
-        	
         	// Add the new meta values
-        	add_post_meta( $post->ID, $key, $value );
-	    }
+        	add_post_meta( $post->ID, $this->params['id'], $page_meta_group );
+		}
+		else
+		{
+		    foreach( $page_meta as $key => $value )
+		    {
+		        if ( $post->post_type == 'revision' )
+		        {
+		            return;
+		        }
+
+		        // Is the field only repeated once? Don't store it as an array
+		        if ( count( $value) === 1 )
+		        {
+		        	$value = $value[0];
+		        }
+
+		        // Remove the existing meta values
+		        delete_post_meta( $post->ID, $key );
+
+	        	// Add the new meta values
+	        	add_post_meta( $post->ID, $key, $value );
+		    }
+		}
 
 		// Any required fields missing?
 		if ( count( $required_missing ) > 0 )
@@ -233,7 +331,7 @@ class WGMetaBox
 		}
 	}
 
-	
+
 	/**
 	 * Renders the meta box
 	 *
@@ -245,54 +343,117 @@ class WGMetaBox
 		global $post;
 		$output = "";
 		$output .= '<input type="hidden" name="' . $this->params['id'] . '-nonce" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '">';
-		
+
 		if ( isset( $context['args'] ) && isset( $context['args']['description'] ) )
 		{
 		    $output .= call_user_func( $context['args']['description'] );
 		}
-		
-		$output .= '<div class="wg-meta-box">';
 
-		// Loop through each field
-		foreach( $this->params['fields'] as $slug => $field )
+		$output .= '<div class="wg-meta-box' . ( $this->params['group_repeatable'] ? ' group-repeatable' : '' ) . '" data-name="' . $this->params['id'] . '">';
+
+		if ( $this->params['group_repeatable'] )
 		{
-			if ( !isset( $field['type'] ) )
-			{
-				throw new Exception( "Type not defined for {$slug}" );
-			}
-			if ( array_key_exists( $field['type'], $this->class_names ) )
-			{
-				// Retrieve the value
-				$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
+			$groups = get_post_meta( $post->ID, "{$this->params['id']}", true );
 
-				if ( !is_array( $value ) )
+			// Loop trough each field group
+			foreach ( $groups as $index => $group )
+			{
+				$output .= '<fieldset class="group-repeatable-section" id="' . $this->params['id'] . '-' . $index . '">';
+
+				// Loop through each field
+				foreach( $this->params['fields'] as $slug => $field )
 				{
-					$value = array( $value );
+					if ( !isset( $field['type'] ) )
+					{
+						throw new Exception( "Type not defined for {$slug}" );
+					}
+					if ( array_key_exists( $field['type'], $this->class_names ) )
+					{
+						// Retrieve the value
+						if ( isset( $group[$slug] ) )
+						{
+							$value = $group[$slug];
+						}
+						else
+						{
+							$value = '';
+						}
+
+						if ( !is_array( $value ) )
+						{
+							$value = array( $value );
+						}
+
+						$field['group_repeatable'] = $this->params['group_repeatable'];
+						$field['slug'] = $slug;
+
+						// Save the properties in a temporary variable
+						$properties = $field;
+
+						$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
+						$field->set_value( $value );
+						$field->set_group_repetition( $index );
+						$output .= $field->render();
+
+					}
+					else
+					{
+						throw new Exception( "Field has unknown type: {$field['type']}" );
+					}
 				}
 
-				$field['slug'] = $slug;
-
-				// Save the properties in a temporary variable
-				$properties = $field;
-
-				$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
-				$field->set_value( $value );
-				$output .= $field->render();
-
+				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove ' . $this->params['id'] ) . '">';
+				$output .= '</fieldset>';
 			}
-			else
+
+			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new ' . $this->params['id'] ) . '">';
+		}
+		else
+		{
+			// Loop through each field
+			foreach( $this->params['fields'] as $slug => $field )
 			{
-				throw new Exception( "Field has unknown type: {$field['type']}" );
+				if ( !isset( $field['type'] ) )
+				{
+					throw new Exception( "Type not defined for {$slug}" );
+				}
+				if ( array_key_exists( $field['type'], $this->class_names ) )
+				{
+					// Retrieve the value
+					$value = get_post_meta( $post->ID, "{$this->params['id']}-{$slug}", true );
+
+					if ( !is_array( $value ) )
+					{
+						$value = array( $value );
+					}
+
+					$field['group_repeatable'] = $this->params['group_repeatable'];
+					$field['slug'] = $slug;
+
+					// Save the properties in a temporary variable
+					$properties = $field;
+
+					$field = new $this->class_names[$properties['type']]( $this->params['id'], $properties );
+					$field->set_value( $value );
+					$output .= $field->render();
+
+				}
+				else
+				{
+					throw new Exception( "Field has unknown type: {$field['type']}" );
+				}
 			}
 		}
+
 		$output .= "</div>";
+
 		echo $output;
 	}
-	
+
 	/**
 	 * Add columns to the admin column
 	 *
-	 * @param string $post_columns 
+	 * @param string $post_columns
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -324,12 +485,12 @@ class WGMetaBox
 		}
 		return $post_columns;
 	}
-	
+
 	/**
 	 * Populates admin column with meta data
 	 *
-	 * @param string $column_name 
-	 * @param string $post_id 
+	 * @param string $column_name
+	 * @param string $post_id
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -340,9 +501,9 @@ class WGMetaBox
 	    $slug = substr( $slug, strlen( $this->params['id'] ) + 1 );
 	    // Do return if the column slug isn't among the fields (i.e. other plugin)
 	    if ( !$slug || !array_key_exists( $slug, $this->params['fields'] ) ) return;
-	    
+
         $field = $this->params['fields'][$slug];
-        
+
 	    $field['slug'] = $slug;
 	    $field['post'] = $post;
 		$field = new $this->class_names[$field['type']]( $this->params['id'], $field );
@@ -378,8 +539,8 @@ class WGMetaBox
 	 */
 	public function register_sortable_meta( $query )
 	{
-	   if( ! is_admin() )  
-	        return;  
+	   if( ! is_admin() )
+	        return;
 
 	    $orderby = $query->get( 'orderby' );
 
@@ -389,7 +550,7 @@ class WGMetaBox
 
 	    	if ( array_key_exists( $slug, $this->params['fields'] ) )
 	    	{
-		        $query->set( 'meta_key', $orderby );  
+		        $query->set( 'meta_key', $orderby );
 		        $query->set( 'orderby','meta_value' );
 	    	}
 	    }
@@ -446,7 +607,7 @@ class WGMetaBox
 
 		return $messages;
 	}
-	
+
 	/**
 	 * Enqueue needed scripts
 	 *
@@ -461,5 +622,6 @@ class WGMetaBox
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 
 		wp_enqueue_script( 'wg-meta-repeatable', $this->assets_url . '/js/repeatable-fields.js' );
+		wp_enqueue_script( 'wg-meta-repeatable-group', $this->assets_url . '/js/repeatable-group.js' );
 	}
 }

@@ -7,6 +7,7 @@
  */
 abstract class Wg_Meta_Box_Input
 {
+	protected $group_repetition = 0;
 
 	public function __construct( $namespace, $properties )
 	{
@@ -35,6 +36,7 @@ abstract class Wg_Meta_Box_Input
 				),
 				'required'    => false,
 				'repeatable'  => false,
+				'group_repeatable'  => false,
 				'repetitions' => array(
 					'min' => 1,
 					'max' => -1,
@@ -42,6 +44,12 @@ abstract class Wg_Meta_Box_Input
 			),
 			$this->default_properties
 		);
+
+		if ( $properties['group_repeatable'] )
+		{
+			// We don't support a repetable field inside a repeatable section at the moment
+			$properties['repeatable'] = false;
+		}
 
 		// Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'admin-column', $properties ) )
@@ -59,8 +67,9 @@ abstract class Wg_Meta_Box_Input
 
 		$this->properties = array_merge( $this->default_properties, $properties );
 
+
 		// Verify repeatable only specified for select and input
-		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea' ) ) && ( $this->_get_max_repetitions() > 1 || $this->_get_min_repetitions > 1 ) )
+		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea' ) ) && ( $this->_get_is_repeatable() ) )
 		{
 			throw new Exception( 'Repetition only supported for inputs of type text and select.' );
 		}
@@ -135,6 +144,15 @@ abstract class Wg_Meta_Box_Input
 	}
 
 	/**
+	 * Set group repetition nr
+	 * @return string id
+	 */
+	public function set_group_repetition( $nr )
+	{
+		$this->group_repetition = $nr;
+	}
+
+	/**
 	 * Retrieves the slug
 	 *
 	 * @return void
@@ -165,7 +183,7 @@ abstract class Wg_Meta_Box_Input
 			$label = $this->properties['label'];
 
 			// In case of repeated field, add field number to label
-			if ( $this->properties['repetitions'] > 1 )
+			if ( $this->properties['repeatable'] )
 			{
 				$label .= ' #' . ( $this->properties['num'] + 1 );
 			}
@@ -339,7 +357,15 @@ abstract class Wg_Meta_Box_Input
 	  */
 	 protected function get_name()
 	 {
-		return $this->namespace . '-' . $this->properties['slug']. '[]';
+		if ( $this->_get_is_group_repeatable() )
+		{
+			$name = $this->namespace . '[' . $this->_get_group_repetition() . '][' . $this->properties['slug'] . ']';
+		}
+		else
+		{
+			$name = $this->namespace . '-' . $this->properties['slug']. '[]';
+		}
+		return $name;
 	 }
 
 	 /**
@@ -349,6 +375,15 @@ abstract class Wg_Meta_Box_Input
 	 protected function get_id()
 	 {
 		return $this->namespace . '-' . $this->properties['slug']. '-' . $this->properties['num'];
+	 }
+
+	 /**
+	  * Get group repetition nr
+	  * @return string id
+	  */
+	 protected function _get_group_repetition()
+	 {
+		return $this->group_repetition;
 	 }
 
 
@@ -404,6 +439,16 @@ abstract class Wg_Meta_Box_Input
 	protected function _get_is_repeatable()
 	{
 		return $this->properties['repeatable'];
+	}
+
+
+	/**
+	 * Get number of min repetitions
+	 * @return integer Min repetitions
+	 */
+	protected function _get_is_group_repeatable()
+	{
+		return $this->properties['group_repeatable'];
 	}
 
 
