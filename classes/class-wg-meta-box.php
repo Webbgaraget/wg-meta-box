@@ -53,8 +53,8 @@ class WGMetaBox
 
 		$this->post_type = $post_type;
 
-		add_action( 'admin_menu', array( $this, 'add' ) );
-		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+		add_action( "add_meta_boxes_{$post_type}", array( $this, 'add' ) );
+		add_action( "save_post_{$post_type}", array( $this, 'save' ), 10, 2 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
