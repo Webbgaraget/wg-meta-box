@@ -402,11 +402,11 @@ class WGMetaBox
 					}
 				}
 
-				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove group' ) . '">';
+				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove ' . $this->params['id'] ) . '">';
 				$output .= '</fieldset>';
 			}
 
-			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new group' ) . '">';
+			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new ' . $this->params['id'] ) . '">';
 		}
 		else
 		{
