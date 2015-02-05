@@ -358,7 +358,7 @@ class WGMetaBox
 			// Loop trough each field group
 			foreach ( $groups as $index => $group )
 			{
-				$output .= '<fieldset class="group-repeatable-section">';
+				$output .= '<fieldset class="group-repeatable-section" id="' . $this->params['id'] . '-' . $index . '">';
 
 				// Loop through each field
 				foreach( $this->params['fields'] as $slug => $field )
@@ -395,10 +395,11 @@ class WGMetaBox
 					}
 				}
 
+				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove group' ) . '">';
 				$output .= '</fieldset>';
 			}
 
-			$output .= '<input type="button" class="button add-group-button" id="' . $this->params['id'] . '-add-new" value="' .  __( 'Add new group' ) . '">';
+			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new group' ) . '">';
 		}
 		else
 		{

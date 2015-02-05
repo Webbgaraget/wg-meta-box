@@ -81,7 +81,7 @@
 		removeGroup : function(num)
 		{
 			// Remove group
-			$('#' + this.$groupContainer.attr('name') + '-' + num).parent().remove();
+			$('#' + this.$groupContainer.data('name') + '-' + num).remove();
 
 			this.initRemoveButtons();
 		},
