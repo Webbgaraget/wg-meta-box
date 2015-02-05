@@ -35,6 +35,7 @@ abstract class Wg_Meta_Box_Input
 				),
 				'required'    => false,
 				'repeatable'  => false,
+				'group_repeatable'  => false,
 				'repetitions' => array(
 					'min' => 1,
 					'max' => -1,
@@ -42,6 +43,12 @@ abstract class Wg_Meta_Box_Input
 			),
 			$this->default_properties
 		);
+
+		if ( $properties['group_repeatable'] )
+		{
+			// We don't support a repetable field inside a repeatable section at the moment
+			$properties['repeatable'] = false;
+		}
 
 		// Do separate merge of admin-column, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'admin-column', $properties ) )
@@ -58,6 +65,7 @@ abstract class Wg_Meta_Box_Input
 		}
 
 		$this->properties = array_merge( $this->default_properties, $properties );
+
 
 		// Verify repeatable only specified for select and input
 		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea' ) ) && ( $this->_get_max_repetitions() > 1 || $this->_get_min_repetitions > 1 ) )
