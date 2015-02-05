@@ -44,7 +44,7 @@ Still reading, are you? Here's an example of how a select and a text field are a
 	    )
 	);
 	WGMetaBox::add_meta_box( 'example', 'Example', $fields, 'page' );
-	
+
 The fields are accessible through the meta keys `example-favorite-color`, `example-name` and `example-visible`.
 
 # Creating a meta box
@@ -84,6 +84,8 @@ There are some common and some field specific arguments. The common arguments ar
 * **label** Field label. _(string, required)_
 
 * **class** Additional class(es) of the input field. _(string, optional, default: "")_
+
+* **html-attributes** Array of additional HTML-attributes for the input field. Elements of the array should be on the form ``'attribute="value"'``. _(array, optional, default: null)_
 
 * **disabled** Whether the input field is disabled or not. _(boolean, optional, default: false)_
 
@@ -214,6 +216,9 @@ In case of a repeatable field, the values will be stored in two different ways. 
 ### 2013- v0.6
 * Creates separate layouts for meta boxes in main column and sidebar (issue #31)
 * Adds repeatable fields for text, textarea and select (issue #40)
+
+### 2014-05-23 v0.5.6
+* Adds the property "html-attributes" for fields. Makes it possible to pass an array of HTML-attributes for an input field on the form ``array( 'attribute="value"', 'attribute2="value2"' )``.
 
 ### 2013-03-04 v0.5.5
 * Adds CSS for datepicker (issue #38)

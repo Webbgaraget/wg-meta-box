@@ -6,6 +6,8 @@ require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-text.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-textarea.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-rich-edit.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-date.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-color.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-image.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-custom.php" );
 
 /**
@@ -24,6 +26,8 @@ class WGMetaBox
 			'textarea' => 'Wg_Meta_Box_Input_Textarea',
 			'richedit' => 'Wg_Meta_Box_Input_Rich_Edit',
 			'date'     => 'Wg_Meta_Box_Input_Date',
+			'color'    => 'Wg_Meta_Box_Input_Color',
+			'image'    => 'Wg_Meta_Box_Input_Image',
 			'custom'   => 'Wg_Meta_Box_Input_Custom'
 		);
 
@@ -158,7 +162,7 @@ class WGMetaBox
 				{
 					$value = '';
 					// Save text, textarea, richedit, date and custom field
-					if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+					if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
 					{
 		                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
 						$value = isset( $group[$slug] ) ? $group[$slug] : '';
