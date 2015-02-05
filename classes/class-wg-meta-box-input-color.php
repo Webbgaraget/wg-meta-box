@@ -23,8 +23,9 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
 	 *
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 * @author Simon Strandman (simon@webbgaraget.se)
 	 */
-	public function render()
+	public function render_markup()
 	{
 		$output = "<tr>";
 

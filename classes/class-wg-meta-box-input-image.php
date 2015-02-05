@@ -4,7 +4,7 @@
  * Class adding functionality to add a image
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
- * @author Simon Strandman (simon@snowbits.se)
+ * @author Simon Strandman (simon@webbgaraget.se)
  */
 class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 {
@@ -21,9 +21,9 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 	 *
 	 * @return string
 	 * @author Erik Hedberg (erik@webbgaraget.se)
-	 * @author Simon Strandman (simon@snowbits.se)
+	 * @author Simon Strandman (simon@webbgaraget.se)
 	 */
-	public function render()
+	public function render_markup()
 	{
 		$output = "<tr>";
 
