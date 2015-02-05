@@ -183,7 +183,7 @@ abstract class Wg_Meta_Box_Input
 			$label = $this->properties['label'];
 
 			// In case of repeated field, add field number to label
-			if ( $this->properties['repetitions'] > 1 )
+			if ( $this->properties['repeatable'] )
 			{
 				$label .= ' #' . ( $this->properties['num'] + 1 );
 			}
