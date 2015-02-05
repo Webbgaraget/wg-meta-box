@@ -88,7 +88,7 @@ abstract class Wg_Meta_Box_Input
 		}
 
 		// Add button for repeatable fields
-		if ( $this->_get_max_repetitions() > 1 || $this->_get_max_repetitions() == -1 )
+		if ( $this->_get_is_repeatable() )
 		{
 			$output .= $this->_insert_add_button();
 		}
