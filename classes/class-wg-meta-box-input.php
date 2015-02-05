@@ -365,7 +365,7 @@ abstract class Wg_Meta_Box_Input
 		$repetitions = count( $this->properties['value'] );
 
 		// Are there more repetitions than allowed max?
-		if ( $max_repetitions !== -1 && $max_repetitions < count( $value ) )
+		if ( $max_repetitions !== -1 && $max_repetitions < $repetitions )
 		{
 			$repetitions = $max_repetitions;
 		}
