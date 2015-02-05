@@ -33,10 +33,11 @@ abstract class Wg_Meta_Box_Input
 					'callback' => array( $this, 'admin_column_callback' ),
 					'sortable' => false,
 				),
-				'required' => false,
+				'required'    => false,
+				'repeatable'  => false,
 				'repetitions' => array(
 					'min' => 1,
-					'max' => 1,
+					'max' => -1,
 				),
 			),
 			$this->default_properties
@@ -395,6 +396,16 @@ abstract class Wg_Meta_Box_Input
 	{
 		return $this->properties['repetitions']['min'];
 	}
+
+	/**
+	 * Get number of min repetitions
+	 * @return integer Min repetitions
+	 */
+	protected function _get_is_repeatable()
+	{
+		return $this->properties['repeatable'];
+	}
+
 
 	/**
 	 * Insert add button for repeatable fields

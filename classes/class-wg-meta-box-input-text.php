@@ -12,7 +12,7 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		$this->default_properties = array();
 	    parent::__construct( $namespace, $properties );
 	}
-	
+
 	/**
 	 * Returns markup for input field
 	 *
@@ -50,10 +50,10 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
 		}
-		
+
 		$output = '<div class="label">';
 
-		
+
 		/** Add label to markup **/
 		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
@@ -64,15 +64,15 @@ class Wg_Meta_Box_Input_Text extends Wg_Meta_Box_Input
 
 		$output .= '</div>';
 		$output .= '<div class="input">';
-		
+
 		/*** Add input field **/
 		$output .= '<input type="text" ' . implode( ' ', $attributes ) . '>';
-		
+
 		/*** Add delete button ***/
-		if ( $this->_get_max_repetitions() > 0 )
+		if ( $this->_get_is_repeatable() )
 		{
 			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
-		}	
+		}
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{
