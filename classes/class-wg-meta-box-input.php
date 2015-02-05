@@ -347,7 +347,15 @@ abstract class Wg_Meta_Box_Input
 	  */
 	 protected function get_name()
 	 {
-		return $this->namespace . '-' . $this->properties['slug']. '[]';
+	 	if ( $this->_get_is_group_repeatable() )
+	 	{
+	 		$name = $this->namespace . '[][' . $this->properties['slug'] . ']';
+	 	}
+	 	else
+	 	{
+			$name = $this->namespace . '-' . $this->properties['slug']. '[]';
+	 	}
+	 	return $name;
 	 }
 
 	 /**
@@ -412,6 +420,16 @@ abstract class Wg_Meta_Box_Input
 	protected function _get_is_repeatable()
 	{
 		return $this->properties['repeatable'];
+	}
+
+
+	/**
+	 * Get number of min repetitions
+	 * @return integer Min repetitions
+	 */
+	protected function _get_is_group_repeatable()
+	{
+		return $this->properties['group_repeatable'];
 	}
 
 
