@@ -37,7 +37,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		// Value
 		if ( isset( $this->properties['value'] ) )
 		{
-			$attributes[] = 'value="' . $this->properties['value'] . '"';
+			$attributes[] = 'value="' . $this->get_value() . '"';
             // Get the media name and url of the chosen image for display purposes
             $preview_image = get_post( $this->properties['value'] );
             $preview_image_name = $preview_image->post_title;
@@ -132,10 +132,10 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
                 // remove = a link that will reset the selected image to none
         		jQuery("#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-button")
         			.wpImagepicker(
-                        '#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>',
-        				'#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-preview',
-                        '#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-label',
-                        '#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-remove');
+                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>",
+        				"#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-preview",
+                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-label",
+                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-remove");
         	});
         	</script>
 	    <?php
