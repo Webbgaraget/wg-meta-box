@@ -7,6 +7,8 @@ require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-text.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-textarea.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-rich-edit.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-date.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-color.php" );
+require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-image.php" );
 require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-custom.php" );
 
 /**
@@ -25,6 +27,8 @@ class WGMetaBox
 			'textarea' => 'Wg_Meta_Box_Input_Textarea',
 			'richedit' => 'Wg_Meta_Box_Input_Rich_Edit',
 			'date'     => 'Wg_Meta_Box_Input_Date',
+			'color'    => 'Wg_Meta_Box_Input_Color',
+			'image'    => 'Wg_Meta_Box_Input_Image',
 			'custom'   => 'Wg_Meta_Box_Input_Custom'
 		);
 
@@ -132,7 +136,7 @@ class WGMetaBox
 		{
 			$value = '';
 			// Save text, textarea, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
 			{
 				$name = "{$this->params['id']}-{$slug}";
 
@@ -421,5 +425,19 @@ class WGMetaBox
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
+
+	    // Color picker script and style
+	    wp_register_script( 'farbtastic-script', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/colorpicker/farbtastic.js', array('jquery'), '', true );
+	    wp_register_style( 'farbtastic-style', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/colorpicker/farbtastic.css', array(), '', 'all' );
+	    wp_enqueue_script( 'farbtastic-script' );
+	    wp_enqueue_style( 'farbtastic-style' );
+
+		// Wordpress image picker
+	    wp_register_script( 'wp-imagepicker', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/imagepicker/wp-imagepicker.js', array('jquery'), '', true );
+	    wp_enqueue_script( 'wp-imagepicker' );
+
+	   	// Time picker
+	    wp_register_script( 'timepicker', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/timepicker/jquery-ui-timepicker-addon.js', array('jquery'), '', true );
+	    wp_enqueue_script( 'timepicker' );
 	}
 }
