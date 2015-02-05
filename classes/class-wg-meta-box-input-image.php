@@ -68,7 +68,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
 		/** Add label to markup **/
 		$output = '<div class="label">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->properties['label'] . '</label>';
 
 		if ( $this->is_required() )
 		{
@@ -80,19 +80,19 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input">';
 
-        $output .= '<p style="margin:0;">Vald bild: <span id="' . $this->namespace . '-' . $this->properties['slug'] . '-label" style="font-style:italic;">' . $preview_image_name . '</span></p>';
+        $output .= '<p style="margin:0;">Vald bild: <span id="' . $this->get_id() . '-label" style="font-style:italic;">' . $preview_image_name . '</span></p>';
         $output .= '<input type="hidden" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<input style="vertical-align: top" type="button" id="'. $this->namespace .'-' .$this->properties['slug'] . '-button" value="Välj bild">';
+		$output .= '<button style="vertical-align: top" id="'. $this->get_id() . '-button">' . __( "Välj bild" ) . '</button>';
 		$output .= '<br>';
-        $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" id="'. $this->namespace .'-' .$this->properties['slug'] . '-preview" src="'. $preview_url .'">';
+        $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" id="'. $this->get_id() . '-preview" src="'. $preview_url .'">';
         $output .= '<br>';
 
         if ( isset( $this->properties['value'] ) )
         {
-            $output .= '<a style="display: block;" id="' . $this->namespace . '-' . $this->properties['slug'] . '-remove" href="#">Ta bort vald bild</a>';
+            $output .= '<a style="display: block;" id="' . $this->get_id() . '-remove" href="#">Ta bort vald bild</a>';
         }
         else {
-            $output .= '<a style="display: none;" id="' . $this->namespace . '-' . $this->properties['slug'] . '-remove" href="#">Ta bort vald bild</a>';
+            $output .= '<a style="display: none;" id="' . $this->get_id() . '-remove" href="#">Ta bort vald bild</a>';
         }
 
 		// Description
@@ -123,12 +123,12 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
                 // preview = the image that will contain the preview of the selected image
                 // label = a span that will display the title of the selected image
                 // remove = a link that will reset the selected image to none
-        		jQuery("#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-button")
+        		jQuery("#<?php echo $this->get_id() ?>-button")
         			.wpImagepicker(
-                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>",
-        				"#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-preview",
-                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-label",
-                        "#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-remove");
+                        "#<?php echo $this->get_id() ?>",
+        				"#<?php echo $this->get_id() ?>-preview",
+                        "#<?php echo $this->get_id() ?>-label",
+                        "#<?php echo $this->get_id() ?>-remove");
         	});
         	</script>
 	    <?php
