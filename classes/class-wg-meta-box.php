@@ -423,21 +423,18 @@ class WGMetaBox
 	 */
 	public function enqueue_js()
 	{
+        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css' );
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 
-	    // Color picker script and style
-	    wp_register_script( 'farbtastic-script', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/colorpicker/farbtastic.js', array('jquery'), '', true );
-	    wp_register_style( 'farbtastic-style', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/colorpicker/farbtastic.css', array(), '', 'all' );
-	    wp_enqueue_script( 'farbtastic-script' );
-	    wp_enqueue_style( 'farbtastic-style' );
+		wp_enqueue_style( 'farbtastic-style', $this->assets_url . '/js/repeatable-fields.js' );
+		wp_enqueue_script( 'farbtastic', $this->assets_url . '/js/repeatable-fields.js' );
 
-		// Wordpress image picker
-	    wp_register_script( 'wp-imagepicker', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/imagepicker/wp-imagepicker.js', array('jquery'), '', true );
-	    wp_enqueue_script( 'wp-imagepicker' );
+		wp_enqueue_script( 'wp-imagepicker', $this->assets_url . '/js/wp-imagepicker.js' );
 
-	   	// Time picker
-	    wp_register_script( 'timepicker', get_template_directory_uri() . '/library/wg-custom-post-type/lib/sb-meta-box/js/timepicker/jquery-ui-timepicker-addon.js', array('jquery'), '', true );
-	    wp_enqueue_script( 'timepicker' );
+		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );
+		wp_enqueue_style( 'wg-meta-box-css' );
+
+		wp_enqueue_script( 'wg-meta-repeatable', $this->assets_url . '/js/repeatable-fields.js' );
+		wp_enqueue_script( 'wg-meta-repeatable-group', $this->assets_url . '/js/repeatable-group.js' );
 	}
 }
