@@ -43,7 +43,7 @@
 
 			this.initListeners();
 
-			this.checkIfMaxReached();
+			this.checkIfLimitReached();
 		},
 		initListeners : function()
 		{
@@ -86,7 +86,7 @@
 			$label = this.createLabel();
 			this.$button.before($label).before($field);
 			this.redefineLabels();
-			this.checkIfMaxReached();
+			this.checkIfLimitReached();
 			this.initRemoveButtons();
 		},
 		removeField : function(num)
@@ -97,7 +97,7 @@
 			// Remove label
 			$('label[for="' + this.$fieldset.attr('name') + '-' + num + '"]').parent().remove();
 
-			this.checkIfMaxReached();
+			this.checkIfLimitReached();
 			this.redefineLabels();
 			this.initRemoveButtons();
 		},
@@ -139,7 +139,7 @@
 				.attr('for', this.$fieldset.attr('name')  + '-' + (this.currentNumberOfFields - 1));
 			return $label;
 		},
-		checkIfMaxReached : function()
+		checkIfLimitReached : function()
 		{
 			if (this.$fieldset.find('label').length == this.max)
 			{
@@ -148,6 +148,15 @@
 			else
 			{
 				this.$button.removeAttr('disabled');
+			}
+
+			if (this.$fieldset.find('label').length == this.min)
+			{
+				this.$fieldset.find('.field-remove-button').hide();
+			}
+			else
+			{
+				this.$fieldset.find('.field-remove-button').show();
 			}
 		},
 		redefineLabels : function()
