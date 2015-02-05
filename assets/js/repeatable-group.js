@@ -65,6 +65,16 @@
 
 		},
 
+		checkIfLimitReched : function() {
+			if ( this.$groupContainer.find('.group-repeatable-section').length === 1 )
+			{
+				this.$removeButtons.hide();
+			}
+			else {
+				this.$removeButtons.show();
+			}
+		},
+
 		addGroup : function()
 		{
 			var $group;
@@ -76,6 +86,7 @@
 			this.$button.before($group);
 
 			this.initRemoveButtons();
+			this.checkIfLimitReched();
 		},
 
 		removeGroup : function(num)
@@ -84,6 +95,7 @@
 			$('#' + this.$groupContainer.data('name') + '-' + num).remove();
 
 			this.initRemoveButtons();
+			this.checkIfLimitReched();
 		},
 
 		createGroup : function()
