@@ -127,6 +127,8 @@ class WGMetaBox
 	{
         if ( is_null( $post ) ) return;
 
+        //var_dump( $_POST ); die();
+
 		// Verify not doing autosave
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
 		{
@@ -264,7 +266,10 @@ class WGMetaBox
 		    $output .= call_user_func( $context['args']['description'] );
 		}
 
-		$output .= '<div class="wg-meta-box">';
+		$output .= '<div class="wg-meta-box' . ( $this->params['group_repeatable'] ? ' group-repeatable' : '' ) . '" data-name="' . $this->params['id'] . '">';
+
+		// Foreach ...
+		$output .= '<fieldset class="group-repeatable-section">';
 
 		// Loop through each field
 		foreach( $this->params['fields'] as $slug => $field )
@@ -299,7 +304,17 @@ class WGMetaBox
 				throw new Exception( "Field has unknown type: {$field['type']}" );
 			}
 		}
+
+		$output .= "</fieldset>";
+		//Endforeach ...
+
+		if ( $this->params['group_repeatable'] )
+		{
+			$output .= '<input type="button" class="button add-group-button" id="' . $this->params['id'] . '-add-new" value="' .  __( 'Add new group' ) . '">';
+		}
+
 		$output .= "</div>";
+
 		echo $output;
 	}
 
@@ -475,5 +490,6 @@ class WGMetaBox
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css' );
 
 		wp_enqueue_script( 'wg-meta-repeatable', $this->assets_url . '/js/repeatable-fields.js' );
+		wp_enqueue_script( 'wg-meta-repeatable-group', $this->assets_url . '/js/repeatable-group.js' );
 	}
 }
