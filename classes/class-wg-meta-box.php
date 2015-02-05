@@ -127,8 +127,6 @@ class WGMetaBox
 	{
         if ( is_null( $post ) ) return;
 
-        //var_dump( $_POST ); die();
-
 		// Verify not doing autosave
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
 		{
@@ -145,85 +143,169 @@ class WGMetaBox
 	        return $post->ID;
 	    }
 
-		$page_meta = array();
-
 		// List of missing fields
 		$required_missing = array();
 
-		foreach( $this->params['fields'] as $slug => $field )
-		{
-			$value = '';
-			// Save text, textarea, richedit, date and custom field
-			if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
-			{
-				$name = "{$this->params['id']}-{$slug}";
+		if ( $this->params['group_repeatable'] && is_array( $_POST[$this->params['id']] ) ) {
+			$page_meta_group = array();
+			$groups  = $_POST[$this->params['id']];
 
-                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-				$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-				$page_meta[$name] = $value;
-			}
-			// Select
-			elseif ( $field['type'] == 'select' )
-			{
-				$name = "{$this->params['id']}-{$slug}";
-				$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
-				$page_meta[$name] = $value;
-			}
-			// Save custom field
-			elseif ( in_array( $field['type'], array( 'custom' ) ) )
-			{
-			    $name = "{$this->params['id']}-{$slug}";
+			// Loop over the fields for each group we're saving
+			foreach ( $groups as $group ) {
+				$meta_group = array();
 
-			    // Call custom callback if defined
-			    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
-			    {
-                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-
-			        $value = call_user_func( $field['callbacks']['save'], $name, $value );
-			    }
-			    else
-			    {
-                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-			    }
-			    $page_meta[$name] = $value;
-			}
-
-			// Check if field is required and not set
-			if ( is_array( $value ) )
-			{
-				foreach( $value as $val )
+				foreach( $this->params['fields'] as $slug => $field )
 				{
-					if ( isset( $field['required']) && $field['required'] && '' == $val )
-						$required_missing[$slug] = $slug;
+					$value = '';
+					// Save text, textarea, richedit, date and custom field
+					if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+					{
+		                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+						$value = isset( $group[$slug] ) ? $group[$slug] : '';
+						$meta_group[$slug] = $value;
+					}
+					// Select
+					elseif ( $field['type'] == 'select' )
+					{
+						$value = isset( $group[$slug] ) && $group[$slug] != '0' ? $group[$slug] : '';
+						$meta_group[$slug] = $value;
+					}
+					// Save custom field
+					elseif ( in_array( $field['type'], array( 'custom' ) ) )
+					{
+					    // Call custom callback if defined
+					    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+					    {
+		                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+
+					        $value = call_user_func( $field['callbacks']['save'], $slug, $value );
+					    }
+					    else
+					    {
+		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+					    }
+					    $meta_group[$slug] = $value;
+					}
+
+					// Check if field is required and not set
+					if ( is_array( $value ) )
+					{
+						foreach( $value as $val )
+						{
+							if ( isset( $field['required']) && $field['required'] && '' == $val )
+							{
+								$required_missing[$slug] = $slug;
+							}
+						}
+					}
+					else
+					{
+						if ( isset( $field['required']) && $field['required'] && '' == $value )
+						{
+							$required_missing[] = $slug;
+						}
+					}
 				}
+
+				// Store the result
+				$page_meta_group[] = $meta_group;
 			}
-			else
+		}
+		else {
+			$page_meta = array();
+
+			// If this isn't a repeatable group just loop over the fields
+			foreach( $this->params['fields'] as $slug => $field )
 			{
-				if ( isset( $field['required']) && $field['required'] && '' == $value )
-					$required_missing[] = $slug;
+				$value = '';
+				// Save text, textarea, richedit, date and custom field
+				if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+				{
+					$name = "{$this->params['id']}-{$slug}";
+
+	                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+					$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+					$page_meta[$name] = $value;
+				}
+				// Select
+				elseif ( $field['type'] == 'select' )
+				{
+					$name = "{$this->params['id']}-{$slug}";
+					$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
+					$page_meta[$name] = $value;
+				}
+				// Save custom field
+				elseif ( in_array( $field['type'], array( 'custom' ) ) )
+				{
+				    $name = "{$this->params['id']}-{$slug}";
+
+				    // Call custom callback if defined
+				    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+				    {
+	                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+
+				        $value = call_user_func( $field['callbacks']['save'], $name, $value );
+				    }
+				    else
+				    {
+	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
+				    }
+				    $page_meta[$name] = $value;
+				}
+
+				// Check if field is required and not set
+				if ( is_array( $value ) )
+				{
+					foreach( $value as $val )
+					{
+						if ( isset( $field['required']) && $field['required'] && '' == $val )
+						{
+							$required_missing[$slug] = $slug;
+						}
+					}
+				}
+				else
+				{
+					if ( isset( $field['required']) && $field['required'] && '' == $value )
+					{
+						$required_missing[] = $slug;
+					}
+				}
 			}
 		}
 
-	    foreach( $page_meta as $key => $value )
-	    {
-	        if ( $post->post_type == 'revision' )
-	        {
-	            return;
-	        }
-
-	        // Is the field only repeated once? Don't store it as an array
-	        if ( count( $value) === 1 )
-	        {
-	        	$value = $value[0];
-	        }
-
-	        // Remove the existing meta values
-	        delete_post_meta( $post->ID, $key );
+		if ( $this->params['group_repeatable'] )
+		{
+			// Remove the existing meta values
+	        delete_post_meta( $post->ID, $this->params['id'] );
 
         	// Add the new meta values
-        	add_post_meta( $post->ID, $key, $value );
-	    }
+        	add_post_meta( $post->ID, $this->params['id'], $page_meta_group );
+		}
+		else
+		{
+		    foreach( $page_meta as $key => $value )
+		    {
+		        if ( $post->post_type == 'revision' )
+		        {
+		            return;
+		        }
+
+		        // Is the field only repeated once? Don't store it as an array
+		        if ( count( $value) === 1 )
+		        {
+		        	$value = $value[0];
+		        }
+
+		        // Remove the existing meta values
+		        delete_post_meta( $post->ID, $key );
+
+	        	// Add the new meta values
+	        	add_post_meta( $post->ID, $key, $value );
+		    }
+		}
 
 		// Any required fields missing?
 		if ( count( $required_missing ) > 0 )

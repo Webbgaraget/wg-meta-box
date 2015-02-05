@@ -349,7 +349,7 @@ abstract class Wg_Meta_Box_Input
 	 {
 	 	if ( $this->_get_is_group_repeatable() )
 	 	{
-	 		$name = $this->namespace . '[][' . $this->properties['slug'] . ']';
+	 		$name = $this->namespace . '[' . $this->_get_group_repetition() . '][' . $this->properties['slug'] . ']';
 	 	}
 	 	else
 	 	{
@@ -365,6 +365,15 @@ abstract class Wg_Meta_Box_Input
 	 protected function get_id()
 	 {
 		return $this->namespace . '-' . $this->properties['slug']. '-' . $this->properties['num'];
+	 }
+
+	 /**
+	  * Get group repetition nr
+	  * @return string id
+	  */
+	 protected function _get_group_repetition()
+	 {
+		return 0; // FIXME
 	 }
 
 
