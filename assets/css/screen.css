@@ -77,3 +77,23 @@
 {
 	display: block;
 }
+
+.input-image-preview {
+	width: 290px;
+	height: auto;
+	padding: 5px;
+	border: 1px solid #ccc;
+	margin-top: 5px;
+}
+
+.input-image-remove {
+	display: block;
+}
+
+.input-image-filename {
+	font-style: italic;
+}
+
+.input-image .hidden {
+	display: none;
+}

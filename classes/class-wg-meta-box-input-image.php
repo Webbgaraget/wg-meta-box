@@ -32,7 +32,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		// Value
 		if ( $this->get_value() )
 		{
-			$attributes[]       = 'value="' . $this->get_value() . '"';
+			$attributes[]     = 'value="' . $this->get_value() . '"';
 
             // Get the media name and url of the chosen image for display purposes
             $previewImage     = get_post( $this->get_value() );
@@ -53,17 +53,6 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'class="text"';
 		}
-		// Disabled
-		if ( isset( $this->properties['disabled'] ) && $this->properties['disabled'] )
-		{
-			$attributes[] = 'disabled="disabled"';
-		}
-		// Placeholder
-		if ( isset( $this->properties['placeholder'] ) )
-		{
-			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
-		}
-
 
 		/** Add label to markup **/
 		$output = '<div class="label">';
@@ -79,21 +68,23 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input input-image">';
 
-        $output .= '<p style="margin:0;">Vald bild: <span class="input-image-filename" style="font-style:italic;">' . $previewImageName . '</span></p>';
+        $output .= '<p style="margin:0;">Vald bild: <span class="input-image-filename">' . $previewImageName . '</span></p>';
         $output .= '<input class="input-image-input" type="hidden" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<button style="vertical-align: top" class="input-image-choose">' . __( "Choose image" ) . '</button>';
+		$output .= '<button style="vertical-align: top" class="input-image-choose button">' . __( "Choose image" ) . '</button>';
 		$output .= '<br>';
-        $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" class="input-image-preview" src="'. $previewUrl .'">';
-        $output .= '<br>';
 
-        if ( isset( $this->properties['value'] ) )
-        {
-            $output .= '<a style="display: block;" class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
-        }
-        else
-        {
-            $output .= '<a style="display: none;" class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
-        }
+		if ( $previewUrl )
+		{
+        	$output .= '<img class="input-image-preview" src="'. $previewUrl .'">';
+            $output .= '<a class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
+		}
+		else
+		{
+        	$output .= '<img class="input-image-preview hidden" src="'. $previewUrl .'">';
+            $output .= '<a class="input-image-remove hidden" href="#">' . __( 'Remove image' ) . '</a>';
+		}
+
+        $output .= '<br>';
 
 		// Description
 		if ( isset( $this->properties['description'] ) )

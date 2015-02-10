@@ -35,10 +35,10 @@
 				$input.val(media_attachment.id);
 				console.log(media_attachment);
 
-				$preview.attr("src", media_attachment.url).fadeIn();
-				$removeButton.show();
-				$label.html(media_attachment.title);
+				$preview.attr("src", media_attachment.url).removeClass('hidden');
+				$removeButton.removeClass('hidden');
 
+				$label.text(media_attachment.title);
 			});
 
 			// Opens the media library frame.
@@ -51,11 +51,11 @@
 
 			// Reset the fields
 			$input.val('');
-			$preview.hide();
-			$label.empty();
+			$label.text('ingen bild vald');
 
-			// Hide the button
-			$removeButton.hide();
+			// Hide this button and the preview
+			$preview.addClass('hidden');
+			$removeButton.addClass('hidden');
 		};
 
 		$chooseButton.click(openImagePicker);
