@@ -87,6 +87,8 @@
 
 			this.initRemoveButtons();
 			this.checkIfLimitReched();
+
+			this.$groupContainer.trigger('wgmb:groupadded');
 		},
 
 		removeGroup : function(num)
@@ -96,6 +98,8 @@
 
 			this.initRemoveButtons();
 			this.checkIfLimitReched();
+
+			this.$groupContainer.trigger('wgmb:groupremoved');
 		},
 
 		createGroup : function()

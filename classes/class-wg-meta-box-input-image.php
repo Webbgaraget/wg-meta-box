@@ -78,21 +78,21 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		$output .= '</div>';
 
 		/*** Add input field **/
-        $output .= '<div class="input">';
+        $output .= '<div class="input input-image">';
 
         $output .= '<p style="margin:0;">Vald bild: <span id="' . $this->get_id() . '-label" style="font-style:italic;">' . $preview_image_name . '</span></p>';
         $output .= '<input type="hidden" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<button style="vertical-align: top" id="'. $this->get_id() . '-button">' . __( "Välj bild" ) . '</button>';
+		$output .= '<button style="vertical-align: top" id="'. $this->get_id() . '-button">' . __( "Chose image" ) . '</button>';
 		$output .= '<br>';
         $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" id="'. $this->get_id() . '-preview" src="'. $preview_url .'">';
         $output .= '<br>';
 
         if ( isset( $this->properties['value'] ) )
         {
-            $output .= '<a style="display: block;" id="' . $this->get_id() . '-remove" href="#">Ta bort vald bild</a>';
+            $output .= '<a style="display: block;" id="' . $this->get_id() . '-remove" href="#">' . __( 'Remove image' ) . '</a>';
         }
         else {
-            $output .= '<a style="display: none;" id="' . $this->get_id() . '-remove" href="#">Ta bort vald bild</a>';
+            $output .= '<a style="display: none;" id="' . $this->get_id() . '-remove" href="#">' . __( 'Remove image' ) . '</a>';
         }
 
 		// Description
