@@ -359,6 +359,13 @@ class WGMetaBox
 		{
 			$groups = get_post_meta( $post->ID, "{$this->params['id']}", true );
 
+			if ( !$groups )
+			{
+				// Make the loop run once with no pre-set values
+				// I know it's ugly.
+				$groups = array(array());
+			}
+
 			// Loop trough each field group
 			foreach ( $groups as $index => $group )
 			{
