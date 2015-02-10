@@ -111,8 +111,8 @@
 			var num;
 			var groupName;
 
-			$group = this.$groupTemplate.clone();
-			groupName = $group.attr('name');
+			$group        = this.$groupTemplate.clone();
+			groupName     = $group.attr('name');
 			$removeButton = $group.find('.group-remove-button');
 
 			num = this.currentNumberOfGroups - 1;

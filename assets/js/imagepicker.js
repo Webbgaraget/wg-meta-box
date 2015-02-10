@@ -74,7 +74,12 @@
 		$(document).on('wgmb:groupadded',
 			function( event, id )
 			{
-				$('#' + id).find('.input-image').each(attachImageHandler);
+				// Remove preview image and text.
+				$('#' + id)
+					.find('.input-image').each(attachImageHandler)
+					.find('.input-image-remove, .input-image-preview').addClass('hidden')
+					.end()
+					.find('.input-image-filename').text('');
 			}
 		);
 	});
