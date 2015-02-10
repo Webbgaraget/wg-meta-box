@@ -625,8 +625,8 @@ class WGMetaBox
 		wp_enqueue_style( 'farbtastic-style', $this->assets_url . '/js/repeatable-fields.js' );
 		wp_enqueue_script( 'farbtastic', $this->assets_url . '/js/repeatable-fields.js' );
 
-		wp_enqueue_script( 'wp-imagepicker', $this->assets_url . '/js/wp-imagepicker.js' );
 		wp_enqueue_script('media-upload');
+		wp_enqueue_script( 'imagepicker', $this->assets_url . '/js/imagepicker.js' );
 
 		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );
 		wp_enqueue_style( 'wg-meta-box-css' );
