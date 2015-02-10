@@ -45,7 +45,7 @@ abstract class Wg_Meta_Box_Input
 			$this->default_properties
 		);
 
-		if ( $properties['group_repeatable'] )
+		if ( !empty( $properties['group_repeatable'] ) )
 		{
 			// We don't support a repetable field inside a repeatable section at the moment
 			$properties['repeatable'] = false;
@@ -363,7 +363,7 @@ abstract class Wg_Meta_Box_Input
 		}
 		else
 		{
-			$name = $this->namespace . '-' . $this->properties['slug']. '[]';
+			$name = $this->namespace . '-' . $this->properties['slug'] . '[]';
 		}
 		return $name;
 	 }
@@ -374,7 +374,7 @@ abstract class Wg_Meta_Box_Input
 	  */
 	 protected function get_id()
 	 {
-		return $this->namespace . '-' . $this->properties['slug']. '-' . $this->properties['num'];
+		return $this->namespace . '-' . $this->properties['slug']. '-' .  $this->_get_group_repetition() . '-' . $this->properties['num'];
 	 }
 
 	 /**
@@ -443,8 +443,8 @@ abstract class Wg_Meta_Box_Input
 
 
 	/**
-	 * Get number of min repetitions
-	 * @return integer Min repetitions
+	 * Get if group repeatable
+	 * @return boolean
 	 */
 	protected function _get_is_group_repeatable()
 	{

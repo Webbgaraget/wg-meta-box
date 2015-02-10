@@ -12,8 +12,6 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 	{
 		$this->default_properties = array();
 		parent::__construct( $namespace, $properties );
-
-		add_action( 'admin_footer', array( $this, 'render_js' ) );
 	}
 
 	/**
@@ -34,16 +32,17 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		// Value
 		if ( $this->get_value() )
 		{
-			$attributes[] = 'value="' . $this->get_value() . '"';
+			$attributes[]       = 'value="' . $this->get_value() . '"';
+
             // Get the media name and url of the chosen image for display purposes
-            $preview_image = get_post( $this->properties['value'] );
-            $preview_image_name = $preview_image->post_title;
-            $preview_url = wp_get_attachment_url( $this->properties['value'] );
+            $previewImage     = get_post( $this->get_value() );
+            $previewImageName = $previewImage->post_title;
+            $previewUrl       = wp_get_attachment_url( $this->get_value() );
 		}
         else
         {
-            $preview_url = '';
-            $preview_image_name = 'ingen bild vald';
+            $previewUrl = '';
+            $previewImageName = 'ingen bild vald';
         }
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -80,19 +79,20 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input input-image">';
 
-        $output .= '<p style="margin:0;">Vald bild: <span id="' . $this->get_id() . '-label" style="font-style:italic;">' . $preview_image_name . '</span></p>';
-        $output .= '<input type="hidden" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<button style="vertical-align: top" id="'. $this->get_id() . '-button">' . __( "Chose image" ) . '</button>';
+        $output .= '<p style="margin:0;">Vald bild: <span class="input-image-filename" style="font-style:italic;">' . $previewImageName . '</span></p>';
+        $output .= '<input class="input-image-input" type="hidden" ' . implode( ' ', $attributes ) . '>';
+		$output .= '<button style="vertical-align: top" class="input-image-choose">' . __( "Choose image" ) . '</button>';
 		$output .= '<br>';
-        $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" id="'. $this->get_id() . '-preview" src="'. $preview_url .'">';
+        $output .= '<img style="width: 290px; height: auto; padding: 5px; border: 1px solid #ccc; margin-top: 5px;" class="input-image-preview" src="'. $previewUrl .'">';
         $output .= '<br>';
 
         if ( isset( $this->properties['value'] ) )
         {
-            $output .= '<a style="display: block;" id="' . $this->get_id() . '-remove" href="#">' . __( 'Remove image' ) . '</a>';
+            $output .= '<a style="display: block;" class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
         }
-        else {
-            $output .= '<a style="display: none;" id="' . $this->get_id() . '-remove" href="#">' . __( 'Remove image' ) . '</a>';
+        else
+        {
+            $output .= '<a style="display: none;" class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
         }
 
 		// Description
@@ -103,34 +103,5 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
 		$output .= '</div>';
 		return $output;
-	}
-
-	/**
-	 * Renders necessary JS
-	 *
-	 * @author Erik Hedberg (erik@webbgaraget.se)
-	 * @author Simon Strandman (simon@snowbits.se)
-	 */
-	function render_js()
-	{
-
-	    ?>
-        <script type="text/javascript">
-        	jQuery(document).ready(function()
-        	{
-                // Calling .wpImagepicker(element, preview, label)
-                // element = the hidden field that contains the attachment id
-                // preview = the image that will contain the preview of the selected image
-                // label = a span that will display the title of the selected image
-                // remove = a link that will reset the selected image to none
-        		jQuery("#<?php echo $this->get_id() ?>-button")
-        			.wpImagepicker(
-                        "#<?php echo $this->get_id() ?>",
-        				"#<?php echo $this->get_id() ?>-preview",
-                        "#<?php echo $this->get_id() ?>-label",
-                        "#<?php echo $this->get_id() ?>-remove");
-        	});
-        	</script>
-	    <?php
 	}
 }
