@@ -78,6 +78,7 @@
 		addGroup : function()
 		{
 			var $group;
+			var id;
 
 			this.currentNumberOfGroups++;
 
@@ -88,18 +89,19 @@
 			this.initRemoveButtons();
 			this.checkIfLimitReched();
 
-			this.$groupContainer.trigger('wgmb:groupadded');
+			this.$groupContainer.trigger('wgmb:groupadded', [ $group.attr('id') ]);
 		},
 
 		removeGroup : function(num)
 		{
+			var id = this.$groupContainer.data('name') + '-' + num;
 			// Remove group
-			$('#' + this.$groupContainer.data('name') + '-' + num).remove();
+			$('#' + id).remove();
 
 			this.initRemoveButtons();
 			this.checkIfLimitReched();
 
-			this.$groupContainer.trigger('wgmb:groupremoved');
+			this.$groupContainer.trigger('wgmb:groupremoved', [ id ]);
 		},
 
 		createGroup : function()
