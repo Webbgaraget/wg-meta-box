@@ -150,70 +150,76 @@ class WGMetaBox
 		// List of missing fields
 		$required_missing = array();
 
-		if ( $this->params['group_repeatable'] && is_array( $_POST[$this->params['id']] ) ) {
+		if ( $this->params['group_repeatable'] ) {
+			
 			$page_meta_group = array();
-			$groups  = $_POST[$this->params['id']];
 
-			// Loop over the fields for each group we're saving
-			foreach ( $groups as $group ) {
-				$meta_group = array();
+			// Do we have any values to save?
+			if ( isset( $_POST[$this->params['id']] ) && is_array( $_POST[$this->params['id']] ) ) {
 
-				foreach( $this->params['fields'] as $slug => $field )
-				{
-					$value = '';
-					// Save text, textarea, richedit, date and custom field
-					if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
-					{
-		                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-						$value = isset( $group[$slug] ) ? $group[$slug] : '';
-						$meta_group[$slug] = $value;
-					}
-					// Select
-					elseif ( $field['type'] === 'select' )
-					{
-						$value = isset( $group[$slug] ) && $group[$slug] != '0' ? $group[$slug] : '';
-						$meta_group[$slug] = $value;
-					}
-					// Save custom field
-					elseif ( in_array( $field['type'], array( 'custom' ) ) )
-					{
-					    // Call custom callback if defined
-					    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
-					    {
-		                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
-		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+				$groups = $_POST[$this->params['id']];
 
-					        $value = call_user_func( $field['callbacks']['save'], $slug, $value );
-					    }
-					    else
-					    {
-		                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
-					    }
-					    $meta_group[$slug] = $value;
-					}
+				// Loop over the fields for each group we're saving
+				foreach ( $groups as $group ) {
+					$meta_group = array();
 
-					// Check if field is required and not set
-					if ( is_array( $value ) )
+					foreach( $this->params['fields'] as $slug => $field )
 					{
-						foreach( $value as $val )
+						$value = '';
+						// Save text, textarea, richedit, date and custom field
+						if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
 						{
-							if ( isset( $field['required']) && $field['required'] && '' == $val )
+			                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+							$value = isset( $group[$slug] ) ? $group[$slug] : '';
+							$meta_group[$slug] = $value;
+						}
+						// Select
+						elseif ( $field['type'] === 'select' )
+						{
+							$value = isset( $group[$slug] ) && $group[$slug] != '0' ? $group[$slug] : '';
+							$meta_group[$slug] = $value;
+						}
+						// Save custom field
+						elseif ( in_array( $field['type'], array( 'custom' ) ) )
+						{
+						    // Call custom callback if defined
+						    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
+						    {
+			                    // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
+			                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+
+						        $value = call_user_func( $field['callbacks']['save'], $slug, $value );
+						    }
+						    else
+						    {
+			                    $value = isset( $group[$slug] ) ? $group[$slug] : '';
+						    }
+						    $meta_group[$slug] = $value;
+						}
+
+						// Check if field is required and not set
+						if ( is_array( $value ) )
+						{
+							foreach( $value as $val )
 							{
-								$required_missing[$slug] = $slug;
+								if ( isset( $field['required']) && $field['required'] && '' == $val )
+								{
+									$required_missing[$slug] = $slug;
+								}
+							}
+						}
+						else
+						{
+							if ( isset( $field['required']) && $field['required'] && '' === $value )
+							{
+								$required_missing[] = $slug;
 							}
 						}
 					}
-					else
-					{
-						if ( isset( $field['required']) && $field['required'] && '' === $value )
-						{
-							$required_missing[] = $slug;
-						}
-					}
-				}
 
-				// Store the result
-				$page_meta_group[] = $meta_group;
+					// Store the result
+					$page_meta_group[] = $meta_group;
+				}
 			}
 		}
 		else
@@ -363,13 +369,18 @@ class WGMetaBox
 			{
 				// Make the loop run once with no pre-set values
 				// I know it's ugly.
-				$groups = array(array());
+				$groups      = array(array());
+				$group_empty = true;
+			}
+			else
+			{
+				$group_empty = false;
 			}
 
 			// Loop trough each field group
 			foreach ( $groups as $index => $group )
 			{
-				$output .= '<fieldset class="group-repeatable-section" id="' . $this->params['id'] . '-' . $index . '">';
+				$output .= '<fieldset class="group-repeatable-section ' . ( $group_empty ? 'group-empty' : '' ) . '" id="' . $this->params['id'] . '-' . $index . '">';
 
 				// Loop through each field
 				foreach( $this->params['fields'] as $slug => $field )

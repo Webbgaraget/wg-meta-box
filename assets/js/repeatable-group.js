@@ -17,7 +17,16 @@
 		this.groupName = this.$groupContainer.data('label');
 
 		// Group label template
-		this.$groupTemplate = this.$groupContainer.find('.group-repeatable-section').first().clone();
+		var $groupTemplate = this.$groupContainer.find('.group-repeatable-section').first();
+
+		if ( $groupTemplate.hasClass('group-empty') )
+		{
+			this.$groupTemplate = $groupTemplate.detach();
+		}
+		else
+		{
+			this.$groupTemplate = $groupTemplate.clone();
+		}
 
 		// Remove buttons
 		this.$removeButtons = this.$groupContainer.find('.group-remove-button');
@@ -65,16 +74,6 @@
 
 		},
 
-		checkIfLimitReched : function() {
-			if ( this.$groupContainer.find('.group-repeatable-section').length === 1 )
-			{
-				this.$removeButtons.hide();
-			}
-			else {
-				this.$removeButtons.show();
-			}
-		},
-
 		addGroup : function()
 		{
 			var $group;
@@ -87,7 +86,6 @@
 			this.$button.before($group);
 
 			this.initRemoveButtons();
-			this.checkIfLimitReched();
 
 			this.$groupContainer.trigger('wgmb:groupadded', [ $group.attr('id') ]);
 		},
@@ -99,7 +97,6 @@
 			$('#' + id).remove();
 
 			this.initRemoveButtons();
-			this.checkIfLimitReched();
 
 			this.$groupContainer.trigger('wgmb:groupremoved', [ id ]);
 		},
