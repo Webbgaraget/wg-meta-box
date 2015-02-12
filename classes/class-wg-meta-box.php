@@ -151,7 +151,7 @@ class WGMetaBox
 		$required_missing = array();
 
 		if ( $this->params['group_repeatable'] ) {
-			
+
 			$page_meta_group = array();
 
 			// Do we have any values to save?
@@ -639,11 +639,9 @@ class WGMetaBox
 	public function enqueue_scripts()
 	{
 	    wp_enqueue_script( 'jquery-ui-datepicker' );
-
-		wp_enqueue_style( 'farbtastic-style', $this->assets_url . '/js/repeatable-fields.js' );
-		wp_enqueue_script( 'farbtastic', $this->assets_url . '/js/repeatable-fields.js' );
-
+	    wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script('media-upload');
+
 		wp_enqueue_script( 'imagepicker', $this->assets_url . '/js/imagepicker.js' );
 
 		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );

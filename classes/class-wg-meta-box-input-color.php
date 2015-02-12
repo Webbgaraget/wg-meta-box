@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class adding functionality to add a image
+ * Class adding functionality to add a color
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
  * @author Simon Strandman (simon@snowbits.se)
@@ -27,18 +27,16 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-		$output = "<tr>";
-
 		/* Setup attributes */
 		$attributes = array();
 		// Name
-		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
-		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		$attributes[] = 'name="' . $this->get_name() . '"';
+		$attributes[] = 'id="' . $this->get_id() . '"';
 
 		// Value
 		if ( isset( $this->properties['value'] ) )
 		{
-			$attributes[] = 'value="' . $this->properties['value'] . '"';
+			$attributes[] = 'value="' . $this->get_value(). '"';
 		}
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -62,19 +60,19 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
 
 
 		/** Add label to markup **/
-		$output .= '<th scope="row">';
-		$output .= '<label for="' . $this->namespace . '-' . $this->properties['slug'] . '">' . $this->properties['label'] . '</label>';
+		$output = '<div class="label">';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_id() . '</label>';
 
 		if ( $this->is_required() )
 		{
 			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
 		}
 
-		$output .= '</th>';
+		$output .= '</div>';
 
+		$output .= '<div class="input input-color">';
 		/*** Add input field **/
-		$output .= '<td><input style="vertical-align: top" type="text" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<br><div style="display: inline-block; border: 1px solid #ccc; margin-top: 5px;" id="'. $this->namespace .'-' .$this->properties['slug'] . '-picker"></div>';
+		$output .= '<input style="vertical-align: top" type="text" ' . implode( ' ', $attributes ) . '>';
 
 		// Description
 		if ( isset( $this->properties['description'] ) )
@@ -82,8 +80,7 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
 			$output .= '<span class="description">' . $this->properties['description'] . '</span>';
 		}
 
-		$output .= '</td>';
-		$output .= '</tr>';
+		$output .= '</div>';
 		return $output;
 	}
 
@@ -91,6 +88,7 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
 	 * Renders necessary JS
 	 *
 	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 * @author Simon Strandman (simon@webbgaraget.se)
 	 */
 	function render_js()
 	{
@@ -99,7 +97,7 @@ class Wg_Meta_Box_Input_Color extends Wg_Meta_Box_Input
         <script type="text/javascript">
         	jQuery(document).ready(function()
         	{
-        		jQuery("#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>-picker").farbtastic('#<?php echo $this->namespace ?>-<?php echo $this->properties['slug'] ?>');
+        		jQuery('#<?php echo $this->get_id() ?>').wpColorPicker();
         	});
         	</script>
 	    <?php
