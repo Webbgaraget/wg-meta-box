@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class adding functionality to add a image
+ * Class adding functionality to add an image
  *
  * @author Erik Hedberg (erik@webbgaraget.se)
  * @author Simon Strandman (simon@webbgaraget.se)
