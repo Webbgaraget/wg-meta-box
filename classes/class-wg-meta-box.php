@@ -17,6 +17,8 @@ require_once( dirname( __FILE__ ) . "/class-wg-meta-box-input-custom.php" );
  */
 class WGMetaBox
 {
+	const TEXT_DOMAIN = 'WGMetaBox';
+
 	protected function __construct( $id, $title, $fields, $post_type, $context, $priority, $callback_args )
 	{
 		$this->class_names = array(
@@ -424,11 +426,11 @@ class WGMetaBox
 					}
 				}
 
-				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove ' . $this->params['id'] ) . '">';
+				$output .= '<input type="button" class="button group-remove-button" data-num="' . $index . '" id="' . $this->params['id'] . '-add-group-' . $index . '" value="' .  __( 'Remove' ) . $this->params['id'] . '">';
 				$output .= '</fieldset>';
 			}
 
-			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new ' . $this->params['id'] ) . '">';
+			$output .= '<input type="button" class="button add-group-button" value="' .  __( 'Add new' ) . ' ' . $this->params['id'] . '">';
 		}
 		else
 		{
