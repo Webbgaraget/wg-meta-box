@@ -383,6 +383,7 @@ class WGMetaBox
 					{
 						throw new Exception( "Type not defined for {$slug}" );
 					}
+
 					if ( array_key_exists( $field['type'], $this->class_names ) )
 					{
 						// Retrieve the value
@@ -433,6 +434,7 @@ class WGMetaBox
 				{
 					throw new Exception( "Type not defined for {$slug}" );
 				}
+
 				if ( array_key_exists( $field['type'], $this->class_names ) )
 				{
 					// Retrieve the value
@@ -481,6 +483,7 @@ class WGMetaBox
 			{
 				throw new Exception( "Type not defined for {$slug}" );
 			}
+
 			if ( array_key_exists( $field['type'], $this->class_names ) )
 			{
 			    $field['slug'] = $slug;
@@ -631,17 +634,17 @@ class WGMetaBox
 	 */
 	public function enqueue_scripts()
 	{
-	    wp_enqueue_script( 'jquery-ui-datepicker' );
-	    wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script('media-upload');
-
-		wp_enqueue_script( 'imagepicker', $this->assets_url . '/js/imagepicker.js' );
-
 		wp_register_style( 'wg-meta-box-css', $this->assets_url . '/css/screen.css' );
+
 		wp_enqueue_style( 'wg-meta-box-css' );
         wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css' );
+	    wp_enqueue_style( 'wp-color-picker' );
 
+	    wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_enqueue_script( 'media-upload' );
+		wp_enqueue_script( 'imagepicker', $this->assets_url . '/js/imagepicker.js' );
 		wp_enqueue_script( 'wg-meta-repeatable', $this->assets_url . '/js/repeatable-fields.js' );
 		wp_enqueue_script( 'wg-meta-repeatable-group', $this->assets_url . '/js/repeatable-group.js' );
+
 	}
 }
