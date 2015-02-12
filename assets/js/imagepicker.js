@@ -33,7 +33,6 @@
 				var media_attachment = meta_image_frame.state().get('selection').first().toJSON();
 
 				$input.val(media_attachment.id);
-				console.log(media_attachment);
 
 				$preview.attr("src", media_attachment.url).removeClass('hidden');
 				$removeButton.removeClass('hidden');
