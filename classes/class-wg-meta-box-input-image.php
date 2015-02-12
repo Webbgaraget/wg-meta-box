@@ -73,14 +73,15 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
 		if ( $previewUrl )
 		{
-        	$output .= '<img class="input-image-preview" src="'. $previewUrl .'">';
-            $output .= '<a class="input-image-remove" href="#">' . __( 'Remove image', WGMetaBox::TEXT_DOMAIN ) . '</a>';
+			$preview_class = '';
 		}
 		else
 		{
-        	$output .= '<img class="input-image-preview hidden" src="'. $previewUrl .'">';
-            $output .= '<a class="input-image-remove hidden" href="#">' . __( 'Remove image', WGMetaBox::TEXT_DOMAIN ) . '</a>';
+			$preview_class = 'hidden';
 		}
+
+    	$output .= '<img class="input-image-preview ' . $preview_class . '" src="'. $previewUrl .'">';
+        $output .= '<a class="input-image-remove ' . $preview_class . '" href="#">' . __( 'Remove image', WGMetaBox::TEXT_DOMAIN ) . '</a>';
 
         $output .= '<br>';
 
