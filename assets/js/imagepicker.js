@@ -8,7 +8,7 @@
 		var $chooseButton = $element.find('.input-image-choose');
 		var $input        = $element.find('.input-image-input');
 		var $preview      = $element.find('.input-image-preview');
-		var $label        = $element.find('.input-image-filename');
+		var $noFile       = $element.find('.input-image-no-file');
 		var $removeButton = $element.find('.input-image-remove');
 
 		var openImagePicker = function(e){
@@ -37,7 +37,7 @@
 				$preview.attr("src", media_attachment.url).removeClass('hidden');
 				$removeButton.removeClass('hidden');
 
-				$label.text(media_attachment.title);
+				$noFile.hide();
 			});
 
 			// Opens the media library frame.
@@ -50,7 +50,7 @@
 
 			// Reset the fields
 			$input.val('');
-			$label.text('ingen bild vald');
+			$noFile.show();
 
 			// Hide this button and the preview
 			$preview.addClass('hidden');
@@ -78,7 +78,7 @@
 					.find('.input-image').each(attachImageHandler)
 					.find('.input-image-remove, .input-image-preview').addClass('hidden')
 					.end()
-					.find('.input-image-filename').text('');
+					.find('.input-image-no-file').show();
 			}
 		);
 	});

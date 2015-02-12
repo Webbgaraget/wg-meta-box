@@ -36,13 +36,11 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
             // Get the media name and url of the chosen image for display purposes
             $previewImage     = get_post( $this->get_value() );
-            $previewImageName = $previewImage->post_title;
             $previewUrl       = wp_get_attachment_url( $this->get_value() );
 		}
         else
         {
             $previewUrl = '';
-            $previewImageName = __( 'no image choosen', WGMetaBox::TEXT_DOMAIN );
         }
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -68,7 +66,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input input-image">';
 
-        $output .= '<p style="margin:0;">' . __( 'Image', WGMetaBox::TEXT_DOMAIN ) . ': <span class="input-image-filename">' . $previewImageName . '</span></p>';
+        $output .= '<p style="margin:0;" class="input-image-no-file">' . __( 'No image selected', WGMetaBox::TEXT_DOMAIN ) . '</p>';
         $output .= '<input class="input-image-input" type="hidden" ' . implode( ' ', $attributes ) . '>';
 		$output .= '<button style="vertical-align: top" class="input-image-choose button">' . __( "Choose image", WGMetaBox::TEXT_DOMAIN ) . '</button>';
 		$output .= '<br>';
