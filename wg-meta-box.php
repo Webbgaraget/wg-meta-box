@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: WG Meta Box
-	Plugin URI: https://github.com/Webbgaraget/wg-meta-box/http://URI_Of_Page_Describing_Plugin_and_Updates
+	Plugin URI: https://github.com/Webbgaraget/wg-meta-box/
 	Description: A class facilitating programmatically creating meta boxes in WordPress.
 	Version: v0.5.2
 	Author: Webbgaraget
