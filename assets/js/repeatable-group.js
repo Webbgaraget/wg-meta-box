@@ -66,7 +66,6 @@
 
 				$this = $(this);
 				groupNum = $this.data('num');
-				console.log("Removing " + groupNum);
 
 				evt.preventDefault();
 				self.removeGroup(groupNum);
@@ -113,7 +112,6 @@
 			$removeButton = $group.find('.group-remove-button');
 
 			num = this.currentNumberOfGroups - 1;
-			console.log("Adding group " + num);
 			$removeButton.data('num', num);
 
 			$group.attr('id' , this.$groupContainer.data('name') + '-' + num);

@@ -68,7 +68,6 @@
 
 				$this = $(this);
 				fieldNum = $this.data('num');
-				console.log("Removing " + fieldNum);
 
 				evt.preventDefault();
 				self.removeField(fieldNum);
@@ -113,7 +112,6 @@
 			$removeButton = $fieldContainer.find('.field-remove-button');
 
 			num = this.currentNumberOfFields - 1;
-			console.log("Adding " + num);
 			$removeButton.data('num', num);
 
 			$field.attr('id' , this.$fieldset.attr('name') + '-' + num);
