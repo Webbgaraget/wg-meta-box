@@ -128,6 +128,7 @@ class WGMetaBox
 	 *
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
+	 * @author Simon Strandman (simon@webbgaraget.se)
 	 */
 	public function save( $post_id, $post )
 	{
@@ -232,27 +233,24 @@ class WGMetaBox
 			foreach( $this->params['fields'] as $slug => $field )
 			{
 				$value = '';
+				$name = "{$this->params['id']}-{$slug}";
+
 				// Save text, textarea, richedit, date and custom field
 				if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
 				{
-					$name = "{$this->params['id']}-{$slug}";
-
 	                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
 					$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 					$post_meta[$name] = $value;
 				}
 				// Select
-				elseif ( $field['type'] == 'select' )
+				else if ( $field['type'] == 'select' )
 				{
-					$name = "{$this->params['id']}-{$slug}";
 					$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
 					$post_meta[$name] = $value;
 				}
 				// Save custom field
-				elseif ( $field['type'] === 'custom' ) )
+				else if ( $field['type'] === 'custom' )
 				{
-				    $name = "{$this->params['id']}-{$slug}";
-
 				    // Call custom callback if defined
 				    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
 				    {
@@ -266,6 +264,12 @@ class WGMetaBox
 	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 				    }
 				    $post_meta[$name] = $value;
+				}
+
+				// If this isn't a repeatable field, just store the value.
+				if ( empty( $field['repeatable'] ) && is_array( $value ) )
+				{
+					$value = reset( $value );
 				}
 
 				// Check if field is required and not set
@@ -291,11 +295,8 @@ class WGMetaBox
 
 		if ( $this->params['group_repeatable'] )
 		{
-			// Remove the existing meta values
-	        delete_post_meta( $post->ID, $this->params['id'] );
-
         	// Add the new meta values
-        	add_post_meta( $post->ID, $this->params['id'], $post_meta_group );
+        	update_post_meta( $post->ID, $this->params['id'], $post_meta_group );
 		}
 		else
 		{
@@ -306,17 +307,8 @@ class WGMetaBox
 		            return;
 		        }
 
-		        // Is the field only repeated once? Don't store it as an array
-		        if ( count( $value) === 1 )
-		        {
-		        	$value = $value[0];
-		        }
-
-		        // Remove the existing meta values
-		        delete_post_meta( $post->ID, $key );
-
 	        	// Add the new meta values
-	        	add_post_meta( $post->ID, $key, $value );
+	        	update_post_meta( $post->ID, $key, $value );
 		    }
 		}
 
@@ -365,7 +357,7 @@ class WGMetaBox
 
 		if ( $this->params['group_repeatable'] )
 		{
-			$groups = get_post_meta( $post->ID, "{$this->params['id']}", true );
+			$groups = get_post_meta( $post->ID, $this->params['id'], true );
 
 			if ( !$groups )
 			{
@@ -451,7 +443,6 @@ class WGMetaBox
 						$value = array( $value );
 					}
 
-					$field['group_repeatable'] = $this->params['group_repeatable'];
 					$field['slug'] = $slug;
 
 					// Save the properties in a temporary variable
