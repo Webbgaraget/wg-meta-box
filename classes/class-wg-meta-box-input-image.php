@@ -42,7 +42,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
         else
         {
             $previewUrl = '';
-            $previewImageName = 'ingen bild vald';
+            $previewImageName = __( 'no image choosen' );
         }
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -68,7 +68,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input input-image">';
 
-        $output .= '<p style="margin:0;">Vald bild: <span class="input-image-filename">' . $previewImageName . '</span></p>';
+        $output .= '<p style="margin:0;">' . __( 'Image' ) . ': <span class="input-image-filename">' . $previewImageName . '</span></p>';
         $output .= '<input class="input-image-input" type="hidden" ' . implode( ' ', $attributes ) . '>';
 		$output .= '<button style="vertical-align: top" class="input-image-choose button">' . __( "Choose image" ) . '</button>';
 		$output .= '<br>';
