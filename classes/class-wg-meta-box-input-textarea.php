@@ -72,7 +72,7 @@ class Wg_Meta_Box_Input_Textarea extends Wg_Meta_Box_Input
 		/*** Add delete button ***/
 		if ( $this->_get_is_repeatable() )
 		{
-			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">Remove</a>';
+			$output .= '<a href="#" class="field-remove-button" data-num="' . $this->properties['num'] . '">' . __( 'Remove', WGMetaBox::TEXT_DOMAIN ) . '</a>';
 		}
 
 		// Description
