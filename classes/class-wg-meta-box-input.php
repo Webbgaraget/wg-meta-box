@@ -58,7 +58,7 @@ abstract class Wg_Meta_Box_Input
 			unset( $properties['admin-column'] );
 		}
 
-		// Do separate merge of repetitions column, since array_merge() doesn't handle multi-dimensional arrays
+		// Do separate merge of repetitions argument, since array_merge() doesn't handle multi-dimensional arrays
 		if ( array_key_exists( 'repetitions', $properties ) )
 		{
 			$this->default_properties['repetitions'] = array_merge( $this->default_properties['repetitions'], $properties['repetitions'] );
@@ -69,9 +69,11 @@ abstract class Wg_Meta_Box_Input
 
 
 		// Verify repeatable only specified for select and input
-		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea' ) ) && ( $this->_get_is_repeatable() ) )
+		// Doesn't work for image yet.
+		// Todo: Check other field types
+		if ( !in_array( $this->get_type(), array( 'text', 'select', 'textarea', 'color', 'date' ) ) && ( $this->_get_is_repeatable() ) )
 		{
-			throw new Exception( 'Repetition only supported for inputs of type text and select.' );
+			throw new Exception( __( 'Repetition not support for type ', WGMetaBox::TEXT_DOMAIN ) . $this->get_type() );
 		}
 	}
 
