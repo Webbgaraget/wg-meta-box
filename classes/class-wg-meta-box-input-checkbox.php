@@ -19,11 +19,11 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 
 	    parent::__construct( $namespace, $properties );
 	}
-	
+
 	/**
 	 * By settings value, it means that the checkbox should be checked
 	 *
-	 * @param string $value 
+	 * @param string $value
 	 * @return void
 	 * @author Erik Hedberg (erik@webbgaraget.se)
 	 */
@@ -41,7 +41,7 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns markup for checkbox
 	 *
@@ -50,7 +50,7 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-		
+
 		/* Setup attributes */
 		$attributes = array();
 		// Name
@@ -82,23 +82,23 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'checked="checked"';
 		}
-		
-		
+
+
 		/** Add label to markup **/
 		$output = '<div class="label checkbox">';
 		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
-			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+			$output .= '<br><small><em>' . __( 'Required', WGMetaBox::TEXT_DOMAIN ) . '</em></small>';
 		}
 
 		$output .= '</div>';
-		
+
 		/*** Add input field **/
 		$output .= '<div class="input checkbox">';
 		$output .= '<input type="checkbox" ' . implode( ' ', $attributes ) . '>';
-		
+
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{
@@ -106,7 +106,7 @@ class Wg_Meta_Box_Input_Checkbox extends Wg_Meta_Box_Input
 		}
 
 		$output .= '</div>';
-		
+
 		return $output;
 	}
 }

@@ -460,7 +460,7 @@ abstract class Wg_Meta_Box_Input
 	{
 		$output = '';
 
-		$output = '<input type="button" class="button add-field-button" id="' . $this->get_id() . '-add-new" value="' .  __( 'Add new' ) . '">';
+		$output = '<input type="button" class="button add-field-button" id="' . $this->get_id() . '-add-new" value="' .  __( 'Add new', WGMetaBox::TEXT_DOMAIN ) . '">';
 
 		return $output;
 	}

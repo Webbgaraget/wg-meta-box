@@ -42,7 +42,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
         else
         {
             $previewUrl = '';
-            $previewImageName = __( 'no image choosen' );
+            $previewImageName = __( 'no image choosen', WGMetaBox::TEXT_DOMAIN );
         }
 		// Class
 		if ( isset( $this->properties['class'] ) )
@@ -60,7 +60,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
 		if ( $this->is_required() )
 		{
-			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+			$output .= '<br><small><em>' . __( 'Required', WGMetaBox::TEXT_DOMAIN ) . '</em></small>';
 		}
 
 		$output .= '</div>';
@@ -68,20 +68,20 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 		/*** Add input field **/
         $output .= '<div class="input input-image">';
 
-        $output .= '<p style="margin:0;">' . __( 'Image' ) . ': <span class="input-image-filename">' . $previewImageName . '</span></p>';
+        $output .= '<p style="margin:0;">' . __( 'Image', WGMetaBox::TEXT_DOMAIN ) . ': <span class="input-image-filename">' . $previewImageName . '</span></p>';
         $output .= '<input class="input-image-input" type="hidden" ' . implode( ' ', $attributes ) . '>';
-		$output .= '<button style="vertical-align: top" class="input-image-choose button">' . __( "Choose image" ) . '</button>';
+		$output .= '<button style="vertical-align: top" class="input-image-choose button">' . __( "Choose image", WGMetaBox::TEXT_DOMAIN ) . '</button>';
 		$output .= '<br>';
 
 		if ( $previewUrl )
 		{
         	$output .= '<img class="input-image-preview" src="'. $previewUrl .'">';
-            $output .= '<a class="input-image-remove" href="#">' . __( 'Remove image' ) . '</a>';
+            $output .= '<a class="input-image-remove" href="#">' . __( 'Remove image', WGMetaBox::TEXT_DOMAIN ) . '</a>';
 		}
 		else
 		{
         	$output .= '<img class="input-image-preview hidden" src="'. $previewUrl .'">';
-            $output .= '<a class="input-image-remove hidden" href="#">' . __( 'Remove image' ) . '</a>';
+            $output .= '<a class="input-image-remove hidden" href="#">' . __( 'Remove image', WGMetaBox::TEXT_DOMAIN ) . '</a>';
 		}
 
         $output .= '<br>';

@@ -16,7 +16,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 
 		add_action( 'admin_footer', array( $this, 'render_js' ) );
 	}
-	
+
 	/**
 	 * Returns markup for input field
 	 *
@@ -25,7 +25,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-		
+
 		/* Setup attributes */
 		$attributes = array();
 		// Name
@@ -56,23 +56,23 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 		{
 			$attributes[] = 'placeholder="' . $this->properties['placeholder'] . '"';
 		}
-		
-		
+
+
 		/** Add label to markup **/
 		$output = '<div class="label">';
 		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
-			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+			$output .= '<br><small><em>' . __( 'Required', WGMetaBox::TEXT_DOMAIN ) . '</em></small>';
 		}
 
 		$output .= '</div>';
-		
+
 		/*** Add input field **/
 		$output .= '<div class="input">';
 		$output .= '<input type="text" ' . implode( ' ', $attributes ) . '>';
-		
+
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{
@@ -80,10 +80,10 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 		}
 
 		$output .= '</div>';
-		
+
 		return $output;
 	}
-	
+
 	/**
 	 * Renders necessary JS
 	 *
@@ -91,7 +91,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 	 */
 	function render_js()
 	{
-	    
+
 	    /*** Set attributes ***/
 	    $attrs = array();
 	    // First day
@@ -109,7 +109,7 @@ class Wg_Meta_Box_Input_Date extends Wg_Meta_Box_Input
 	    {
 	        $attrs['dateFormat'] = 'yy-mm-dd';
 	    }
-	    
+
         $attr_string = "";
         if ( count( $attrs ) > 0 )
         {

@@ -18,7 +18,7 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 		$this->default_properties = array();
 	    parent::__construct( $namespace, $properties );
 	}
-	
+
 	/**
 	 * Returns markup for input field
 	 *
@@ -27,27 +27,27 @@ class Wg_Meta_Box_Input_Custom extends Wg_Meta_Box_Input
 	 */
 	public function render_markup()
 	{
-       
+
         $id = $this->get_id();
         $value = $this->get_value();
-		
-		
+
+
 		/** Add label to markup **/
 		$output = '<div class="label">';
 		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
-			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+			$output .= '<br><small><em>' . __( 'Required', WGMetaBox::TEXT_DOMAIN ) . '</em></small>';
 		}
 
 		$output .= '</div>';
-		
+
 		/*** Add custom input **/
 		$output .= '<div class="input">';
-		
+
 		$output .= call_user_func( $this->properties['callbacks']['render'], $id, $value );
-		
+
 		// Description
 		if ( isset( $this->properties['description'] ) )
 		{

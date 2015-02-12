@@ -61,7 +61,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 
 		if ( $this->is_required() )
 		{
-			$output .= '<br><small><em>' . __( 'Required' ) . '</em></small>';
+			$output .= '<br><small><em>' . __( 'Required', WGMetaBox::TEXT_DOMAIN ) . '</em></small>';
 		}
 
 		$output .= '</div>';
