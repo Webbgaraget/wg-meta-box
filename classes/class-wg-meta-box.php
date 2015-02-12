@@ -182,7 +182,7 @@ class WGMetaBox
 							$meta_group[$slug] = $value;
 						}
 						// Save custom field
-						elseif ( in_array( $field['type'], array( 'custom' ) ) )
+						elseif ( $field['type'] === 'custom' )
 						{
 						    // Call custom callback if defined
 						    if ( is_array( $field['callbacks'] ) && isset( $field['callbacks']['save'] ) )
@@ -233,7 +233,7 @@ class WGMetaBox
 			{
 				$value = '';
 				// Save text, textarea, richedit, date and custom field
-				if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'checkbox' ) ) )
+				if ( in_array( $field['type'], array( 'text', 'textarea', 'richedit', 'date', 'color', 'image', 'checkbox' ) ) )
 				{
 					$name = "{$this->params['id']}-{$slug}";
 
@@ -249,7 +249,7 @@ class WGMetaBox
 					$post_meta[$name] = $value;
 				}
 				// Save custom field
-				elseif ( in_array( $field['type'], array( 'custom' ) ) )
+				elseif ( $field['type'] === 'custom' ) )
 				{
 				    $name = "{$this->params['id']}-{$slug}";
 
