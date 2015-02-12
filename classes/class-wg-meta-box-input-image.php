@@ -56,7 +56,7 @@ class Wg_Meta_Box_Input_Image extends Wg_Meta_Box_Input
 
 		/** Add label to markup **/
 		$output = '<div class="label">';
-		$output .= '<label for="' . $this->get_id() . '">' . $this->properties['label'] . '</label>';
+		$output .= '<label for="' . $this->get_id() . '">' . $this->get_label() . '</label>';
 
 		if ( $this->is_required() )
 		{
