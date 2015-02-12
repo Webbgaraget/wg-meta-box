@@ -154,7 +154,7 @@ class WGMetaBox
 
 		if ( $this->params['group_repeatable'] ) {
 
-			$page_meta_group = array();
+			$post_meta_group = array();
 
 			// Do we have any values to save?
 			if ( isset( $_POST[$this->params['id']] ) && is_array( $_POST[$this->params['id']] ) ) {
@@ -220,13 +220,13 @@ class WGMetaBox
 					}
 
 					// Store the result
-					$page_meta_group[] = $meta_group;
+					$post_meta_group[] = $meta_group;
 				}
 			}
 		}
 		else
 		{
-			$page_meta = array();
+			$post_meta = array();
 
 			// If this isn't a repeatable group just loop over the fields
 			foreach( $this->params['fields'] as $slug => $field )
@@ -239,14 +239,14 @@ class WGMetaBox
 
 	                // If the field isn't set (checkbox), use empty string (default for get_post_meta()).
 					$value = isset( $_POST[$name] ) ? $_POST[$name] : '';
-					$page_meta[$name] = $value;
+					$post_meta[$name] = $value;
 				}
 				// Select
 				elseif ( $field['type'] == 'select' )
 				{
 					$name = "{$this->params['id']}-{$slug}";
 					$value = isset( $_POST[$name] ) && $_POST[$name] != '0' ? $_POST[$name] : '';
-					$page_meta[$name] = $value;
+					$post_meta[$name] = $value;
 				}
 				// Save custom field
 				elseif ( in_array( $field['type'], array( 'custom' ) ) )
@@ -265,7 +265,7 @@ class WGMetaBox
 				    {
 	                    $value = isset( $_POST[$name] ) ? $_POST[$name] : '';
 				    }
-				    $page_meta[$name] = $value;
+				    $post_meta[$name] = $value;
 				}
 
 				// Check if field is required and not set
@@ -295,11 +295,11 @@ class WGMetaBox
 	        delete_post_meta( $post->ID, $this->params['id'] );
 
         	// Add the new meta values
-        	add_post_meta( $post->ID, $this->params['id'], $page_meta_group );
+        	add_post_meta( $post->ID, $this->params['id'], $post_meta_group );
 		}
 		else
 		{
-		    foreach( $page_meta as $key => $value )
+		    foreach( $post_meta as $key => $value )
 		    {
 		        if ( $post->post_type == 'revision' )
 		        {
