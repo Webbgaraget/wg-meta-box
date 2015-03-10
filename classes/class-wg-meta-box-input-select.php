@@ -99,6 +99,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 					}
 				}
 				$output .= '<option value="' . $value . '"' . $selected . '>' . $name . '</option>';
+				$selected = '';
 			}
 		} else {
 			// One value
