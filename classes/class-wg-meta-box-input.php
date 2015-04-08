@@ -168,7 +168,7 @@ abstract class Wg_Meta_Box_Input
 	 */
 	public function show_in_admin_column()
 	{
-	    return $this->properties['admin-column']['display'];
+	    return isset( $this->properties['admin-column']['display'] ) && $this->properties['admin-column']['display'];
 	}
 
 	/**
