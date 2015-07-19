@@ -31,8 +31,13 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 
 		/* Setup attributes */
 		$attributes = $this->get_attributes();
-		// Name
-		$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		// Name and check for multiple
+		if ( isset( $this->properties['multiple'] ) && $this->properties['multiple'] )
+		{
+			$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '[]"';
+		} else {
+			$attributes[] = 'name="' . $this->namespace . '-' . $this->properties['slug']. '"';
+		}
 		$attributes[] = 'id="' . $this->namespace . '-' . $this->properties['slug']. '"';
 
 		// Class
@@ -79,14 +84,35 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 		}
 
 		$output .= '<select ' . implode( ' ', $attributes ) . '>';
-		foreach( $this->properties['options'] as $value => $name )
+		
+		// Multiple
+		if ( is_array( $this->get_value() ) ) 
 		{
 			$selected = '';
-			if ( $this->get_value() == $value )
+			foreach( $this->properties['options'] as $value => $name ) 
 			{
-				$selected = ' selected="selected"';
+				foreach ( $this->get_value() as $m_value ) 
+				{
+					if ( $m_value == $value ) 
+					{
+						$selected = ' selected="selected"';
+					}
+				}
+				$output .= '<option value="' . $value . '"' . $selected . '>' . $name . '</option>';
+				$selected = '';
 			}
-			$output .= '<option value="' . $value . '"' . $selected . '>' . $name . '</option>';
+		} else {
+			// One value
+			foreach( $this->properties['options'] as $value => $name )
+			{
+				$selected = '';
+				if ( $this->get_value() == $value )
+				{ 
+					$selected = ' selected="selected"';
+				}
+				$output .= '<option value="' . $value . '"' . $selected . '>' . $name . '</option>';
+			}
+			$output .= '</select>';
 		}
 		$output .= '</select>';
 
@@ -125,7 +151,12 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
 	public function get_value()
 	{
         $value = parent::get_value();
-
+        
+	// Check if $value is an array (cannot be the default value) 
+        if ( is_array ( $value ) ) {
+        	return $value;
+        }
+        
         // In case of default value
         if ( !$value || !array_key_exists( $value, $this->properties['options'] ) )
         {
@@ -134,6 +165,7 @@ class Wg_Meta_Box_Input_Select extends Wg_Meta_Box_Input
             {
                 return '0';
             }
+            
             // Otherwise, there's no value
             return null;
         }
